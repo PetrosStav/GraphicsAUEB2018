@@ -1,0 +1,43 @@
+﻿  GeometricMesh.cpp
+  GeometryNode.cpp
+  main.cpp
+  OBJLoader.cpp
+  Renderer.cpp
+c:\users\petro\source\repos\graphicsaueb2018\lab7\renderer.cpp(542): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\petro\source\repos\graphicsaueb2018\lab7\renderer.cpp(546): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\petro\source\repos\graphicsaueb2018\lab7\renderer.cpp(551): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\petro\source\repos\graphicsaueb2018\lab7\renderer.cpp(555): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  ShaderProgram.cpp
+  SpotlightNode.cpp
+c:\users\petro\source\repos\graphicsaueb2018\lab7\spotlightnode.cpp(18): warning C4305: '=': truncation from 'double' to 'float'
+  TextureManager.cpp
+  Tools.cpp
+  Generating Code...
+  Lab7.vcxproj -> C:\Users\petro\source\repos\GraphicsAUEB2018\x64\Debug\CGProject2018.exe
+  Copying DLLs to output folder..
+  copy "C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\*.dll" "C:\Users\petro\source\repos\GraphicsAUEB2018\x64\Debug\"
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\glew32.dll
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\libjpeg-9.dll
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\libpng16-16.dll
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\libtiff-5.dll
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\libwebp-4.dll
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\SDL2.dll
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\SDL2_image.dll
+  C:\Users\petro\source\repos\GraphicsAUEB2018\3rdParty\bin\x64\zlib1.dll
+          8 file(s) copied.
