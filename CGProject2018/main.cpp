@@ -42,7 +42,7 @@ bool init()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 	// Create Window
-	window = SDL_CreateWindow("OpenGL Lab 7", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	window = SDL_CreateWindow("OpenGL Tower Defense Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (window == NULL)
 	{
 		printf("Could not create window: %s\n", SDL_GetError());
@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
 			{
 				int x = event.motion.x;
 				int y = event.motion.y;
+
 				if (mouse_button_pressed)
 				{
 					renderer->CameraLook(glm::vec2(x, y) - prev_mouse_position);

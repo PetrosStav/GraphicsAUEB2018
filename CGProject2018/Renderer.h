@@ -27,6 +27,10 @@ protected:
 	glm::vec2										m_camera_movement;
 	glm::vec2										m_camera_look_angle_destination;
 	
+	// Our stuff
+	// Road Tile List
+	std::tuple<int,int> road_tiles[29];
+
 	// Geometry Rendering Intermediate Buffer
 	GLuint m_fbo;
 	GLuint m_fbo_depth_texture;
@@ -43,12 +47,13 @@ protected:
 	SpotLightNode m_spotlight_node;
 
 	// Meshes
+	// TODO
 	class GeometryNode*								m_geometric_object1;
 	glm::mat4										m_geometric_object1_transformation_matrix;
 	glm::mat4										m_geometric_object1_transformation_normal_matrix;
-	class GeometryNode*								m_geometric_object2;
-	glm::mat4										m_geometric_object2_transformation_matrix;
-	glm::mat4										m_geometric_object2_transformation_normal_matrix;
+	class GeometryNode**							m_geometric_object2;
+	glm::mat4*										m_geometric_object2_transformation_matrix;
+	glm::mat4*										m_geometric_object2_transformation_normal_matrix;
 	class GeometryNode*								m_geometric_object3;
 	glm::mat4										m_geometric_object3_transformation_matrix;
 	glm::mat4										m_geometric_object3_transformation_normal_matrix;

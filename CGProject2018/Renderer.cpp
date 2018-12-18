@@ -13,8 +13,18 @@ Renderer::Renderer()
 	m_vbo_fbo_vertices = 0;
 	m_vao_fbo = 0;
 	
+	// TODO
+
+	// Terrain
 	m_geometric_object1 = nullptr;
-	m_geometric_object2 = nullptr;
+
+	// Road tiles
+	m_geometric_object2 = new GeometryNode*[29];
+	for (int i = 0; i < 29; i++) {
+		m_geometric_object2[i] = nullptr;
+	}
+
+	// Treasure Chest
 	m_geometric_object3 = nullptr;
 
 	m_fbo = 0;
@@ -24,9 +34,10 @@ Renderer::Renderer()
 	m_continous_time = 0.0;
 
 	// initialize the camera parameters
-	m_camera_position = glm::vec3(1, 3, -6);
-	m_camera_target_position = glm::vec3(0, 0, 0);
+	m_camera_position = glm::vec3(0.720552, 18.1377, -11.3135);
+	m_camera_target_position = glm::vec3(4.005, 12.634, -5.66336);
 	m_camera_up_vector = glm::vec3(0, 1, 0);
+	
 }
 
 Renderer::~Renderer()
@@ -39,8 +50,16 @@ Renderer::~Renderer()
 	glDeleteVertexArrays(1, &m_vao_fbo);
 	glDeleteBuffers(1, &m_vbo_fbo_vertices);
 
+	// TODO
+
 	delete m_geometric_object1;
+
+	for (int i = 0; i < 29; i++) {
+		delete m_geometric_object2[i];
+	}
+
 	delete m_geometric_object2;
+
 	delete m_geometric_object3;
 }
 
@@ -48,6 +67,37 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 {
 	this->m_screen_width = SCREEN_WIDTH;
 	this->m_screen_height = SCREEN_HEIGHT;
+
+	// Initialize road tiles
+	road_tiles[0] = std::tuple<int,int>(0, 0);
+	road_tiles[1] = std::tuple<int, int>(0, 1);
+	road_tiles[2] = std::tuple<int, int>(0, 2);
+	road_tiles[3] = std::tuple<int, int>(0, 3);
+	road_tiles[4] = std::tuple<int, int>(1, 3);
+	road_tiles[5] = std::tuple<int, int>(1, 4);
+	road_tiles[6] = std::tuple<int, int>(1, 5);
+	road_tiles[7] = std::tuple<int, int>(1, 6);
+	road_tiles[8] = std::tuple<int, int>(1, 7);
+	road_tiles[9] = std::tuple<int, int>(2, 7);
+	road_tiles[10] = std::tuple<int, int>(2, 8);
+	road_tiles[11] = std::tuple<int, int>(3, 8);
+	road_tiles[12] = std::tuple<int, int>(4, 8);
+	road_tiles[13] = std::tuple<int, int>(5, 8);
+	road_tiles[14] = std::tuple<int, int>(6, 8);
+	road_tiles[15] = std::tuple<int, int>(6, 7);
+	road_tiles[16] = std::tuple<int, int>(6, 6);
+	road_tiles[17] = std::tuple<int, int>(7, 6);
+	road_tiles[18] = std::tuple<int, int>(7, 5);
+	road_tiles[19] = std::tuple<int, int>(7, 4);
+	road_tiles[20] = std::tuple<int, int>(7, 3);
+	road_tiles[21] = std::tuple<int, int>(8, 3);
+	road_tiles[22] = std::tuple<int, int>(9, 3);
+	road_tiles[23] = std::tuple<int, int>(9, 2);
+	road_tiles[24] = std::tuple<int, int>(9, 1);
+	road_tiles[25] = std::tuple<int, int>(8, 1);
+	road_tiles[26] = std::tuple<int, int>(7, 1);
+	road_tiles[27] = std::tuple<int, int>(6, 1);
+	road_tiles[28] = std::tuple<int, int>(6, 0);
 
 	// Initialize OpenGL functions
 
@@ -84,9 +134,14 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	return techniques_initialization && items_initialization && buffers_initialization && meshes_initialization && lights_sources_initialization;
 }
 
+void getRealPos(float& x, float& y) {
+	x = 9 - x*2;
+	y = 9 - y*2;
+}
+
 void Renderer::Update(float dt)
 {
-	float movement_speed = 2.0f;
+	float movement_speed = 20.0f;
 	// compute the direction of the camera
 	glm::vec3 direction = glm::normalize(m_camera_target_position - m_camera_position);
 
@@ -118,16 +173,26 @@ void Renderer::Update(float dt)
 	m_continous_time += dt;
 
 	// update meshes tranformations
-	m_geometric_object1_transformation_matrix = glm::scale(glm::mat4(1.f), glm::vec3(0.25f));
+
+	// TODO
+
+	m_geometric_object1_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))*glm::scale(glm::mat4(1.f), glm::vec3(20.0f));
 	m_geometric_object1_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object1_transformation_matrix))));
 
-	glm::mat4 object_translation = glm::translate(glm::mat4(1.0), glm::vec3(2, 5, 0));
-	glm::mat4 object_rotation = glm::rotate(glm::mat4(1.0), 1.5f*m_continous_time, glm::vec3(0, 1, 0));
-	glm::mat4 object_scale = glm::scale(glm::mat4(1.0), glm::vec3(0.8f));
-	m_geometric_object2_transformation_matrix = glm::translate(glm::mat4(1.0), glm::vec3(-4, 2, -2)) * object_translation * object_rotation * object_scale;
-	m_geometric_object2_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object2_transformation_matrix))));
+	m_geometric_object2_transformation_matrix = new glm::mat4[29];
+	m_geometric_object2_transformation_normal_matrix = new glm::mat4[29];
+	for (int i = 0; i < 29; i++) {
 
-	m_geometric_object3_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0, 1, 0)) * glm::rotate(glm::mat4(1.f), glm::radians(10.f), glm::vec3(0,0,1)) * glm::scale(glm::mat4(1.0), glm::vec3(0.07f));
+		float x = (float)std::get<0>(road_tiles[i]);
+		float y = (float)std::get<1>(road_tiles[i]);
+
+		getRealPos(x, y);
+
+		m_geometric_object2_transformation_matrix[i] = glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))*glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::scale(glm::mat4(1.f), glm::vec3(2.0f));
+		m_geometric_object2_transformation_normal_matrix[i] = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object2_transformation_matrix[i]))));
+	}
+
+	m_geometric_object3_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(2 * 3.f, 0, -2 * 10.f))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
 	m_geometric_object3_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object3_transformation_matrix))));
 }
 
@@ -277,23 +342,26 @@ bool Renderer::ResizeBuffers(int width, int height)
 // Initialize the light sources
 bool Renderer::InitLightSources()
 {
-	// Initialize the spot light
-	m_spotlight_node.SetPosition(glm::vec3(8, 14, -3));
-	m_spotlight_node.SetTarget(glm::vec3(0, 4, 0));
-	m_spotlight_node.SetColor(40.0f * glm::vec3(255, 255, 251) / 255.f);
-	m_spotlight_node.SetConeSize(50, 70);
+	// Initialize the spot light -- changed to pdf specifics
+	m_spotlight_node.SetPosition(glm::vec3(16, 30, 16));
+	m_spotlight_node.SetTarget(glm::vec3(16.4, 0, 16));
+	//m_spotlight_node.SetTarget(glm::vec3(0, 0, 0));
+	m_spotlight_node.SetColor(glm::vec3(140, 140, 140));
+	m_spotlight_node.SetConeSize(73, 80);
+	//m_spotlight_node.SetConeSize(100, 120);
 	m_spotlight_node.CastShadow(true);
 
 	return true;
 }
 
 // Load Geometric Meshes
+// TODO
 bool Renderer::InitGeometricMeshes()
 {
 	bool initialized = true;
 	OBJLoader loader;
 	// load geometric object 1
-	auto mesh = loader.load("../Data/Knossos/knossos.obj");
+	auto mesh = loader.load("../Assets/Terrain/terrain.obj");
 	if (mesh != nullptr)
 	{
 		m_geometric_object1 = new GeometryNode();
@@ -303,17 +371,20 @@ bool Renderer::InitGeometricMeshes()
 		initialized = false;
 
 	// load geometric object 2
-	mesh = loader.load("../Data/Pirates/weight.obj");
+	mesh = loader.load("../Assets/Terrain/road.obj");
 	if (mesh != nullptr)
 	{
-		m_geometric_object2 = new GeometryNode();
-		m_geometric_object2->Init(mesh);
+		for(int i=0;i<29;i++){
+			m_geometric_object2[i] = new GeometryNode();
+			m_geometric_object2[i]->Init(mesh);
+		}
+		
 	}
 	else
 		initialized = false;
 
 	// load geometric object 3
-	mesh = loader.load("../Data/Pirates/skeleton.obj");
+	mesh = loader.load("../Assets/Treasure/treasure_chest.obj");
 	if (mesh != nullptr)
 	{
 		m_geometric_object3 = new GeometryNode();
@@ -374,11 +445,15 @@ void Renderer::RenderShadowMaps()
 		glUniformMatrix4fv(m_spot_light_shadow_map_program["uniform_projection_matrix"], 1, GL_FALSE, glm::value_ptr(m_spotlight_node.GetProjectionMatrix()));
 		glUniformMatrix4fv(m_spot_light_shadow_map_program["uniform_view_matrix"], 1, GL_FALSE, glm::value_ptr(m_spotlight_node.GetViewMatrix()));
 
+		// TODO
+
 		// draw the first object
 		DrawGeometryNodeToShadowMap(m_geometric_object1, m_geometric_object1_transformation_matrix, m_geometric_object1_transformation_normal_matrix);
 
 		// draw the second object
-		DrawGeometryNodeToShadowMap(m_geometric_object2, m_geometric_object2_transformation_matrix, m_geometric_object2_transformation_normal_matrix);
+		for (int i = 0; i < 29; i++) {
+			DrawGeometryNodeToShadowMap(m_geometric_object2[i], m_geometric_object2_transformation_matrix[i], m_geometric_object2_transformation_normal_matrix[i]);
+		}
 
 		// draw the third object
 		DrawGeometryNodeToShadowMap(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
@@ -450,11 +525,15 @@ void Renderer::RenderGeometry()
 	glUniform1i(m_geometry_rendering_program["uniform_diffuse_texture"], 0);
 	glActiveTexture(GL_TEXTURE0);
 
+	// TODO
+
 	// draw the first object
 	DrawGeometryNode(m_geometric_object1, m_geometric_object1_transformation_matrix, m_geometric_object1_transformation_normal_matrix);
 
 	// draw the second object
-	DrawGeometryNode(m_geometric_object2, m_geometric_object2_transformation_matrix, m_geometric_object2_transformation_normal_matrix);
+	for (int i = 0; i < 29; i++) {
+		DrawGeometryNode(m_geometric_object2[i], m_geometric_object2_transformation_matrix[i], m_geometric_object2_transformation_normal_matrix[i]);
+	}
 
 	// draw the third object
 	DrawGeometryNode(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
