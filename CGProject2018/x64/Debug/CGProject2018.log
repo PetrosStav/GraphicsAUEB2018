@@ -1,20 +1,20 @@
 ﻿  Renderer.cpp
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(621): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(694): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(625): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(698): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(630): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(703): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(634): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(707): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float

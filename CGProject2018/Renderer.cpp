@@ -30,6 +30,12 @@ Renderer::Renderer()
 	m_fbo = 0;
 	m_fbo_texture = 0;
 
+	// Green Tile
+	m_geometric_object4 = nullptr;
+
+	// Red Tile
+	m_geometric_object5 = nullptr;
+
 	m_rendering_mode = RENDERING_MODE::TRIANGLES;	
 	m_continous_time = 0.0;
 
@@ -61,6 +67,10 @@ Renderer::~Renderer()
 	delete m_geometric_object2;
 
 	delete m_geometric_object3;
+
+	delete m_geometric_object4;
+
+	delete m_geometric_object5;
 }
 
 bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
@@ -188,12 +198,36 @@ void Renderer::Update(float dt)
 
 		getRealPos(x, y);
 
-		m_geometric_object2_transformation_matrix[i] = glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))*glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::scale(glm::mat4(1.f), glm::vec3(2.0f));
+		m_geometric_object2_transformation_matrix[i] = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))*glm::scale(glm::mat4(1.f), glm::vec3(2.0f));
 		m_geometric_object2_transformation_normal_matrix[i] = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object2_transformation_matrix[i]))));
 	}
 
 	m_geometric_object3_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(2 * 3.f, 0, -2 * 10.f))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
 	m_geometric_object3_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object3_transformation_matrix))));
+
+	float x = (float)this->tileX;
+	float y = (float)this->tileY;
+
+	getRealPos(x, y);
+
+	inRoad = false;
+
+	for (auto t : road_tiles) {
+		if (std::get<0>(t) == this->tileX && std::get<1>(t) == this->tileY) {
+			inRoad = true;
+			break;
+		}
+	}
+
+	if (!inRoad) {
+
+		m_geometric_object4_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.02f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
+		m_geometric_object4_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object4_transformation_matrix))));
+	}
+	else {
+		m_geometric_object5_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.02f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
+		m_geometric_object5_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object5_transformation_matrix))));
+	}
 }
 
 bool Renderer::InitCommonItems()
@@ -393,6 +427,26 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
+	// load geometric object 4
+	mesh = loader.load("../Assets/Various/plane_green.obj");
+	if (mesh != nullptr)
+	{
+		m_geometric_object4 = new GeometryNode();
+		m_geometric_object4->Init(mesh);
+	}
+	else
+		initialized = false;
+
+	// load geometric object 5
+	mesh = loader.load("../Assets/Various/plane_red.obj");
+	if (mesh != nullptr)
+	{
+		m_geometric_object5 = new GeometryNode();
+		m_geometric_object5->Init(mesh);
+	}
+	else
+		initialized = false;
+
 	return initialized;
 }
 
@@ -458,6 +512,14 @@ void Renderer::RenderShadowMaps()
 		// draw the third object
 		DrawGeometryNodeToShadowMap(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
 		
+		if (!inRoad) {
+			// draw the fourth object
+			DrawGeometryNodeToShadowMap(m_geometric_object4, m_geometric_object4_transformation_matrix, m_geometric_object4_transformation_normal_matrix);
+		}
+		else {
+			// draw the fifth object
+			DrawGeometryNodeToShadowMap(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
+		}
 		glBindVertexArray(0);
 
 		// Unbind shadow mapping program
@@ -538,6 +600,14 @@ void Renderer::RenderGeometry()
 	// draw the third object
 	DrawGeometryNode(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
 
+	if (!inRoad) {
+		// draw the fourth object
+		DrawGeometryNode(m_geometric_object4, m_geometric_object4_transformation_matrix, m_geometric_object4_transformation_normal_matrix);
+	}
+	else {
+		// draw the fifth object
+		DrawGeometryNode(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
+	}
 	glBindVertexArray(0);
 	m_geometry_rendering_program.Unbind();
 
@@ -637,4 +707,10 @@ void Renderer::CameraMoveRight(bool enable)
 void Renderer::CameraLook(glm::vec2 lookDir)
 {
 	m_camera_look_angle_destination = glm::vec2(1, -1) * lookDir;
+}
+
+void Renderer::TileSetPos(int x, int y)
+{
+	this->tileX = x;
+	this->tileY = y;
 }

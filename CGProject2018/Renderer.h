@@ -48,15 +48,29 @@ protected:
 
 	// Meshes
 	// TODO
+	// Terrain
 	class GeometryNode*								m_geometric_object1;
 	glm::mat4										m_geometric_object1_transformation_matrix;
 	glm::mat4										m_geometric_object1_transformation_normal_matrix;
+	// RoadTiles
 	class GeometryNode**							m_geometric_object2;
 	glm::mat4*										m_geometric_object2_transformation_matrix;
 	glm::mat4*										m_geometric_object2_transformation_normal_matrix;
+	// Treasure Chest
 	class GeometryNode*								m_geometric_object3;
 	glm::mat4										m_geometric_object3_transformation_matrix;
 	glm::mat4										m_geometric_object3_transformation_normal_matrix;
+	// GreenTile
+	class GeometryNode*								m_geometric_object4;
+	glm::mat4										m_geometric_object4_transformation_matrix;
+	glm::mat4										m_geometric_object4_transformation_normal_matrix;
+	// RedTile
+	class GeometryNode*								m_geometric_object5;
+	glm::mat4										m_geometric_object5_transformation_matrix;
+	glm::mat4										m_geometric_object5_transformation_normal_matrix;
+	// Tile positions
+	int												tileX, tileY;
+	bool											inRoad;
 
 	// Protected Functions
 	bool InitRenderingTechniques();
@@ -95,6 +109,10 @@ public:
 	void										CameraMoveLeft(bool enable);
 	void										CameraMoveRight(bool enable);
 	void										CameraLook(glm::vec2 lookDir);	
+
+	// Green tile Function
+	void										TileSetPos(int x, int y);
+
 };
 
 #endif

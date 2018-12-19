@@ -105,6 +105,12 @@ int main(int argc, char *argv[])
 
 	auto simulation_start = chrono::steady_clock::now();
 
+	// Initialize position of tile to center of the map
+	int tileX, tileY;
+	tileX = 4;
+	tileY = 4;
+	renderer->TileSetPos(tileX, tileY);
+
 	// Wait for user exit
 	while (quit == false)
 	{
@@ -123,38 +129,58 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_t) renderer->SetRenderingMode(Renderer::RENDERING_MODE::TRIANGLES);
 				else if (event.key.keysym.sym == SDLK_l) renderer->SetRenderingMode(Renderer::RENDERING_MODE::LINES);
 				else if (event.key.keysym.sym == SDLK_p) renderer->SetRenderingMode(Renderer::RENDERING_MODE::POINTS);
-				else if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP)
+				else if (event.key.keysym.sym == SDLK_w)
 				{
 					renderer->CameraMoveForward(true);
 				}
-				else if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN)
+				else if (event.key.keysym.sym == SDLK_s)
 				{
 					renderer->CameraMoveBackWard(true);
 				}	
-				else if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT)
+				else if (event.key.keysym.sym == SDLK_a)
 				{
 					renderer->CameraMoveLeft(true);
 				}
-				else if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT)
+				else if (event.key.keysym.sym == SDLK_d)
 				{
 					renderer->CameraMoveRight(true);
+				}
+				else if (event.key.keysym.sym == SDLK_UP && tileY + 1<=9)
+				{
+					tileY++;
+					renderer->TileSetPos(tileX, tileY);
+				}
+				else if (event.key.keysym.sym == SDLK_DOWN && tileY - 1 >= 0)
+				{
+					tileY--;
+					renderer->TileSetPos(tileX, tileY);
+				}
+				else if (event.key.keysym.sym == SDLK_LEFT && tileX + 1 <= 9)
+				{
+					tileX++;
+					renderer->TileSetPos(tileX, tileY);
+				}
+				else if (event.key.keysym.sym == SDLK_RIGHT && tileX - 1 >= 0)
+				{
+					tileX--;
+					renderer->TileSetPos(tileX, tileY);
 				}
 			}
 			else if (event.type == SDL_KEYUP)
 			{
-				if (event.key.keysym.sym == SDLK_w || event.key.keysym.sym == SDLK_UP)
+				if (event.key.keysym.sym == SDLK_w)
 				{
 					renderer->CameraMoveForward(false);
 				}
-				else if (event.key.keysym.sym == SDLK_s || event.key.keysym.sym == SDLK_DOWN)
+				else if (event.key.keysym.sym == SDLK_s)
 				{
 					renderer->CameraMoveBackWard(false);
 				}
-				else if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_LEFT)
+				else if (event.key.keysym.sym == SDLK_a)
 				{
 					renderer->CameraMoveLeft(false);
 				}
-				else if (event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_RIGHT)
+				else if (event.key.keysym.sym == SDLK_d)
 				{
 					renderer->CameraMoveRight(false);
 				}
