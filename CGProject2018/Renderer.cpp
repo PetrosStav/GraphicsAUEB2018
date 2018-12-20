@@ -36,6 +36,18 @@ Renderer::Renderer()
 	// Red Tile
 	m_geometric_object5 = nullptr;
 
+	// Pirate
+	m_geometric_object6 = nullptr;
+
+	// Pirate Sword
+	m_geometric_object7 = nullptr;
+
+	// Pirate Left Leg
+	m_geometric_object8 = nullptr;
+
+	// Pirate Right Leg
+	m_geometric_object9 = nullptr;
+
 	m_rendering_mode = RENDERING_MODE::TRIANGLES;	
 	m_continous_time = 0.0;
 
@@ -71,6 +83,14 @@ Renderer::~Renderer()
 	delete m_geometric_object4;
 
 	delete m_geometric_object5;
+
+	delete m_geometric_object6;
+
+	delete m_geometric_object7;
+
+	delete m_geometric_object8;
+
+	delete m_geometric_object9;
 }
 
 bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
@@ -228,6 +248,20 @@ void Renderer::Update(float dt)
 		m_geometric_object5_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
 		m_geometric_object5_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object5_transformation_matrix))));
 	}
+
+	m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
+	m_geometric_object6_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object6_transformation_matrix))));
+	
+	// HOW TO PIVOT??
+	m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 12 * 0.09 + , cos(m_continous_time)*3*0.09))*glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))*glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(3.14f/4), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	m_geometric_object7_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object7_transformation_matrix))));
+	
+	m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-4*0.09, 0, -2 * 0.09)) * glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
+	
+	m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
+
 }
 
 bool Renderer::InitCommonItems()
@@ -395,7 +429,7 @@ bool Renderer::InitGeometricMeshes()
 	bool initialized = true;
 	OBJLoader loader;
 	// load geometric object 1
-	auto mesh = loader.load("../Assets/Terrain/terrain.obj");
+	auto mesh = loader.load("../Data/Terrain/terrain.obj");
 	if (mesh != nullptr)
 	{
 		m_geometric_object1 = new GeometryNode();
@@ -405,7 +439,7 @@ bool Renderer::InitGeometricMeshes()
 		initialized = false;
 
 	// load geometric object 2
-	mesh = loader.load("../Assets/Terrain/road.obj");
+	mesh = loader.load("../Data/Terrain/road.obj");
 	if (mesh != nullptr)
 	{
 		for(int i=0;i<29;i++){
@@ -418,7 +452,7 @@ bool Renderer::InitGeometricMeshes()
 		initialized = false;
 
 	// load geometric object 3
-	mesh = loader.load("../Assets/Treasure/treasure_chest.obj");
+	mesh = loader.load("../Data/Treasure/treasure_chest.obj");
 	if (mesh != nullptr)
 	{
 		m_geometric_object3 = new GeometryNode();
@@ -428,7 +462,7 @@ bool Renderer::InitGeometricMeshes()
 		initialized = false;
 
 	// load geometric object 4
-	mesh = loader.load("../Assets/Various/plane_green.obj");
+	mesh = loader.load("../Data/Various/plane_green.obj");
 	if (mesh != nullptr)
 	{
 		m_geometric_object4 = new GeometryNode();
@@ -438,11 +472,51 @@ bool Renderer::InitGeometricMeshes()
 		initialized = false;
 
 	// load geometric object 5
-	mesh = loader.load("../Assets/Various/plane_red.obj");
+	mesh = loader.load("../Data/Various/plane_red.obj");
 	if (mesh != nullptr)
 	{
 		m_geometric_object5 = new GeometryNode();
 		m_geometric_object5->Init(mesh);
+	}
+	else
+		initialized = false;
+
+	// load geometric object 6
+	mesh = loader.load("../Data/Pirate/pirate_body.obj");
+	if (mesh != nullptr)
+	{
+		m_geometric_object6 = new GeometryNode();
+		m_geometric_object6->Init(mesh);
+	}
+	else
+		initialized = false;
+
+	// load geometric object 7
+	mesh = loader.load("../Data/Pirate/pirate_arm.obj");
+	if (mesh != nullptr)
+	{
+		m_geometric_object7 = new GeometryNode();
+		m_geometric_object7->Init(mesh);
+	}
+	else
+		initialized = false;
+
+	// load geometric object 8
+	mesh = loader.load("../Data/Pirate/pirate_left_foot.obj");
+	if (mesh != nullptr)
+	{
+		m_geometric_object8 = new GeometryNode();
+		m_geometric_object8->Init(mesh);
+	}
+	else
+		initialized = false;
+
+	// load geometric object 9
+	mesh = loader.load("../Data/Pirate/pirate_right_foot.obj");
+	if (mesh != nullptr)
+	{
+		m_geometric_object9 = new GeometryNode();
+		m_geometric_object9->Init(mesh);
 	}
 	else
 		initialized = false;
@@ -501,8 +575,6 @@ void Renderer::RenderShadowMaps()
 
 		// TODO
 
-		glDepthMask(GL_TRUE);
-
 		// draw the first object
 		DrawGeometryNodeToShadowMap(m_geometric_object1, m_geometric_object1_transformation_matrix, m_geometric_object1_transformation_normal_matrix);
 
@@ -524,6 +596,18 @@ void Renderer::RenderShadowMaps()
 		//	// draw the fifth object
 		//	DrawGeometryNodeToShadowMap(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
 		//}
+
+		// draw the sixth object
+		DrawGeometryNodeToShadowMap(m_geometric_object6, m_geometric_object6_transformation_matrix, m_geometric_object6_transformation_normal_matrix);
+
+		// draw the 7th object
+		DrawGeometryNodeToShadowMap(m_geometric_object7, m_geometric_object7_transformation_matrix, m_geometric_object7_transformation_normal_matrix);
+
+		// draw the 8th object
+		DrawGeometryNodeToShadowMap(m_geometric_object8, m_geometric_object8_transformation_matrix, m_geometric_object8_transformation_normal_matrix);
+
+		// draw the 9th object
+		DrawGeometryNodeToShadowMap(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
 
 		glBindVertexArray(0);
 
@@ -605,6 +689,24 @@ void Renderer::RenderGeometry()
 	// draw the third object
 	DrawGeometryNode(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
 
+	// draw the sixth pbject
+
+	DrawGeometryNode(m_geometric_object6, m_geometric_object6_transformation_matrix, m_geometric_object6_transformation_normal_matrix);
+
+	// draw the 7th pbject
+
+	DrawGeometryNode(m_geometric_object7, m_geometric_object7_transformation_matrix, m_geometric_object7_transformation_normal_matrix);
+
+	// draw the 8th pbject
+
+	DrawGeometryNode(m_geometric_object8, m_geometric_object8_transformation_matrix, m_geometric_object8_transformation_normal_matrix);
+
+	// draw the 9th pbject
+
+	DrawGeometryNode(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
+
+	// Draw all the transparent objects
+
 	// Enable Blending
 	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
@@ -618,6 +720,8 @@ void Renderer::RenderGeometry()
 		// draw the fifth object
 		DrawGeometryNode(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
 	}
+
+	glDepthMask(GL_TRUE);
 
 	glBindVertexArray(0);
 	m_geometry_rendering_program.Unbind();

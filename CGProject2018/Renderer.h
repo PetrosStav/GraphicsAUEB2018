@@ -68,6 +68,22 @@ protected:
 	class GeometryNode*								m_geometric_object5;
 	glm::mat4										m_geometric_object5_transformation_matrix;
 	glm::mat4										m_geometric_object5_transformation_normal_matrix;
+	// Pirate Body
+	class GeometryNode*								m_geometric_object6;
+	glm::mat4										m_geometric_object6_transformation_matrix;
+	glm::mat4										m_geometric_object6_transformation_normal_matrix;
+	// Pirate Sword
+	class GeometryNode*								m_geometric_object7;
+	glm::mat4										m_geometric_object7_transformation_matrix;
+	glm::mat4										m_geometric_object7_transformation_normal_matrix;
+	// Pirate Left Leg
+	class GeometryNode*								m_geometric_object8;
+	glm::mat4										m_geometric_object8_transformation_matrix;
+	glm::mat4										m_geometric_object8_transformation_normal_matrix;
+	// Pirate Right Leg
+	class GeometryNode*								m_geometric_object9;
+	glm::mat4										m_geometric_object9_transformation_matrix;
+	glm::mat4										m_geometric_object9_transformation_normal_matrix;
 	// Tile positions
 	int												tileX, tileY;
 	bool											inRoad;
