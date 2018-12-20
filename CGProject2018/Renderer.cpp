@@ -221,11 +221,11 @@ void Renderer::Update(float dt)
 
 	if (!inRoad) {
 
-		m_geometric_object4_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.02f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
+		m_geometric_object4_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
 		m_geometric_object4_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object4_transformation_matrix))));
 	}
 	else {
-		m_geometric_object5_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.02f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
+		m_geometric_object5_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
 		m_geometric_object5_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object5_transformation_matrix))));
 	}
 }
@@ -501,6 +501,8 @@ void Renderer::RenderShadowMaps()
 
 		// TODO
 
+		glDepthMask(GL_TRUE);
+
 		// draw the first object
 		DrawGeometryNodeToShadowMap(m_geometric_object1, m_geometric_object1_transformation_matrix, m_geometric_object1_transformation_normal_matrix);
 
@@ -512,14 +514,17 @@ void Renderer::RenderShadowMaps()
 		// draw the third object
 		DrawGeometryNodeToShadowMap(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
 		
-		if (!inRoad) {
-			// draw the fourth object
-			DrawGeometryNodeToShadowMap(m_geometric_object4, m_geometric_object4_transformation_matrix, m_geometric_object4_transformation_normal_matrix);
-		}
-		else {
-			// draw the fifth object
-			DrawGeometryNodeToShadowMap(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
-		}
+		// These don't need shadows
+
+		//if (!inRoad) {
+		//	// draw the fourth object
+		//	DrawGeometryNodeToShadowMap(m_geometric_object4, m_geometric_object4_transformation_matrix, m_geometric_object4_transformation_normal_matrix);
+		//}
+		//else {
+		//	// draw the fifth object
+		//	DrawGeometryNodeToShadowMap(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
+		//}
+
 		glBindVertexArray(0);
 
 		// Unbind shadow mapping program
@@ -600,6 +605,11 @@ void Renderer::RenderGeometry()
 	// draw the third object
 	DrawGeometryNode(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
 
+	// Enable Blending
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	if (!inRoad) {
 		// draw the fourth object
 		DrawGeometryNode(m_geometric_object4, m_geometric_object4_transformation_matrix, m_geometric_object4_transformation_normal_matrix);
@@ -608,6 +618,7 @@ void Renderer::RenderGeometry()
 		// draw the fifth object
 		DrawGeometryNode(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
 	}
+
 	glBindVertexArray(0);
 	m_geometry_rendering_program.Unbind();
 
