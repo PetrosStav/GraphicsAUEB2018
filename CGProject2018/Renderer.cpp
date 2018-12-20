@@ -239,27 +239,40 @@ void Renderer::Update(float dt)
 		}
 	}
 
+	glm::mat4 terrainTransform = glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18));
+
 	if (!inRoad) {
 
-		m_geometric_object4_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
+		m_geometric_object4_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))* terrainTransform * glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
 		m_geometric_object4_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object4_transformation_matrix))));
 	}
 	else {
-		m_geometric_object5_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
+		m_geometric_object5_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))* terrainTransform * glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
 		m_geometric_object5_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object5_transformation_matrix))));
 	}
 
-	m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
+	x = 0;
+	y = 0;
+
+	getRealPos(x, y);
+
+	glm::mat4 pirateRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>()), glm::vec3(0, 1, 0));
+
+	m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
 	m_geometric_object6_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object6_transformation_matrix))));
 	
-	// HOW TO PIVOT??
-	m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 12 * 0.09, cos(m_continous_time)*3*0.09))*glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))*glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(3.14f/4), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	//glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+	glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+	glm::mat4 stPivotRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+
+	m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 9.5 * 0.09, 1 * 0.09))*
+		glm::translate(glm::mat4(1.0f), glm::vec3(0, .3, 0))* pivotRot *glm::translate(glm::mat4(1.0f), glm::vec3(0, -.3, 0))* stPivotRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 	m_geometric_object7_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object7_transformation_matrix))));
 	
-	m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-4*0.09, 0, -2 * 0.09)) * glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 	m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
 	
-	m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 	m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
 
 }
