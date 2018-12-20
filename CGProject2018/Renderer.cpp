@@ -253,7 +253,7 @@ void Renderer::Update(float dt)
 	m_geometric_object6_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object6_transformation_matrix))));
 	
 	// HOW TO PIVOT??
-	m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 12 * 0.09 + , cos(m_continous_time)*3*0.09))*glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))*glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(3.14f/4), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 12 * 0.09, cos(m_continous_time)*3*0.09))*glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))*glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(3.14f/4), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 	m_geometric_object7_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object7_transformation_matrix))));
 	
 	m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-4*0.09, 0, -2 * 0.09)) * glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
