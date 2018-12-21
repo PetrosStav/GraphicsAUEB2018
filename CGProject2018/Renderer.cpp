@@ -6,6 +6,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "OBJLoader.h"
+#include "Tower.h"
 
 // RENDERER
 Renderer::Renderer()
@@ -48,6 +49,11 @@ Renderer::Renderer()
 	// Pirate Right Leg
 	m_geometric_object9 = nullptr;
 
+	//Tower
+	m_geometric_object10 = nullptr;
+	
+
+	//
 	m_rendering_mode = RENDERING_MODE::TRIANGLES;	
 	m_continous_time = 0.0;
 
@@ -91,6 +97,21 @@ Renderer::~Renderer()
 	delete m_geometric_object8;
 
 	delete m_geometric_object9;
+
+	delete m_geometric_object10;
+
+	/*if (availableTowers.size() != 0) {
+		for (int i = 0; i < availableTowers.size(); i++) {
+			delete availableTowers[i];
+		}
+	}
+	
+	if (createdTowers.size() != 0) {
+		for (int i = 0; i < createdTowers.size(); i++) {
+			delete createdTowers[i];
+		}
+	}*/
+	
 }
 
 bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
@@ -162,11 +183,6 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 
 	//If everything initialized
 	return techniques_initialization && items_initialization && buffers_initialization && meshes_initialization && lights_sources_initialization;
-}
-
-void getRealPos(float& x, float& y) {
-	x = 9 - x*2;
-	y = 9 - y*2;
 }
 
 void Renderer::Update(float dt)
@@ -251,6 +267,16 @@ void Renderer::Update(float dt)
 		m_geometric_object5_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object5_transformation_matrix))));
 	}
 
+	m_geometric_object10_transformation_matrix = new glm::mat4[createdTowers.size()];
+	m_geometric_object10_transformation_normal_matrix = new glm::mat4[createdTowers.size()];
+	if (createdTowers.size() != 0) {
+		for (int i = 0; i < createdTowers.size(); i++) {
+			m_geometric_object10_transformation_matrix[i] = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * createdTowers[i]->getX(), 0, -2 * createdTowers[i]->getY()))* terrainTransform * glm::scale(glm::mat4(1.0), glm::vec3(0.4f));
+			m_geometric_object10_transformation_normal_matrix[i] = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object10_transformation_matrix[i]))));
+		}
+			
+	}
+
 	x = 0;
 	y = 0;
 
@@ -274,6 +300,7 @@ void Renderer::Update(float dt)
 	
 	m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 	m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
+
 
 }
 
@@ -534,6 +561,20 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
+	// load geometric object 10
+	mesh = loader.load("../Data/MedievalTower/tower.obj");
+	if (mesh != nullptr)
+	{
+		// You start with 3 towers
+		for (int i = 0; i < 3; i++) {
+			m_geometric_object10 = new Tower();
+			m_geometric_object10->GeometryNode::Init(mesh);
+			availableTowers.push_back(m_geometric_object10);
+		}
+	}
+	else
+		initialized = false;
+
 	return initialized;
 }
 
@@ -609,6 +650,11 @@ void Renderer::RenderShadowMaps()
 		//	// draw the fifth object
 		//	DrawGeometryNodeToShadowMap(m_geometric_object5, m_geometric_object5_transformation_matrix, m_geometric_object5_transformation_normal_matrix);
 		//}
+		if (createdTowers.size() != 0) {
+			for (int i = 0; i < createdTowers.size(); i++) {
+				DrawGeometryNodeToShadowMap(createdTowers[i], m_geometric_object10_transformation_matrix[i], m_geometric_object10_transformation_normal_matrix[i]);
+			}
+		}
 
 		// draw the sixth object
 		DrawGeometryNodeToShadowMap(m_geometric_object6, m_geometric_object6_transformation_matrix, m_geometric_object6_transformation_normal_matrix);
@@ -717,6 +763,12 @@ void Renderer::RenderGeometry()
 	// draw the 9th pbject
 
 	DrawGeometryNode(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
+
+	if (createdTowers.size() != 0) {
+		for (int i = 0; i < createdTowers.size(); i++) {
+			DrawGeometryNode(createdTowers[i], m_geometric_object10_transformation_matrix[i], m_geometric_object10_transformation_normal_matrix[i]);
+		}
+	}
 
 	// Draw all the transparent objects
 
@@ -842,3 +894,19 @@ void Renderer::TileSetPos(int x, int y)
 	this->tileX = x;
 	this->tileY = y;
 }
+
+void Renderer::getRealPos(float& x, float& y) {
+	x = 9 - x * 2;
+	y = 9 - y * 2;
+}
+
+void Renderer::addRemoveTowers(float x, float y) {
+	if (availableTowers.size() != 0) {
+		getRealPos(x, y);
+		availableTowers.back()->setX(x);
+		availableTowers.back()->setY(y);
+		createdTowers.push_back(availableTowers.back());
+		availableTowers.pop_back();
+	}
+}
+

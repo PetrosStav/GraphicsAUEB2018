@@ -1,32 +1,34 @@
 ﻿  Renderer.cpp
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(819): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\sotir\source\repos\graphicsaueb2018\cgproject2018\renderer.cpp(871): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(823): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\sotir\source\repos\graphicsaueb2018\cgproject2018\renderer.cpp(875): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(828): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\sotir\source\repos\graphicsaueb2018\cgproject2018\renderer.cpp(880): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(832): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\sotir\source\repos\graphicsaueb2018\cgproject2018\renderer.cpp(884): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-  CGProject2018.vcxproj -> C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\x64\Debug\CGProject2018.exe
+  Tower.cpp
+  Generating Code...
+  CGProject2018.vcxproj -> C:\Users\sotir\Source\Repos\GraphicsAUEB2018\x64\Debug\CGProject2018.exe
   Copying DLLs to output folder..
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\glew32.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libjpeg-9.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libpng16-16.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libtiff-5.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libwebp-4.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\SDL2.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\SDL2_image.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\zlib1.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\glew32.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libjpeg-9.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libpng16-16.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libtiff-5.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libwebp-4.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\SDL2.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\SDL2_image.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\zlib1.dll
           8 file(s) copied.

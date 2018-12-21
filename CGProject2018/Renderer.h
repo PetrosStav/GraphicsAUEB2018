@@ -84,9 +84,12 @@ protected:
 	class GeometryNode*								m_geometric_object9;
 	glm::mat4										m_geometric_object9_transformation_matrix;
 	glm::mat4										m_geometric_object9_transformation_normal_matrix;
+	//Towers
+	class Tower*									m_geometric_object10;
+	glm::mat4*										m_geometric_object10_transformation_matrix;
+	glm::mat4*										m_geometric_object10_transformation_normal_matrix;
 	// Tile positions
 	int												tileX, tileY;
-	bool											inRoad;
 
 	// Protected Functions
 	bool InitRenderingTechniques();
@@ -106,6 +109,7 @@ public:
 	Renderer();
 	~Renderer();
 	bool										Init(int SCREEN_WIDTH, int SCREEN_HEIGHT);
+	bool										inRoad;
 	void										Update(float dt);
 	bool										ResizeBuffers(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 	bool										ReloadShaders();
@@ -128,7 +132,15 @@ public:
 
 	// Green tile Function
 	void										TileSetPos(int x, int y);
+	//
+	void										getRealPos(float& x, float& y);
 
+	//vector containing available towers
+	std::vector<Tower*>						availableTowers;
+	//vector containing placed towers
+	std::vector<Tower*>						createdTowers;
+	//
+	void									addRemoveTowers(float x, float y);
 };
 
 #endif

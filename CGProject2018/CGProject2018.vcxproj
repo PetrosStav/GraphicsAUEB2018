@@ -135,6 +135,7 @@
     <ClInclude Include="SpotlightNode.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Tools.h" />
+    <ClInclude Include="Tower.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeometricMesh.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="SpotlightNode.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Tools.cpp" />
+    <ClCompile Include="Tower.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
