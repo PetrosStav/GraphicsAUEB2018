@@ -141,6 +141,7 @@ public:
 	std::vector<Tower*>						createdTowers;
 	//
 	void									addRemoveTowers(float x, float y);
+	void									removeTowers(float x, float y);
 };
 
 #endif

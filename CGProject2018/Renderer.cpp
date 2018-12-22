@@ -7,6 +7,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "OBJLoader.h"
 #include "Tower.h"
+#include <iostream>
 
 // RENDERER
 Renderer::Renderer()
@@ -21,7 +22,7 @@ Renderer::Renderer()
 
 	// Road tiles
 	m_geometric_object2 = new GeometryNode*[29];
-	for (int i = 0; i < 29; i++) {
+	for (int i = 0; i < 29; i++) { 
 		m_geometric_object2[i] = nullptr;
 	}
 
@@ -907,6 +908,16 @@ void Renderer::addRemoveTowers(float x, float y) {
 		availableTowers.back()->setY(y);
 		createdTowers.push_back(availableTowers.back());
 		availableTowers.pop_back();
+		std::cout << availableTowers.size()<<std::endl;
 	}
+}
+
+void Renderer::removeTowers(float x, float y) {
+
+	if (createdTowers.size() != 0) {
+		getRealPos(x, y);
+		createdTowers.pop_back();
+	}
+
 }
 
