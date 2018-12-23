@@ -6,7 +6,7 @@ Tower::Tower() : GeometryNode() {
 	this->y_tower = 0;
 }
 
-//Tower::~Tower() { }
+//Tower::~Tower() {}
 
 void Tower::setX(float x) {
 	this->x_tower = x;

@@ -125,15 +125,15 @@ int main(int argc, char *argv[])
 			{
 				// Key down events
 				if (event.key.keysym.sym == SDLK_ESCAPE) quit = true;
-				else if (event.key.keysym.sym == SDLK_z) renderer->ReloadShaders();
-				//else if (event.key.keysym.sym == SDLK_t) renderer->SetRenderingMode(Renderer::RENDERING_MODE::TRIANGLES);
-				else if (event.key.keysym.sym == SDLK_l) renderer->SetRenderingMode(Renderer::RENDERING_MODE::LINES);
+				else if (event.key.keysym.sym == SDLK_k) renderer->ReloadShaders();
+				else if (event.key.keysym.sym == SDLK_i) renderer->SetRenderingMode(Renderer::RENDERING_MODE::TRIANGLES);
+				else if (event.key.keysym.sym == SDLK_o) renderer->SetRenderingMode(Renderer::RENDERING_MODE::LINES);
 				else if (event.key.keysym.sym == SDLK_p) renderer->SetRenderingMode(Renderer::RENDERING_MODE::POINTS);
 				else if (event.key.keysym.sym == SDLK_t)
 				{
 					bool inroad = renderer->inRoad;
 					if (!inroad) {
-						renderer->addRemoveTowers(tileX, tileY);
+						renderer->addTower(tileX, tileY);
 					}
 					
 				}
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 				{
 					bool inroad = renderer->inRoad;
 					if (!inroad) {
-						renderer->removeTowers(tileX,tileY);
+						renderer->rearrangeTower(tileX,tileY);
 					}
 				}
 				else if (event.key.keysym.sym == SDLK_w)

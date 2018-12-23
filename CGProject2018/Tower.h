@@ -1,3 +1,5 @@
+#pragma once
+
 #include "GeometryNode.h"
 
 class Tower : public GeometryNode{

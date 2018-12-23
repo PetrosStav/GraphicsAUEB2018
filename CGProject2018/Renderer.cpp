@@ -38,17 +38,19 @@ Renderer::Renderer()
 	// Red Tile
 	m_geometric_object5 = nullptr;
 
-	// Pirate
-	m_geometric_object6 = nullptr;
+	//// Pirate
+	//m_geometric_object6 = nullptr;
 
-	// Pirate Sword
-	m_geometric_object7 = nullptr;
+	//// Pirate Sword
+	//m_geometric_object7 = nullptr;
 
-	// Pirate Left Leg
-	m_geometric_object8 = nullptr;
+	//// Pirate Left Leg
+	//m_geometric_object8 = nullptr;
 
-	// Pirate Right Leg
-	m_geometric_object9 = nullptr;
+	//// Pirate Right Leg
+	//m_geometric_object9 = nullptr;
+
+	pirates = std::vector<Pirate*>();
 
 	//Tower
 	m_geometric_object10 = nullptr;
@@ -91,17 +93,20 @@ Renderer::~Renderer()
 
 	delete m_geometric_object5;
 
-	delete m_geometric_object6;
+	/*delete m_geometric_object6;
 
 	delete m_geometric_object7;
 
 	delete m_geometric_object8;
 
-	delete m_geometric_object9;
+	delete m_geometric_object9;*/
 
-	delete m_geometric_object10;
+	// delet all pirates
+	for (Pirate* p : pirates) {
+		delete p;
+	}
 
-	/*if (availableTowers.size() != 0) {
+	if (availableTowers.size() != 0) {
 		for (int i = 0; i < availableTowers.size(); i++) {
 			delete availableTowers[i];
 		}
@@ -111,7 +116,7 @@ Renderer::~Renderer()
 		for (int i = 0; i < createdTowers.size(); i++) {
 			delete createdTowers[i];
 		}
-	}*/
+	}
 	
 }
 
@@ -151,6 +156,17 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	road_tiles[27] = std::tuple<int, int>(6, 1);
 	road_tiles[28] = std::tuple<int, int>(6, 0);
 
+	// Create a pirate at position 0,0
+	Pirate* p1 = new Pirate();
+	p1->setX(0);
+	p1->setY(0);
+	pirates.push_back(p1);
+
+	Pirate* p2 = new Pirate();
+	p2->setX(1);
+	p2->setY(1);
+	pirates.push_back(p2);
+
 	// Initialize OpenGL functions
 
 	//Set clear color
@@ -188,7 +204,7 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 
 void Renderer::Update(float dt)
 {
-	float movement_speed = 20.0f;
+	float movement_speed = 15.0f;
 	// compute the direction of the camera
 	glm::vec3 direction = glm::normalize(m_camera_target_position - m_camera_position);
 
@@ -199,6 +215,7 @@ void Renderer::Update(float dt)
 	// move the camera sideways
 	glm::vec3 right = glm::normalize(glm::cross(direction, m_camera_up_vector));
 	m_camera_position += m_camera_movement.y *  movement_speed * right * dt;
+	if (m_camera_position[1] < 0.5) m_camera_position[1] = 0.5;
 	m_camera_target_position += m_camera_movement.y * movement_speed * right * dt;
 
 	glm::mat4 rotation = glm::mat4(1.0f);
@@ -278,30 +295,79 @@ void Renderer::Update(float dt)
 			
 	}
 
-	x = 0;
-	y = 0;
 
-	getRealPos(x, y);
+	// For Pirates
 
-	glm::mat4 pirateRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>()), glm::vec3(0, 1, 0));
+	for (Pirate* p : pirates) {
+		x = p->getX();
+		y = p->getY();
 
-	m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
-	m_geometric_object6_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object6_transformation_matrix))));
-	
-	//glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
-	glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
-	glm::mat4 stPivotRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+		getRealPos(x, y);
 
-	m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 9.5 * 0.09, 1 * 0.09))*
-		glm::translate(glm::mat4(1.0f), glm::vec3(0, .3, 0))* pivotRot *glm::translate(glm::mat4(1.0f), glm::vec3(0, -.3, 0))* stPivotRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
-	m_geometric_object7_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object7_transformation_matrix))));
-	
-	m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
-	m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
-	
-	m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
-	m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
+		glm::mat4 pirateRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>()), glm::vec3(0, 1, 0));
 
+		// body
+
+		glm::mat4 m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
+		glm::mat4 m_geometric_object6_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object6_transformation_matrix))));
+
+		p->setBodyTM(m_geometric_object6_transformation_matrix);
+		p->setBodyTNM(m_geometric_object6_transformation_normal_matrix);
+
+		//glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+		glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+		glm::mat4 stPivotRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+
+		// sword
+
+		glm::mat4 m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 9.5 * 0.09, 1 * 0.09))*
+			glm::translate(glm::mat4(1.0f), glm::vec3(0, .3, 0))* pivotRot *glm::translate(glm::mat4(1.0f), glm::vec3(0, -.3, 0))* stPivotRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 m_geometric_object7_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object7_transformation_matrix))));
+
+		p->setSwordTM(m_geometric_object7_transformation_matrix);
+		p->setSwordTNM(m_geometric_object7_transformation_normal_matrix);
+
+		// left foot
+
+		glm::mat4 m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
+
+		p->setLeftFootTM(m_geometric_object8_transformation_matrix);
+		p->setLeftFootTNM(m_geometric_object8_transformation_normal_matrix);
+
+		// right foot
+
+		glm::mat4 m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
+		
+		p->setRightFootTM(m_geometric_object9_transformation_matrix);
+		p->setRightFootTNM(m_geometric_object9_transformation_normal_matrix);
+
+	}
+
+	//x = 0;
+	//y = 0;
+
+	//getRealPos(x, y);
+
+	//glm::mat4 pirateRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>()), glm::vec3(0, 1, 0));
+
+	//m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
+	//m_geometric_object6_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object6_transformation_matrix))));
+
+	////glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+	//glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+	//glm::mat4 stPivotRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+
+	//m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 9.5 * 0.09, 1 * 0.09))*
+	//	glm::translate(glm::mat4(1.0f), glm::vec3(0, .3, 0))* pivotRot *glm::translate(glm::mat4(1.0f), glm::vec3(0, -.3, 0))* stPivotRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	//m_geometric_object7_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object7_transformation_matrix))));
+
+	//m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	//m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
+
+	//m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+	//m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
 
 }
 
@@ -522,45 +588,64 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
-	// load geometric object 6
-	mesh = loader.load("../Data/Pirate/pirate_body.obj");
-	if (mesh != nullptr)
-	{
-		m_geometric_object6 = new GeometryNode();
-		m_geometric_object6->Init(mesh);
-	}
-	else
-		initialized = false;
+	//// load geometric object 6
+	//mesh = loader.load("../Data/Pirate/pirate_body.obj");
+	//if (mesh != nullptr)
+	//{
+	//	m_geometric_object6 = new GeometryNode();
+	//	m_geometric_object6->Init(mesh);
+	//}
+	//else
+	//	initialized = false;
 
-	// load geometric object 7
-	mesh = loader.load("../Data/Pirate/pirate_arm.obj");
-	if (mesh != nullptr)
-	{
-		m_geometric_object7 = new GeometryNode();
-		m_geometric_object7->Init(mesh);
-	}
-	else
-		initialized = false;
+	//// load geometric object 7
+	//mesh = loader.load("../Data/Pirate/pirate_arm.obj");
+	//if (mesh != nullptr)
+	//{
+	//	m_geometric_object7 = new GeometryNode();
+	//	m_geometric_object7->Init(mesh);
+	//}
+	//else
+	//	initialized = false;
 
-	// load geometric object 8
-	mesh = loader.load("../Data/Pirate/pirate_left_foot.obj");
-	if (mesh != nullptr)
-	{
-		m_geometric_object8 = new GeometryNode();
-		m_geometric_object8->Init(mesh);
-	}
-	else
-		initialized = false;
+	//// load geometric object 8
+	//mesh = loader.load("../Data/Pirate/pirate_left_foot.obj");
+	//if (mesh != nullptr)
+	//{
+	//	m_geometric_object8 = new GeometryNode();
+	//	m_geometric_object8->Init(mesh);
+	//}
+	//else
+	//	initialized = false;
 
-	// load geometric object 9
-	mesh = loader.load("../Data/Pirate/pirate_right_foot.obj");
-	if (mesh != nullptr)
-	{
-		m_geometric_object9 = new GeometryNode();
-		m_geometric_object9->Init(mesh);
+	//// load geometric object 9
+	//mesh = loader.load("../Data/Pirate/pirate_right_foot.obj");
+	//if (mesh != nullptr)
+	//{
+	//	m_geometric_object9 = new GeometryNode();
+	//	m_geometric_object9->Init(mesh);
+	//}
+	//else
+	//	initialized = false;
+
+	auto mesh1 = loader.load("../Data/Pirate/pirate_body.obj");
+	auto mesh2 = loader.load("../Data/Pirate/pirate_arm.obj");
+	auto mesh3 = loader.load("../Data/Pirate/pirate_left_foot.obj");
+	auto mesh4 = loader.load("../Data/Pirate/pirate_right_foot.obj");
+	for (Pirate* p : pirates) {
+		p->setBody(new GeometryNode());
+		p->getBody()->Init(mesh1);
+
+		p->setSword(new GeometryNode());
+		p->getSword()->Init(mesh2);
+
+		p->setLeftFoot(new GeometryNode());
+		p->getLeftFoot()->Init(mesh3);
+
+		p->setRightFoot(new GeometryNode());
+		p->getRightFoot()->Init(mesh4);
+
 	}
-	else
-		initialized = false;
 
 	// load geometric object 10
 	mesh = loader.load("../Data/MedievalTower/tower.obj");
@@ -657,17 +742,32 @@ void Renderer::RenderShadowMaps()
 			}
 		}
 
-		// draw the sixth object
-		DrawGeometryNodeToShadowMap(m_geometric_object6, m_geometric_object6_transformation_matrix, m_geometric_object6_transformation_normal_matrix);
+		//// draw the sixth object
+		//DrawGeometryNodeToShadowMap(m_geometric_object6, m_geometric_object6_transformation_matrix, m_geometric_object6_transformation_normal_matrix);
 
-		// draw the 7th object
-		DrawGeometryNodeToShadowMap(m_geometric_object7, m_geometric_object7_transformation_matrix, m_geometric_object7_transformation_normal_matrix);
+		//// draw the 7th object
+		//DrawGeometryNodeToShadowMap(m_geometric_object7, m_geometric_object7_transformation_matrix, m_geometric_object7_transformation_normal_matrix);
 
-		// draw the 8th object
-		DrawGeometryNodeToShadowMap(m_geometric_object8, m_geometric_object8_transformation_matrix, m_geometric_object8_transformation_normal_matrix);
+		//// draw the 8th object
+		//DrawGeometryNodeToShadowMap(m_geometric_object8, m_geometric_object8_transformation_matrix, m_geometric_object8_transformation_normal_matrix);
 
-		// draw the 9th object
-		DrawGeometryNodeToShadowMap(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
+		//// draw the 9th object
+		//DrawGeometryNodeToShadowMap(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
+
+		for (Pirate* p : pirates) {
+			// body
+			DrawGeometryNodeToShadowMap(p->getBody(), p->getBodyTM(), p->getBodyTNM());
+
+			// sword
+			DrawGeometryNodeToShadowMap(p->getSword(), p->getSwordTM(), p->getSwordTNM());
+
+			// leftfoot
+			DrawGeometryNodeToShadowMap(p->getLeftFoot(), p->getLeftFootTM(), p->getLeftFootTNM());
+
+			//rightfoot
+			DrawGeometryNodeToShadowMap(p->getRightFoot(), p->getRightFootTM(), p->getRightFootTNM());
+
+		}
 
 		glBindVertexArray(0);
 
@@ -749,21 +849,36 @@ void Renderer::RenderGeometry()
 	// draw the third object
 	DrawGeometryNode(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
 
-	// draw the sixth pbject
+	//// draw the sixth pbject
 
-	DrawGeometryNode(m_geometric_object6, m_geometric_object6_transformation_matrix, m_geometric_object6_transformation_normal_matrix);
+	//DrawGeometryNode(m_geometric_object6, m_geometric_object6_transformation_matrix, m_geometric_object6_transformation_normal_matrix);
 
-	// draw the 7th pbject
+	//// draw the 7th pbject
 
-	DrawGeometryNode(m_geometric_object7, m_geometric_object7_transformation_matrix, m_geometric_object7_transformation_normal_matrix);
+	//DrawGeometryNode(m_geometric_object7, m_geometric_object7_transformation_matrix, m_geometric_object7_transformation_normal_matrix);
 
-	// draw the 8th pbject
+	//// draw the 8th pbject
 
-	DrawGeometryNode(m_geometric_object8, m_geometric_object8_transformation_matrix, m_geometric_object8_transformation_normal_matrix);
+	//DrawGeometryNode(m_geometric_object8, m_geometric_object8_transformation_matrix, m_geometric_object8_transformation_normal_matrix);
 
-	// draw the 9th pbject
+	//// draw the 9th pbject
 
-	DrawGeometryNode(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
+	//DrawGeometryNode(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
+
+	for (Pirate* p : pirates) {
+		// body
+		DrawGeometryNode(p->getBody(), p->getBodyTM(), p->getBodyTNM());
+
+		// sword
+		DrawGeometryNode(p->getSword(), p->getSwordTM(), p->getSwordTNM());
+
+		// leftfoot
+		DrawGeometryNode(p->getLeftFoot(), p->getLeftFootTM(), p->getLeftFootTNM());
+
+		//rightfoot
+		DrawGeometryNode(p->getRightFoot(), p->getRightFootTM(), p->getRightFootTNM());
+
+	}
 
 	if (createdTowers.size() != 0) {
 		for (int i = 0; i < createdTowers.size(); i++) {
@@ -901,23 +1016,54 @@ void Renderer::getRealPos(float& x, float& y) {
 	y = 9 - y * 2;
 }
 
-void Renderer::addRemoveTowers(float x, float y) {
+void Renderer::addTower(float x, float y) {
 	if (availableTowers.size() != 0) {
 		getRealPos(x, y);
+		// Check that no other towers are in this spot
+		for (Tower* t : createdTowers) {
+			if (t->getX() == x && t->getY() == y) {
+				// TODO
+				// If we found then [MESSAGE] OR [ANOTHER TILE COLOR] + return
+				return;
+			}
+		}
 		availableTowers.back()->setX(x);
 		availableTowers.back()->setY(y);
 		createdTowers.push_back(availableTowers.back());
 		availableTowers.pop_back();
-		std::cout << availableTowers.size()<<std::endl;
 	}
 }
 
-void Renderer::removeTowers(float x, float y) {
+void Renderer::removeTower(float x, float y) {
 
 	if (createdTowers.size() != 0) {
 		getRealPos(x, y);
-		createdTowers.pop_back();
+		unsigned short i = 0;
+		for (Tower* t : createdTowers) {
+			if (t->getX() == x && t->getY() == y) {
+				Tower* erased = createdTowers[i];
+				createdTowers.erase(createdTowers.begin() + i);
+				delete erased;
+				printf("Removed Tower at Pos %f,%f \n", x, y);
+			}
+			i++;
+		}
 	}
-
 }
 
+void Renderer::rearrangeTower(float x, float y) {
+
+	if (createdTowers.size() != 0) {
+		getRealPos(x, y);
+		unsigned short i = 0;
+		for (Tower* t : createdTowers) {
+			if (t->getX() == x && t->getY() == y) {
+				Tower* erased = createdTowers[i];
+				createdTowers.erase(createdTowers.begin() + i);
+				availableTowers.push_back(erased);
+				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
+			}
+			i++;
+		}
+	}
+}

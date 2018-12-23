@@ -6,6 +6,8 @@
 #include <vector>
 #include "ShaderProgram.h"
 #include "SpotlightNode.h"
+#include "Tower.h"
+#include "Pirate.h"
 
 class Renderer
 {
@@ -68,22 +70,26 @@ protected:
 	class GeometryNode*								m_geometric_object5;
 	glm::mat4										m_geometric_object5_transformation_matrix;
 	glm::mat4										m_geometric_object5_transformation_normal_matrix;
-	// Pirate Body
-	class GeometryNode*								m_geometric_object6;
-	glm::mat4										m_geometric_object6_transformation_matrix;
-	glm::mat4										m_geometric_object6_transformation_normal_matrix;
-	// Pirate Sword
-	class GeometryNode*								m_geometric_object7;
-	glm::mat4										m_geometric_object7_transformation_matrix;
-	glm::mat4										m_geometric_object7_transformation_normal_matrix;
-	// Pirate Left Leg
-	class GeometryNode*								m_geometric_object8;
-	glm::mat4										m_geometric_object8_transformation_matrix;
-	glm::mat4										m_geometric_object8_transformation_normal_matrix;
-	// Pirate Right Leg
-	class GeometryNode*								m_geometric_object9;
-	glm::mat4										m_geometric_object9_transformation_matrix;
-	glm::mat4										m_geometric_object9_transformation_normal_matrix;
+	//// Pirate Body
+	//class GeometryNode*								m_geometric_object6;
+	//glm::mat4										m_geometric_object6_transformation_matrix;
+	//glm::mat4										m_geometric_object6_transformation_normal_matrix;
+	//// Pirate Sword
+	//class GeometryNode*								m_geometric_object7;
+	//glm::mat4										m_geometric_object7_transformation_matrix;
+	//glm::mat4										m_geometric_object7_transformation_normal_matrix;
+	//// Pirate Left Leg
+	//class GeometryNode*								m_geometric_object8;
+	//glm::mat4										m_geometric_object8_transformation_matrix;
+	//glm::mat4										m_geometric_object8_transformation_normal_matrix;
+	//// Pirate Right Leg
+	//class GeometryNode*								m_geometric_object9;
+	//glm::mat4										m_geometric_object9_transformation_matrix;
+	//glm::mat4										m_geometric_object9_transformation_normal_matrix;
+
+	// Pirates
+	std::vector<Pirate*>							pirates;
+
 	//Towers
 	class Tower*									m_geometric_object10;
 	glm::mat4*										m_geometric_object10_transformation_matrix;
@@ -136,12 +142,13 @@ public:
 	void										getRealPos(float& x, float& y);
 
 	//vector containing available towers
-	std::vector<Tower*>						availableTowers;
+	std::vector<Tower*>							availableTowers;
 	//vector containing placed towers
-	std::vector<Tower*>						createdTowers;
+	std::vector<Tower*>							createdTowers;
 	//
-	void									addRemoveTowers(float x, float y);
-	void									removeTowers(float x, float y);
+	void										addTower(float x, float y);
+	void										removeTower(float x, float y);
+	void										rearrangeTower(float x, float y);
 };
 
 #endif
