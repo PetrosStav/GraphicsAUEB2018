@@ -91,9 +91,10 @@ protected:
 	std::vector<Pirate*>							pirates;
 
 	//Towers
-	class Tower*									m_geometric_object10;
+	/*class Tower*									m_geometric_object10;
 	glm::mat4*										m_geometric_object10_transformation_matrix;
-	glm::mat4*										m_geometric_object10_transformation_normal_matrix;
+	glm::mat4*										m_geometric_object10_transformation_normal_matrix;*/
+	//std::vector<Tower*>								towers;
 	// Tile positions
 	int												tileX, tileY;
 

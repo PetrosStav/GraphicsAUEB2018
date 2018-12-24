@@ -1,32 +1,11 @@
-﻿  Renderer.cpp
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(987): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(991): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(996): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1000): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  CGProject2018.vcxproj -> C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\x64\Debug\CGProject2018.exe
+﻿  CGProject2018.vcxproj -> C:\Users\sotir\Source\Repos\GraphicsAUEB2018\x64\Debug\CGProject2018.exe
   Copying DLLs to output folder..
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\glew32.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libjpeg-9.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libpng16-16.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libtiff-5.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\libwebp-4.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\SDL2.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\SDL2_image.dll
-  C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\zlib1.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\glew32.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libjpeg-9.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libpng16-16.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libtiff-5.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\libwebp-4.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\SDL2.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\SDL2_image.dll
+  C:\Users\sotir\Source\Repos\GraphicsAUEB2018\3rdParty\bin\x64\zlib1.dll
           8 file(s) copied.
