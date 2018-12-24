@@ -6,8 +6,7 @@
 #include <vector>
 #include "ShaderProgram.h"
 #include "SpotlightNode.h"
-#include "Tower.h"
-#include "Pirate.h"
+#include "GameState.h"
 
 class Renderer
 {
@@ -31,7 +30,7 @@ protected:
 	
 	// Our stuff
 	// Road Tile List
-	std::tuple<int,int> road_tiles[29];
+	//std::tuple<int,int> road_tiles[29];
 
 	// Geometry Rendering Intermediate Buffer
 	GLuint m_fbo;
@@ -88,7 +87,7 @@ protected:
 	//glm::mat4										m_geometric_object9_transformation_normal_matrix;
 
 	// Pirates
-	std::vector<Pirate*>							pirates;
+	//std::vector<Pirate*>							pirates;
 
 	//Towers
 	/*class Tower*									m_geometric_object10;
@@ -96,7 +95,9 @@ protected:
 	glm::mat4*										m_geometric_object10_transformation_normal_matrix;*/
 	//std::vector<Tower*>								towers;
 	// Tile positions
-	int												tileX, tileY;
+	//int												tileX, tileY;
+
+	GameState*										game;
 
 	// Protected Functions
 	bool InitRenderingTechniques();
@@ -116,7 +117,7 @@ public:
 	Renderer();
 	~Renderer();
 	bool										Init(int SCREEN_WIDTH, int SCREEN_HEIGHT);
-	bool										inRoad;
+	//bool										inRoad;
 	void										Update(float dt);
 	bool										ResizeBuffers(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 	bool										ReloadShaders();
@@ -137,19 +138,23 @@ public:
 	void										CameraMoveRight(bool enable);
 	void										CameraLook(glm::vec2 lookDir);	
 
-	// Green tile Function
-	void										TileSetPos(int x, int y);
-	//
-	void										getRealPos(float& x, float& y);
+	//// Green tile Function
+	//void										TileSetPos(int x, int y);
+	////
+	//void										getRealPos(float& x, float& y);
 
-	//vector containing available towers
-	std::vector<Tower*>							availableTowers;
-	//vector containing placed towers
-	std::vector<Tower*>							createdTowers;
-	//
-	void										addTower(float x, float y);
-	void										removeTower(float x, float y);
-	void										rearrangeTower(float x, float y);
+	////vector containing available towers
+	//std::vector<Tower*>							availableTowers;
+	////vector containing placed towers
+	//std::vector<Tower*>							createdTowers;
+	////
+	//void										addTower(float x, float y);
+	//void										removeTower(float x, float y);
+	//void										rearrangeTower(float x, float y);
+
+	void										setGameState(GameState* game);
+	GameState*									getGameState();
+
 };
 
 #endif

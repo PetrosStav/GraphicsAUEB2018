@@ -50,7 +50,9 @@ Renderer::Renderer()
 	//// Pirate Right Leg
 	//m_geometric_object9 = nullptr;
 
-	pirates = std::vector<Pirate*>();
+	/*pirates = std::vector<Pirate*>();
+	availableTowers = std::vector<Tower*>();
+	createdTowers = std::vector<Tower*>();*/
 
 	//
 	m_rendering_mode = RENDERING_MODE::TRIANGLES;	
@@ -97,10 +99,10 @@ Renderer::~Renderer()
 
 	delete m_geometric_object9;*/
 
-	// delete all pirates
-	for (Pirate* p : pirates) {
-		delete p;
-	}
+	//// delete all pirates
+	//for (Pirate* p : pirates) {
+	//	delete p;
+	//}
 
 	/*if (availableTowers.size() != 0) {
 		for (int i = 0; i < availableTowers.size(); i++) {
@@ -114,13 +116,13 @@ Renderer::~Renderer()
 		}
 	}*/
 
-	for (Tower* t : availableTowers) {
+	/*for (Tower* t : availableTowers) {
 		delete t;
 	}
 	
 	for (Tower* t : createdTowers) {
 		delete t;
-	}
+	}*/
 }
 
 bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
@@ -128,47 +130,47 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	this->m_screen_width = SCREEN_WIDTH;
 	this->m_screen_height = SCREEN_HEIGHT;
 
-	// Initialize road tiles
-	road_tiles[0] = std::tuple<int,int>(0, 0);
-	road_tiles[1] = std::tuple<int, int>(0, 1);
-	road_tiles[2] = std::tuple<int, int>(0, 2);
-	road_tiles[3] = std::tuple<int, int>(0, 3);
-	road_tiles[4] = std::tuple<int, int>(1, 3);
-	road_tiles[5] = std::tuple<int, int>(1, 4);
-	road_tiles[6] = std::tuple<int, int>(1, 5);
-	road_tiles[7] = std::tuple<int, int>(1, 6);
-	road_tiles[8] = std::tuple<int, int>(1, 7);
-	road_tiles[9] = std::tuple<int, int>(2, 7);
-	road_tiles[10] = std::tuple<int, int>(2, 8);
-	road_tiles[11] = std::tuple<int, int>(3, 8);
-	road_tiles[12] = std::tuple<int, int>(4, 8);
-	road_tiles[13] = std::tuple<int, int>(5, 8);
-	road_tiles[14] = std::tuple<int, int>(6, 8);
-	road_tiles[15] = std::tuple<int, int>(6, 7);
-	road_tiles[16] = std::tuple<int, int>(6, 6);
-	road_tiles[17] = std::tuple<int, int>(7, 6);
-	road_tiles[18] = std::tuple<int, int>(7, 5);
-	road_tiles[19] = std::tuple<int, int>(7, 4);
-	road_tiles[20] = std::tuple<int, int>(7, 3);
-	road_tiles[21] = std::tuple<int, int>(8, 3);
-	road_tiles[22] = std::tuple<int, int>(9, 3);
-	road_tiles[23] = std::tuple<int, int>(9, 2);
-	road_tiles[24] = std::tuple<int, int>(9, 1);
-	road_tiles[25] = std::tuple<int, int>(8, 1);
-	road_tiles[26] = std::tuple<int, int>(7, 1);
-	road_tiles[27] = std::tuple<int, int>(6, 1);
-	road_tiles[28] = std::tuple<int, int>(6, 0);
+	//// Initialize road tiles
+	//road_tiles[0] = std::tuple<int,int>(0, 0);
+	//road_tiles[1] = std::tuple<int, int>(0, 1);
+	//road_tiles[2] = std::tuple<int, int>(0, 2);
+	//road_tiles[3] = std::tuple<int, int>(0, 3);
+	//road_tiles[4] = std::tuple<int, int>(1, 3);
+	//road_tiles[5] = std::tuple<int, int>(1, 4);
+	//road_tiles[6] = std::tuple<int, int>(1, 5);
+	//road_tiles[7] = std::tuple<int, int>(1, 6);
+	//road_tiles[8] = std::tuple<int, int>(1, 7);
+	//road_tiles[9] = std::tuple<int, int>(2, 7);
+	//road_tiles[10] = std::tuple<int, int>(2, 8);
+	//road_tiles[11] = std::tuple<int, int>(3, 8);
+	//road_tiles[12] = std::tuple<int, int>(4, 8);
+	//road_tiles[13] = std::tuple<int, int>(5, 8);
+	//road_tiles[14] = std::tuple<int, int>(6, 8);
+	//road_tiles[15] = std::tuple<int, int>(6, 7);
+	//road_tiles[16] = std::tuple<int, int>(6, 6);
+	//road_tiles[17] = std::tuple<int, int>(7, 6);
+	//road_tiles[18] = std::tuple<int, int>(7, 5);
+	//road_tiles[19] = std::tuple<int, int>(7, 4);
+	//road_tiles[20] = std::tuple<int, int>(7, 3);
+	//road_tiles[21] = std::tuple<int, int>(8, 3);
+	//road_tiles[22] = std::tuple<int, int>(9, 3);
+	//road_tiles[23] = std::tuple<int, int>(9, 2);
+	//road_tiles[24] = std::tuple<int, int>(9, 1);
+	//road_tiles[25] = std::tuple<int, int>(8, 1);
+	//road_tiles[26] = std::tuple<int, int>(7, 1);
+	//road_tiles[27] = std::tuple<int, int>(6, 1);
+	//road_tiles[28] = std::tuple<int, int>(6, 0);
 
-	// Create a pirate at position 0,0
-	Pirate* p1 = new Pirate();
-	p1->setX(0);
-	p1->setY(0);
-	pirates.push_back(p1);
+	//// Create a pirate at position 0,0
+	//Pirate* p1 = new Pirate();
+	//p1->setX(0);
+	//p1->setY(0);
+	//pirates.push_back(p1);
 
-	Pirate* p2 = new Pirate();
-	p2->setX(1);
-	p2->setY(1);
-	pirates.push_back(p2);
+	//Pirate* p2 = new Pirate();
+	//p2->setX(1);
+	//p2->setY(1);
+	//pirates.push_back(p2);
 
 	// Initialize OpenGL functions
 
@@ -248,12 +250,13 @@ void Renderer::Update(float dt)
 
 	m_geometric_object2_transformation_matrix = new glm::mat4[29];
 	m_geometric_object2_transformation_normal_matrix = new glm::mat4[29];
+
 	for (int i = 0; i < 29; i++) {
 
-		float x = (float)std::get<0>(road_tiles[i]);
-		float y = (float)std::get<1>(road_tiles[i]);
+		float x = (float)std::get<0>(game->getRoadTiles()[i]);
+		float y = (float)std::get<1>(game->getRoadTiles()[i]);
 
-		getRealPos(x, y);
+		game->getRealPos(x, y);
 
 		m_geometric_object2_transformation_matrix[i] = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))*glm::scale(glm::mat4(1.f), glm::vec3(2.0f));
 		m_geometric_object2_transformation_normal_matrix[i] = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object2_transformation_matrix[i]))));
@@ -262,19 +265,16 @@ void Renderer::Update(float dt)
 	m_geometric_object3_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(2 * 3.f, 0, -2 * 10.f))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
 	m_geometric_object3_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object3_transformation_matrix))));
 
-	float x = (float)this->tileX;
-	float y = (float)this->tileY;
+	float x = (float)game->getTileX();
+	float y = (float)game->getTileY();
 
-	getRealPos(x, y);
+	game->getRealPos(x, y);
 
-	inRoad = false;
+	bool inRoad = false;
 
-	for (auto t : road_tiles) {
-		if (std::get<0>(t) == this->tileX && std::get<1>(t) == this->tileY) {
-			inRoad = true;
-			break;
-		}
-	}
+	game->updateInRoad();
+
+	inRoad = game->getInRoad();
 
 	glm::mat4 terrainTransform = glm::translate(glm::mat4(1.f), glm::vec3(18, 0.05f, 18));
 
@@ -282,8 +282,7 @@ void Renderer::Update(float dt)
 
 		m_geometric_object4_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))* terrainTransform * glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
 		m_geometric_object4_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object4_transformation_matrix))));
-	}
-	else {
+	}else {
 		m_geometric_object5_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.01f, -2 * y))* terrainTransform * glm::scale(glm::mat4(1.0), glm::vec3(2.0f));
 		m_geometric_object5_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object5_transformation_matrix))));
 	}
@@ -297,7 +296,7 @@ void Renderer::Update(float dt)
 		}
 			
 	}*/
-	for (Tower* t : createdTowers) {
+	for (Tower* t : game->getCreatedTowers()) {
 		x = t->getX();
 		y = t->getY();
 
@@ -310,11 +309,11 @@ void Renderer::Update(float dt)
 
 	// For Pirates
 
-	for (Pirate* p : pirates) {
+	for (Pirate* p : game->getPirates()) {
 		x = p->getX();
 		y = p->getY();
 
-		getRealPos(x, y);
+		game->getRealPos(x, y);
 
 		glm::mat4 pirateRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>()), glm::vec3(0, 1, 0));
 
@@ -640,11 +639,37 @@ bool Renderer::InitGeometricMeshes()
 	//else
 	//	initialized = false;
 
-	auto mesh1 = loader.load("../Data/Pirate/pirate_body.obj");
-	auto mesh2 = loader.load("../Data/Pirate/pirate_arm.obj");
-	auto mesh3 = loader.load("../Data/Pirate/pirate_left_foot.obj");
-	auto mesh4 = loader.load("../Data/Pirate/pirate_right_foot.obj");
-	for (Pirate* p : pirates) {
+	mesh = loader.load("../Data/Pirate/pirate_body.obj");
+	if (mesh != nullptr) {
+		game->setPirateBodyMesh(loader.load("../Data/Pirate/pirate_body.obj"));
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/Pirate/pirate_arm.obj");
+	if (mesh != nullptr) {
+		game->setPirateSwordMesh(loader.load("../Data/Pirate/pirate_arm.obj"));
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/Pirate/pirate_left_foot.obj");
+	if (mesh != nullptr) {
+		game->setPirateLFootMesh(loader.load("../Data/Pirate/pirate_left_foot.obj"));
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/Pirate/pirate_right_foot.obj");
+	if (mesh != nullptr) {
+		game->setPirateRFootMesh(loader.load("../Data/Pirate/pirate_right_foot.obj"));
+	}
+	else
+		initialized = false;
+	
+	game->assignMeshtoPirates();
+
+	/*for (Pirate* p : game->getPirates()) {
 		p->setBody(new GeometryNode());
 		p->getBody()->Init(mesh1);
 
@@ -657,19 +682,23 @@ bool Renderer::InitGeometricMeshes()
 		p->setRightFoot(new GeometryNode());
 		p->getRightFoot()->Init(mesh4);
 
-	}
+	}*/
 
 	// load geometric object 10
 	mesh = loader.load("../Data/MedievalTower/tower.obj");
 	if (mesh != nullptr)
 	{
-		// You start with 3 towers
-		for (int i = 0; i < 3; i++) {
-			Tower* tower = new Tower();
-			tower->setTower(new GeometryNode());
-			tower->getTower()->Init(mesh);
-			availableTowers.push_back(tower);
-		}
+		game->setTowerMesh(mesh);
+
+		game->assignMeshToTowers();
+
+		//// You start with 3 towers
+		//for (int i = 0; i < 3; i++) {
+		//	Tower* tower = new Tower();
+		//	tower->setTower(new GeometryNode());
+		//	tower->getTower()->Init(mesh);
+		//	game->getAvailableTowers().push_back(tower);
+		//}
 	}
 	else
 		initialized = false;
@@ -754,7 +783,7 @@ void Renderer::RenderShadowMaps()
 				DrawGeometryNodeToShadowMap(createdTowers[i], m_geometric_object10_transformation_matrix[i], m_geometric_object10_transformation_normal_matrix[i]);
 			}
 		}*/
-		for (Tower* t : createdTowers) {
+		for (Tower* t : game->getCreatedTowers()) {
 			DrawGeometryNodeToShadowMap(t->getTower(), t->getTowerTM(), t->getTowerTNM());
 		}
 
@@ -772,7 +801,7 @@ void Renderer::RenderShadowMaps()
 		//// draw the 9th object
 		//DrawGeometryNodeToShadowMap(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
 
-		for (Pirate* p : pirates) {
+		for (Pirate* p : game->getPirates()) {
 			// body
 			DrawGeometryNodeToShadowMap(p->getBody(), p->getBodyTM(), p->getBodyTNM());
 
@@ -883,7 +912,7 @@ void Renderer::RenderGeometry()
 
 	//DrawGeometryNode(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
 
-	for (Pirate* p : pirates) {
+	for (Pirate* p : game->getPirates()) {
 		// body
 		DrawGeometryNode(p->getBody(), p->getBodyTM(), p->getBodyTNM());
 
@@ -903,7 +932,7 @@ void Renderer::RenderGeometry()
 			DrawGeometryNode(createdTowers[i], m_geometric_object10_transformation_matrix[i], m_geometric_object10_transformation_normal_matrix[i]);
 		}
 	}*/
-	for (Tower* t : createdTowers) {
+	for (Tower* t : game->getCreatedTowers()) {
 		DrawGeometryNode(t->getTower(), t->getTowerTM(), t->getTowerTNM());
 	}
 
@@ -916,7 +945,7 @@ void Renderer::RenderGeometry()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	if (!inRoad) {
+	if (!game->getInRoad()) {
 		// draw the fourth object
 		DrawGeometryNode(m_geometric_object4, m_geometric_object4_transformation_matrix, m_geometric_object4_transformation_normal_matrix);
 	}
@@ -1028,65 +1057,75 @@ void Renderer::CameraLook(glm::vec2 lookDir)
 	m_camera_look_angle_destination = glm::vec2(1, -1) * lookDir;
 }
 
-void Renderer::TileSetPos(int x, int y)
+void Renderer::setGameState(GameState * game)
 {
-	this->tileX = x;
-	this->tileY = y;
+	this->game = game;
 }
 
-void Renderer::getRealPos(float& x, float& y) {
-	x = 9 - x * 2;
-	y = 9 - y * 2;
+GameState * Renderer::getGameState()
+{
+	return game;
 }
 
-void Renderer::addTower(float x, float y) {
-	if (availableTowers.size() != 0) {
-		getRealPos(x, y);
-		// Check that no other towers are in this spot
-		for (Tower* t : createdTowers) {
-			if (t->getX() == x && t->getY() == y) {
-				// TODO
-				// If we found then [MESSAGE] OR [ANOTHER TILE COLOR] + return
-				return;
-			}
-		}
-		availableTowers.back()->setX(x);
-		availableTowers.back()->setY(y);
-		createdTowers.push_back(availableTowers.back());
-		availableTowers.pop_back();
-	}
-}
-
-void Renderer::removeTower(float x, float y) {
-
-	if (createdTowers.size() != 0) {
-		getRealPos(x, y);
-		unsigned short i = 0;
-		for (Tower* t : createdTowers) {
-			if (t->getX() == x && t->getY() == y) {
-				Tower* erased = createdTowers[i];
-				createdTowers.erase(createdTowers.begin() + i);
-				delete erased;
-				printf("Removed Tower at Pos %f,%f \n", x, y);
-			}
-			i++;
-		}
-	}
-}
-
-void Renderer::rearrangeTower(float x, float y) {
-
-	if (createdTowers.size() != 0) {
-		getRealPos(x, y);
-		unsigned short i = 0;
-		for (Tower* t : createdTowers) {
-			if (t->getX() == x && t->getY() == y) {
-				Tower* erased = createdTowers[i];
-				createdTowers.erase(createdTowers.begin() + i);
-				availableTowers.push_back(erased);
-				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
-			}
-			i++;
-		}
-	}
-}
+//void Renderer::TileSetPos(int x, int y)
+//{
+//	this->tileX = x;
+//	this->tileY = y;
+//}
+//
+//void Renderer::getRealPos(float& x, float& y) {
+//	x = 9 - x * 2;
+//	y = 9 - y * 2;
+//}
+//
+//void Renderer::addTower(float x, float y) {
+//	if (availableTowers.size() != 0) {
+//		getRealPos(x, y);
+//		// Check that no other towers are in this spot
+//		for (Tower* t : createdTowers) {
+//			if (t->getX() == x && t->getY() == y) {
+//				// TODO
+//				// If we found then [MESSAGE] OR [ANOTHER TILE COLOR] + return
+//				return;
+//			}
+//		}
+//		availableTowers.back()->setX(x);
+//		availableTowers.back()->setY(y);
+//		createdTowers.push_back(availableTowers.back());
+//		availableTowers.pop_back();
+//	}
+//}
+//
+//void Renderer::removeTower(float x, float y) {
+//
+//	if (createdTowers.size() != 0) {
+//		getRealPos(x, y);
+//		unsigned short i = 0;
+//		for (Tower* t : createdTowers) {
+//			if (t->getX() == x && t->getY() == y) {
+//				Tower* erased = createdTowers[i];
+//				createdTowers.erase(createdTowers.begin() + i);
+//				delete erased;
+//				printf("Removed Tower at Pos %f,%f \n", x, y);
+//			}
+//			i++;
+//		}
+//	}
+//}
+//
+//void Renderer::rearrangeTower(float x, float y) {
+//
+//	if (createdTowers.size() != 0) {
+//		getRealPos(x, y);
+//		unsigned short i = 0;
+//		for (Tower* t : createdTowers) {
+//			if (t->getX() == x && t->getY() == y) {
+//				Tower* erased = createdTowers[i];
+//				createdTowers.erase(createdTowers.begin() + i);
+//				availableTowers.push_back(erased);
+//				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
+//			}
+//			i++;
+//		}
+//	}
+//}

@@ -140,6 +140,7 @@
     <ClInclude Include="Tower.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GeometricMesh.cpp" />
     <ClCompile Include="GeometryNode.cpp" />
     <ClCompile Include="main.cpp" />

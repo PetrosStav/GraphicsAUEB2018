@@ -3,6 +3,7 @@
 #include <chrono>
 #include "GLEW\glew.h"
 #include "Renderer.h"
+#include "GameState.h"
 
 using namespace std;
 
@@ -25,7 +26,7 @@ void func()
 }
 
 // initialize SDL and OpenGL
-bool init()
+bool init(GameState* game)
 {
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -72,6 +73,11 @@ bool init()
 	glGetError();
 
 	renderer = new Renderer();
+
+	// set renderer's game state
+
+	renderer->setGameState(game);
+
 	bool engine_initialized = renderer->Init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//atexit(func);
@@ -91,8 +97,11 @@ void clean_up()
 
 int main(int argc, char *argv[])
 {
+	// Initialize the Game State
+	GameState* game = new GameState();
+
 	//Initialize
-	if (init() == false)
+	if (init(game) == false)
 	{
 		system("pause");
 		return EXIT_FAILURE;
@@ -105,11 +114,14 @@ int main(int argc, char *argv[])
 
 	auto simulation_start = chrono::steady_clock::now();
 
-	// Initialize position of tile to center of the map
-	int tileX, tileY;
-	tileX = 4;
-	tileY = 4;
-	renderer->TileSetPos(tileX, tileY);
+	//// Initialize position of tile to center of the map
+	//int tileX, tileY;
+	//tileX = 4;
+	//tileY = 4;
+	//renderer->TileSetPos(tileX, tileY);
+
+	// Timers for timed events
+	unsigned int lastTime = 0, currentTime;
 
 	// Wait for user exit
 	while (quit == false)
@@ -131,17 +143,17 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_p) renderer->SetRenderingMode(Renderer::RENDERING_MODE::POINTS);
 				else if (event.key.keysym.sym == SDLK_t)
 				{
-					bool inroad = renderer->inRoad;
+					bool inroad = game->getInRoad();
 					if (!inroad) {
-						renderer->addTower(tileX, tileY);
+						game->addTower();
 					}
 					
 				}
 				else if (event.key.keysym.sym == SDLK_r)
 				{
-					bool inroad = renderer->inRoad;
+					bool inroad = game->getInRoad();
 					if (!inroad) {
-						renderer->rearrangeTower(tileX,tileY);
+						game->rearrangeTower();
 					}
 				}
 				else if (event.key.keysym.sym == SDLK_w)
@@ -160,25 +172,30 @@ int main(int argc, char *argv[])
 				{
 					renderer->CameraMoveRight(true);
 				}
-				else if (event.key.keysym.sym == SDLK_UP && tileY + 1<=9)
+				else if (event.key.keysym.sym == SDLK_UP && game->getTileY() + 1<=9)
 				{
-					tileY++;
-					renderer->TileSetPos(tileX, tileY);
+					game->setTileY(game->getTileY() + 1);
+					game->updateInRoad();
 				}
-				else if (event.key.keysym.sym == SDLK_DOWN && tileY - 1 >= 0)
+				else if (event.key.keysym.sym == SDLK_DOWN && game->getTileY() - 1 >= 0)
 				{
-					tileY--;
-					renderer->TileSetPos(tileX, tileY);
+					game->setTileY(game->getTileY() - 1);
+					game->updateInRoad();
 				}
-				else if (event.key.keysym.sym == SDLK_LEFT && tileX + 1 <= 9)
+				else if (event.key.keysym.sym == SDLK_LEFT && game->getTileX() + 1 <= 9)
 				{
-					tileX++;
-					renderer->TileSetPos(tileX, tileY);
+					game->setTileX(game->getTileX() + 1);
+					game->updateInRoad();
 				}
-				else if (event.key.keysym.sym == SDLK_RIGHT && tileX - 1 >= 0)
+				else if (event.key.keysym.sym == SDLK_RIGHT && game->getTileX() - 1 >= 0)
 				{
-					tileX--;
-					renderer->TileSetPos(tileX, tileY);
+					game->setTileX(game->getTileX() - 1);
+					game->updateInRoad();
+				}
+				else if (event.key.keysym.sym == SDLK_q)
+				{
+					// TEST TO CREATE PIRATE ON THE FLY
+					game->createPirate();
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -240,6 +257,14 @@ int main(int argc, char *argv[])
 		float dt = chrono::duration <float>(simulation_end - simulation_start).count(); // in seconds
 		simulation_start = chrono::steady_clock::now();
 
+		// Create a timed event
+		currentTime = SDL_GetTicks();
+		if (currentTime > lastTime + 30*1000) {
+			printf("Timed Event: 30 seconds have passed, one more Tower is available.\n");
+			game->createTower();
+			lastTime = currentTime;
+		}
+
 		// Update
 		renderer->Update(dt);
 
@@ -249,6 +274,9 @@ int main(int argc, char *argv[])
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
 	}
+
+	// Delete the game state
+	delete game;
 
 	//Clean up
 	clean_up();
