@@ -16,11 +16,11 @@ GameState::GameState() {
 	p1->setY(0);
 	pirates.push_back(p1);
 
-	// Crate a pirate at position 1,1
-	Pirate* p2 = new Pirate();
-	p2->setX(1);
-	p2->setY(1);
-	pirates.push_back(p2);
+	//// Create a pirate at position 1,1
+	//Pirate* p2 = new Pirate();
+	//p2->setX(1);
+	//p2->setY(1);
+	//pirates.push_back(p2);
 
 	// Start with 3 available towers
 
@@ -262,6 +262,12 @@ void GameState::getRealPos(float & x, float & y)
 	y = 9 - y * 2;
 }
 
+void GameState::getGridPos(float & x, float & y)
+{
+	x = (9 - x) / 2;
+	y = (9 - y) / 2;
+}
+
 void GameState::setTilePosition(int x, int y)
 {
 	this->tileX = x;
@@ -366,13 +372,48 @@ void GameState::createPirate()
 	p->setRightFoot(new GeometryNode());
 	p->getRightFoot()->Init(pirateRFootMesh);
 
-	// Default test
-	unsigned idx = rand() % 29;
+	// Default test -- random
+	/*unsigned idx = rand() % 29;
 	p->setX(std::get<0>(road_tiles[idx]));
-	p->setY(std::get<1>(road_tiles[idx]));
+	p->setY(std::get<1>(road_tiles[idx]));*/
+
+	// Put him in the start
+	p->setX(std::get<0>(road_tiles[0]));
+	p->setY(std::get<1>(road_tiles[0]));
 
 	pirates.push_back(p);
 
+}
+
+void GameState::updatePirateTargets()
+{
+	for (Pirate* p : pirates) {
+
+		// Check if pirate has reached the prev target
+		bool reached = false;
+		if (abs(p->getX() - p->getTargetX()) < 0.2 && abs(p->getY() - p->getTargetY()) < 0.2) {
+			int idx = p->getRoadIdx();
+			p->setRoadIdx(idx + 1);
+			
+		}
+
+		// Get in which index is in the road
+		int idx = p->getRoadIdx();
+
+		// Set the target to the next x,y coordinates using the road_tiles
+		if (idx + 1 < 29) {
+			float x_new = std::get<0>(road_tiles[idx + 1]);
+			float y_new = std::get<1>(road_tiles[idx + 1]);
+
+			p->setTargetX(x_new);
+			p->setTargetY(y_new);
+		}
+		else {
+			// Set index to 29 as an indicator that it finished -- TODO: or later as the chest coordinates
+			p->setRoadIdx(29);
+		}
+
+	}
 }
 
 void GameState::setTowerMesh(GeometricMesh * mesh)

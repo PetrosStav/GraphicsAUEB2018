@@ -6,7 +6,6 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "OBJLoader.h"
-#include "Tower.h"
 #include <iostream>
 
 // RENDERER
@@ -315,7 +314,55 @@ void Renderer::Update(float dt)
 
 		game->getRealPos(x, y);
 
-		glm::mat4 pirateRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>()), glm::vec3(0, 1, 0));
+		// find the new location as the pirate follows the path
+		float target_x = p->getTargetX();
+		float target_y = p->getTargetY();
+
+		game->getRealPos(target_x, target_y);
+
+
+		//float x_new = x + (0.05 * (x < target_x) + (-0.05 *(x > target_x)));
+		//float y_new = y + (0.05 * (y < target_y) + (-0.05 *(y > target_y)));
+
+		auto deltaTargetX = target_x - x;
+		auto deltaTargetY = target_y - y;
+
+		float x_new = x + ((abs(deltaTargetX) < 0.15) ? 0 : (0.01*(deltaTargetX > 0) - 0.01*(deltaTargetX <= 0)));
+		float y_new = y + ((abs(deltaTargetY) < 0.15) ? 0 : (0.01*(deltaTargetY > 0) - 0.01*(deltaTargetY <= 0)));
+
+		/*float t = float(((int)m_continous_time % 5000))/5000;
+
+		float x_new = x + (target_x - x) * t;
+		float y_new = y + (target_y - y) * t;*/
+
+		/*printf("X: %f, X2: %f\t", x, x_new);
+		printf("Y: %f, Y2: %f\n", y, y_new);*/
+
+		auto deltaX = x_new - x;
+		auto deltaY = y_new - y;
+		auto rad = atan2(deltaY, -deltaX);
+
+		//printf("Rad: %f\n", rad);
+
+		// special cases
+
+		glm::mat4 pirateRot;
+
+		if (p->getRoadIdx() == 1) pirateRot = glm::rotate(glm::mat4(1.0f), -glm::pi<float>(), glm::vec3(0, 1, 0));
+		else if (p->getRoadIdx() == 29) {
+			pirateRot = glm::rotate(glm::mat4(1.0f), 0.f, glm::vec3(0, 1, 0));
+		}
+		else {
+			pirateRot = glm::rotate(glm::mat4(1.0f), rad - glm::pi<float>() / 2, glm::vec3(0, 1, 0));
+		}
+		x = x_new;
+		y = y_new;
+
+		game->getGridPos(x_new, y_new);
+
+
+		p->setX(x_new);
+		p->setY(y_new);
 
 		// body
 
@@ -326,7 +373,7 @@ void Renderer::Update(float dt)
 		p->setBodyTNM(m_geometric_object6_transformation_normal_matrix);
 
 		//glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
-		glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+		glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(5*m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
 		glm::mat4 stPivotRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
 
 		// sword
@@ -340,7 +387,9 @@ void Renderer::Update(float dt)
 
 		// left foot
 
-		glm::mat4 m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 animLFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 2*0.09f+sin(10*m_continous_time)* 2 * 0.09f));
+
+		glm::mat4 m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * animLFoot *glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 		glm::mat4 m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
 
 		p->setLeftFootTM(m_geometric_object8_transformation_matrix);
@@ -348,7 +397,9 @@ void Renderer::Update(float dt)
 
 		// right foot
 
-		glm::mat4 m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 animRFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2*0.09f-sin(10*m_continous_time)*2 * 0.09f));
+
+		glm::mat4 m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * animRFoot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 		glm::mat4 m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
 		
 		p->setRightFootTM(m_geometric_object9_transformation_matrix);

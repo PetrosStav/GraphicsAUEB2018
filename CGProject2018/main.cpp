@@ -264,6 +264,11 @@ int main(int argc, char *argv[])
 			game->createTower();
 			lastTime = currentTime;
 		}
+		// every 100ms
+		if (currentTime > lastTime + 100) {
+			//printf("Timed Event: 100ms - Updated Pirate Targets\n");
+			game->updatePirateTargets();
+		}
 
 		// Update
 		renderer->Update(dt);

@@ -37,10 +37,11 @@ public:
 	void										rearrangeTower(float x, float y);
 	void										rearrangeTower();
 
-	// Grid function
+	// Grid functions
 	void										getRealPos(float& x, float& y);
+	void										getGridPos(float& x, float& y);
 
-	// Green tile Function
+	// Tile Functions
 	void										setTilePosition(int x, int y);
 	void										setTileX(int x);
 	void										setTileY(int y);
@@ -51,20 +52,25 @@ public:
 	bool										getInRoad();
 	bool										isInRoad(int x, int y);
 
+	// Meshes
+
 	void										setPirateBodyMesh(GeometricMesh* mesh);
 	void										setPirateSwordMesh(GeometricMesh* mesh);
 	void										setPirateLFootMesh(GeometricMesh* mesh);
 	void										setPirateRFootMesh(GeometricMesh* mesh);
-
 	void										assignMeshtoPirates();
 
-	void										createPirate();
-
 	void										setTowerMesh(GeometricMesh* mesh);
-
 	void										assignMeshToTowers();
 
+	// Adding objects
+
 	void										createTower();
+	void										createPirate();
+
+	// Update paths
+
+	void										updatePirateTargets();
 
 private:
 

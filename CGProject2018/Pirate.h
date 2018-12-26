@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GeometryNode.h"
+#include "GeometricMesh.h"
 
 class Pirate{
 
@@ -10,6 +11,9 @@ public:
 
 	void setX(float x);
 	void setY(float y);
+	void setTargetX(float x);
+	void setTargetY(float y);
+	void setRoadIdx(int idx);
 
 	void setBody(GeometryNode* body);
 	void setBodyTM(glm::mat4 tm);
@@ -29,6 +33,11 @@ public:
 
 	float getX();
 	float getY();
+
+	float getTargetX();
+	float getTargetY();
+
+	int getRoadIdx();
 
 	GeometryNode* getBody();
 	glm::mat4 getBodyTM();
@@ -69,4 +78,10 @@ private:
 
 	float x_pirate;
 	float y_pirate;
+
+	float target_x;
+	float target_y;
+
+	int roadIdx;
+
 };

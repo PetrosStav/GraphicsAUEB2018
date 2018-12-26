@@ -4,6 +4,9 @@
 Pirate::Pirate(){
 	this->x_pirate = 0;
 	this->y_pirate = 0;
+	this->target_x = 0;
+	this->target_y = 0;
+	this->roadIdx = 0;
 	m_geometric_objectBody = nullptr;
 	m_geometric_objectSword = nullptr;
 	m_geometric_objectLeftFoot = nullptr;
@@ -24,6 +27,21 @@ void Pirate::setX(float x) {
 
 void Pirate::setY(float y) {
 	this->y_pirate = y;
+}
+
+void Pirate::setTargetX(float x)
+{
+	this->target_x = x;
+}
+
+void Pirate::setTargetY(float y)
+{
+	this->target_y = y;
+}
+
+void Pirate::setRoadIdx(int idx)
+{
+	this->roadIdx = idx;
 }
 
 void Pirate::setBody(GeometryNode * body){
@@ -80,6 +98,21 @@ float Pirate::getX() {
 
 float Pirate::getY() {
 	return this->y_pirate;
+}
+
+float Pirate::getTargetX()
+{
+	return target_x;
+}
+
+float Pirate::getTargetY()
+{
+	return target_y;
+}
+
+int Pirate::getRoadIdx()
+{
+	return roadIdx;
 }
 
 GeometryNode * Pirate::getBody()
