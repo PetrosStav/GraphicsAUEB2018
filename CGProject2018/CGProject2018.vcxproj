@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BoundingSphere.h" />
+    <ClInclude Include="CannonBall.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GeometricMesh.h" />
     <ClInclude Include="GeometryNode.h" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoundingSphere.cpp" />
+    <ClCompile Include="CannonBall.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GeometricMesh.cpp" />
     <ClCompile Include="GeometryNode.cpp" />
