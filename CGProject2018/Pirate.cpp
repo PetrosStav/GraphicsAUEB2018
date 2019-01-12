@@ -7,10 +7,16 @@ Pirate::Pirate(){
 	this->target_x = 0;
 	this->target_y = 0;
 	this->roadIdx = 0;
+	this->health_points = 10;
+	this->animStart = std::rand() % 1000;
 	m_geometric_objectBody = nullptr;
 	m_geometric_objectSword = nullptr;
 	m_geometric_objectLeftFoot = nullptr;
 	m_geometric_objectRightFoot = nullptr;
+	this->bound_shpere = new BoundingShpere();
+	this->bound_shpere->setX(18);
+	this->bound_shpere->setY(0.7f);
+	this->bound_shpere->setZ(18);
 }
 
 Pirate::~Pirate()
@@ -19,14 +25,19 @@ Pirate::~Pirate()
 	delete m_geometric_objectSword;
 	delete m_geometric_objectLeftFoot;
 	delete m_geometric_objectRightFoot;
+	delete bound_shpere;
 }
 
 void Pirate::setX(float x) {
 	this->x_pirate = x;
+	// Change bounding sphere X pos
+	this->bound_shpere->setX(18 - 2 * x);
 }
 
 void Pirate::setY(float y) {
 	this->y_pirate = y;
+	// Change bounding sphere Z pos
+	this->bound_shpere->setZ(18 - 2 * y);
 }
 
 void Pirate::setTargetX(float x)
@@ -42,6 +53,16 @@ void Pirate::setTargetY(float y)
 void Pirate::setRoadIdx(int idx)
 {
 	this->roadIdx = idx;
+}
+
+void Pirate::setHealthPoints(int hp)
+{
+	this->health_points = hp;
+}
+
+void Pirate::setAnimStart(int start)
+{
+	this->animStart = start;
 }
 
 void Pirate::setBody(GeometryNode * body){
@@ -115,6 +136,16 @@ int Pirate::getRoadIdx()
 	return roadIdx;
 }
 
+int Pirate::getHealthPoints()
+{
+	return health_points;
+}
+
+int Pirate::getAnimStart()
+{
+	return animStart;
+}
+
 GeometryNode * Pirate::getBody()
 {
 	return m_geometric_objectBody;
@@ -173,4 +204,9 @@ glm::mat4 Pirate::getRightFootTM()
 glm::mat4 Pirate::getRightFootTNM()
 {
 	return m_geometric_objectRightFoot_transformation_normal_matrix;
+}
+
+BoundingShpere* Pirate::getBoundingSphere()
+{
+	return bound_shpere;
 }

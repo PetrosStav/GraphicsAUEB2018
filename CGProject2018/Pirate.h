@@ -2,6 +2,7 @@
 
 #include "GeometryNode.h"
 #include "GeometricMesh.h"
+#include "BoundingSphere.h"
 
 class Pirate{
 
@@ -14,6 +15,10 @@ public:
 	void setTargetX(float x);
 	void setTargetY(float y);
 	void setRoadIdx(int idx);
+
+	void setHealthPoints(int hp);
+
+	void setAnimStart(int start);
 
 	void setBody(GeometryNode* body);
 	void setBodyTM(glm::mat4 tm);
@@ -39,6 +44,10 @@ public:
 
 	int getRoadIdx();
 
+	int getHealthPoints();
+
+	int getAnimStart();
+
 	GeometryNode* getBody();
 	glm::mat4 getBodyTM();
 	glm::mat4 getBodyTNM();
@@ -55,6 +64,7 @@ public:
 	glm::mat4 getRightFootTM();
 	glm::mat4 getRightFootTNM();
 
+	BoundingShpere* getBoundingSphere();
 
 private:
 
@@ -83,5 +93,11 @@ private:
 	float target_y;
 
 	int roadIdx;
+
+	int health_points;
+
+	int animStart;
+
+	BoundingShpere*									bound_shpere;
 
 };

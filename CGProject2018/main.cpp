@@ -36,7 +36,7 @@ bool init(GameState* game)
 
 	// use Double Buffering
 	if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0)
-		cout << "Error: No double buffering" << endl;
+		std::cout << "Error: No double buffering" << endl;
 
 	// set OpenGL Version (3.3)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 					if (!inroad) {
 						game->addTower();
 					}
-					
+
 				}
 				else if (event.key.keysym.sym == SDLK_r)
 				{
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_s)
 				{
 					renderer->CameraMoveBackWard(true);
-				}	
+				}
 				else if (event.key.keysym.sym == SDLK_a)
 				{
 					renderer->CameraMoveLeft(true);
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 				{
 					renderer->CameraMoveRight(true);
 				}
-				else if (event.key.keysym.sym == SDLK_UP && game->getTileY() + 1<=9)
+				else if (event.key.keysym.sym == SDLK_UP && game->getTileY() + 1 <= 9)
 				{
 					game->setTileY(game->getTileY() + 1);
 					game->updateInRoad();
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
 
 		// Create a timed event
 		currentTime = SDL_GetTicks();
-		if (currentTime > lastTime + 30*1000) {
+		if (currentTime > lastTime + 30 * 1000) {
 			printf("Timed Event: 30 seconds have passed, one more Tower is available.\n");
 			game->createTower();
 			lastTime = currentTime;
@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 
 		// Draw
 		renderer->Render();
-		
+
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
 	}

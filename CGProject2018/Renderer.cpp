@@ -373,7 +373,7 @@ void Renderer::Update(float dt)
 		p->setBodyTNM(m_geometric_object6_transformation_normal_matrix);
 
 		//glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
-		glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(5*m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+		glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(5*m_continous_time+p->getAnimStart())*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
 		glm::mat4 stPivotRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
 
 		// sword
@@ -387,7 +387,7 @@ void Renderer::Update(float dt)
 
 		// left foot
 
-		glm::mat4 animLFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 2*0.09f+sin(10*m_continous_time)* 2 * 0.09f));
+		glm::mat4 animLFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 2*0.09f+sin(10*m_continous_time + p->getAnimStart())* 2 * 0.09f));
 
 		glm::mat4 m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * animLFoot *glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 		glm::mat4 m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
@@ -397,7 +397,7 @@ void Renderer::Update(float dt)
 
 		// right foot
 
-		glm::mat4 animRFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2*0.09f-sin(10*m_continous_time)*2 * 0.09f));
+		glm::mat4 animRFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2*0.09f-sin(10*m_continous_time + p->getAnimStart())*2 * 0.09f));
 
 		glm::mat4 m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * animRFoot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 		glm::mat4 m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
@@ -765,6 +765,7 @@ void Renderer::SetRenderingMode(RENDERING_MODE mode)
 // Render the Scene
 void Renderer::Render()
 {
+	
 	// Draw the geometry to the shadow maps
 	RenderShadowMaps();
 
