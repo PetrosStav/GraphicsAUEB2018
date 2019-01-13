@@ -445,6 +445,8 @@ void Renderer::Update(float dt)
 			if (targetPirate->getHealthPoints() == 0) {
 				std::cout << "Pirate died!" << std::endl;
 				game->deletePirate(targetPirate);
+				// increase score
+				game->setScore(game->getScore() + 1);
 			}
 			cb->setHitTarget(true);
 		}
