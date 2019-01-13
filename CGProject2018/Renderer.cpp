@@ -407,6 +407,56 @@ void Renderer::Update(float dt)
 
 	}
 
+	// For the CannonBalls
+	for (CannonBall* cb : game->getCannonBalls()) {
+
+		float x, y, z;
+		x = cb->getX();
+		y = cb->getY();
+		z = cb->getZ();
+
+		float tx, ty, tz;
+		/*tx = cb->getTargetX();
+		ty = cb->getTargetY();
+		tz = cb->getTargetZ();*/
+
+		Pirate* targetPirate = cb->getTargetPirate();
+
+		tx = -18 + 4 * targetPirate->getX();
+		ty = 0.5f;
+		tz = -18 + 4 * targetPirate->getY();
+
+		auto deltaTargetX = tx - x;
+		auto deltaTargetY = ty - y;
+		auto deltaTargetZ = tz - z;
+
+		float x_new = x + ((abs(deltaTargetX) < 0.05) ? 0 : cb->getSpeed() * (0.2*(deltaTargetX > 0) - 0.2*(deltaTargetX <= 0)));
+		float y_new = y + ((abs(deltaTargetY) < 0.005) ? 0 : cb->getSpeed() * (0.01*(deltaTargetY > 0) - 0.01*(deltaTargetY <= 0)));
+		float z_new = z + ((abs(deltaTargetZ) < 0.05) ? 0 : cb->getSpeed() * (0.2*(deltaTargetZ > 0) - 0.2*(deltaTargetZ <= 0)));
+
+		cb->setX(x_new);
+		cb->setY(y_new);
+		cb->setZ(z_new);
+
+		if (cb->getBoundingSphere()->isSphereIntersecting(targetPirate->getBoundingSphere())) {
+			std::cout << "BAM" << std::endl;
+			game->deleteHitCannonBall(cb);
+			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - 10);
+			if (targetPirate->getHealthPoints() == 0) {
+				std::cout << "Pirate died!" << std::endl;
+				game->deletePirate(targetPirate);
+			}
+			cb->setHitTarget(true);
+		}
+
+		glm::mat4 m_cannonball_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(cb->getX(), cb->getY(), cb->getZ()))* terrainTransform * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
+		glm::mat4 m_cannonball_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_cannonball_transformation_matrix))));
+
+		cb->setCannonBallTM(m_cannonball_transformation_matrix);
+		cb->setCannonBallTNM(m_cannonball_transformation_normal_matrix);
+
+	}
+
 	//x = 0;
 	//y = 0;
 
@@ -754,6 +804,14 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
+	// load cannonball mesh
+	mesh = loader.load("../Data/Various/cannonball.obj");
+	if (mesh != nullptr) {
+		game->setCannonballMesh(mesh);
+	}
+	else
+		initialized = false;
+
 	return initialized;
 }
 
@@ -868,6 +926,11 @@ void Renderer::RenderShadowMaps()
 
 		}
 
+		// draw the cannonballs
+		for (CannonBall* cannonball : game->getCannonBalls()) {
+			DrawGeometryNodeToShadowMap(cannonball->getCannonBall(), cannonball->getCannonBallTM(), cannonball->getCannonBallTNM());
+		}
+
 		glBindVertexArray(0);
 
 		// Unbind shadow mapping program
@@ -977,6 +1040,11 @@ void Renderer::RenderGeometry()
 		//rightfoot
 		DrawGeometryNode(p->getRightFoot(), p->getRightFootTM(), p->getRightFootTNM());
 
+	}
+
+	// draw the cannonballs
+	for (CannonBall* cannonball : game->getCannonBalls()) {
+		DrawGeometryNode(cannonball->getCannonBall(), cannonball->getCannonBallTM(), cannonball->getCannonBallTNM());
 	}
 
 	/*if (createdTowers.size() != 0) {

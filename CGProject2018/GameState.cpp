@@ -7,6 +7,7 @@ GameState::GameState() {
 	availableTowers = std::vector<Tower*>();
 	createdTowers = std::vector<Tower*>();
 	pirates = std::vector<Pirate*>();
+	cannonballs = std::vector<CannonBall*>();
 
 	// Testing
 
@@ -87,6 +88,10 @@ GameState::~GameState()
 		delete t;
 	}
 
+	for (CannonBall* cb : cannonballs) {
+		delete cb;
+	}
+
 }
 
 void GameState::setGold(unsigned int gold)
@@ -137,6 +142,16 @@ void GameState::setPirates(std::vector<Pirate*> pirates)
 std::vector<Pirate*> GameState::getPirates()
 {
 	return pirates;
+}
+
+void GameState::setCannonBalls(std::vector<CannonBall*> cannonballs)
+{
+	this->cannonballs = cannonballs;
+}
+
+std::vector<CannonBall*> GameState::getCannonBalls()
+{
+	return cannonballs;
 }
 
 std::tuple<int, int>* GameState::getRoadTiles()
@@ -385,6 +400,26 @@ void GameState::createPirate()
 
 }
 
+void GameState::shootCannonBall(Tower * tower, Pirate * pirate)
+{
+	CannonBall* cannonball = new CannonBall();
+	cannonball->setCannonBall(new GeometryNode());
+	cannonball->getCannonBall()->Init(cannonballMesh);
+
+	cannonball->setX(-2 * tower->getX());
+	cannonball->setY(3.f); // TODO: maybe change it
+	cannonball->setZ(-2 * tower->getY());
+
+	//cannonball->setTargetX(-2 * pirate->getX());
+	//cannonball->setTargetY(0.5f); // TODO: maybe change it
+	//cannonball->setTargetZ(-2 * pirate->getY());
+
+	cannonball->setTargetPirate(pirate);
+
+	cannonballs.push_back(cannonball);
+
+}
+
 void GameState::updatePirateTargets()
 {
 	for (Pirate* p : pirates) {
@@ -416,6 +451,56 @@ void GameState::updatePirateTargets()
 	}
 }
 
+void GameState::deleteHitCannonBall(CannonBall * cannonball)
+{
+	cannonballs.erase(std::remove(cannonballs.begin(), cannonballs.end(), cannonball), cannonballs.end());
+}
+
+void GameState::deleteHitCannonBalls()
+{
+	unsigned int i = 0;
+	for (CannonBall* cb : cannonballs) {
+		if (cb->hasHitTarget()) {
+			cannonballs.erase(cannonballs.begin() + i);
+		}
+		i += 1;
+	}
+}
+
+void GameState::towersFire()
+{
+	for (Tower* t : createdTowers) {
+		int state = t->getState();
+		if (state == 5) {
+
+			// search for pirates inside the radius of the tower
+			for (Pirate* p : pirates) {
+				float tx = t->getX();
+				float ty = t->getY();
+				getGridPos(tx,ty);
+				float px = p->getX();
+				float py = p->getY();
+				// TODO: change tile range of tower
+				// now is 2
+				if (abs(tx - px) <= 2 && abs(ty - py) <= 2) {
+					shootCannonBall(t, p);
+					break;
+				}
+			}
+
+			t->setState(0);
+		}
+		else {
+			t->setState(state + 1);
+		}
+	}
+}
+
+void GameState::deletePirate(Pirate* pirate)
+{
+	pirates.erase(std::remove(pirates.begin(), pirates.end(), pirate), pirates.end());
+}
+
 void GameState::setTowerMesh(GeometricMesh * mesh)
 {
 	this->towerMesh = mesh;
@@ -427,6 +512,11 @@ void GameState::assignMeshToTowers()
 		t->setTower(new GeometryNode());
 		t->getTower()->Init(towerMesh);
 	}
+}
+
+void GameState::setCannonballMesh(GeometricMesh * mesh)
+{
+	cannonballMesh = mesh;
 }
 
 void GameState::createTower()

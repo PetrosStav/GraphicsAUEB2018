@@ -6,7 +6,8 @@ CannonBall::CannonBall() {
 	this->x_ball = 0;
 	this->y_ball = 0;
 	this->z_ball = 0;
-	this->speed = 9.0f;
+	this->speed = 1.0f;
+	this->hitTarget = false;
 
 	m_geometric_objectCannonBall = nullptr;
 
@@ -14,7 +15,7 @@ CannonBall::CannonBall() {
 	this->bound_shpere->setX(0);
 	this->bound_shpere->setY(0);
 	this->bound_shpere->setZ(0);
-	this->bound_shpere->setRadius(0.1f);
+	this->bound_shpere->setRadius(1.f);
 
 }
 
@@ -39,23 +40,76 @@ float CannonBall::getSpeed() {
 	return this->speed;
 }
 
+float CannonBall::getTargetX()
+{
+	return target_x;
+}
+
+float CannonBall::getTargetY()
+{
+	return target_y;
+}
+
+float CannonBall::getTargetZ()
+{
+	return target_z;
+}
+
+bool CannonBall::hasHitTarget()
+{
+	return hitTarget;
+}
+
+Pirate * CannonBall::getTargetPirate()
+{
+	return targetPirate;
+}
+
 void CannonBall::setX(float x_ball) {
 	this->x_ball = x_ball;
 	//8a prepei na kounietai kai to bounding sphere ee?
 	//den 3erw poso na to balw omws
+	this->bound_shpere->setX(36 + x_ball);
 
 }
 
 void CannonBall::setY(float y_ball) {
 	this->y_ball = y_ball;
+	this->bound_shpere->setY(y_ball);
 }
 
 void CannonBall::setZ(float z_ball) {
 	this->z_ball = z_ball;
+	this->bound_shpere->setZ(36 + z_ball);
 }
 
 void CannonBall::setSpeed(float speed) {
 	this->speed = speed;
+}
+
+void CannonBall::setTargetX(float x)
+{
+	target_x = x;
+}
+
+void CannonBall::setTargetY(float y)
+{
+	target_y = y;
+}
+
+void CannonBall::setTargetZ(float z)
+{
+	target_z = z;
+}
+
+void CannonBall::setHitTarget(bool hitTarget)
+{
+	this->hitTarget = hitTarget;
+}
+
+void CannonBall::setTargetPirate(Pirate * pirate)
+{
+	this->targetPirate = pirate;
 }
 
 void CannonBall::setCannonBall(GeometryNode * ball) {

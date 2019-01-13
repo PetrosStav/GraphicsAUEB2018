@@ -4,6 +4,7 @@
 Tower::Tower() {
 	this->x_tower = 0;
 	this->y_tower = 0;
+	this->state = 0;
 	m_geometric_objectTower = nullptr;
 }
 
@@ -17,6 +18,11 @@ void Tower::setX(float x) {
 
 void Tower::setY(float y) {
 	this->y_tower = y;
+}
+
+void Tower::setState(int s)
+{
+	this->state = s;
 }
 
 void Tower::setTower(GeometryNode * tower) {
@@ -37,6 +43,11 @@ float Tower::getX() {
 
 float Tower::getY() {
 	return this->y_tower;
+}
+
+int Tower::getState()
+{
+	return state;
 }
 
 GeometryNode * Tower::getTower()

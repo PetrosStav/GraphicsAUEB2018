@@ -3,6 +3,7 @@
 #include "GeometryNode.h"
 #include "GeometricMesh.h"
 #include "BoundingSphere.h"
+#include "Pirate.h"
 
 class CannonBall {
 
@@ -15,6 +16,13 @@ public:
 	void setZ(float z);
 	void setSpeed(float speed);
 
+	void setTargetX(float x);
+	void setTargetY(float y);
+	void setTargetZ(float z);
+
+	void setHitTarget(bool hitTarget);
+
+	void setTargetPirate(Pirate* pirate);
 
 	void setCannonBall(GeometryNode* cannonball);
 	void setCannonBallTM(glm::mat4 tm);
@@ -24,6 +32,14 @@ public:
 	float getY();
 	float getZ();
 	float getSpeed();
+
+	float getTargetX();
+	float getTargetY();
+	float getTargetZ();
+
+	bool hasHitTarget();
+
+	Pirate* getTargetPirate();
 
 	GeometryNode* getCannonBall();
 	glm::mat4 getCannonBallTM();
@@ -40,9 +56,17 @@ private:
 	float x_ball;
 	float y_ball;
 	float z_ball;
+
+	float target_x;
+	float target_y;
+	float target_z;
+	
+	Pirate* targetPirate;
+
 	float speed;
 
 	BoundingShpere*									bound_shpere;
 
+	bool hitTarget;
 
 };

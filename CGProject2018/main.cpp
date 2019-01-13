@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	//renderer->TileSetPos(tileX, tileY);
 
 	// Timers for timed events
-	unsigned int lastTime = 0, currentTime;
+	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, currentTime;
 
 	// Wait for user exit
 	while (quit == false)
@@ -196,6 +196,8 @@ int main(int argc, char *argv[])
 				{
 					// TEST TO CREATE PIRATE ON THE FLY
 					game->createPirate();
+					/*if(game->getCreatedTowers().size() != 0)
+						game->shootCannonBall(game->getCreatedTowers()[0], game->getPirates()[0]);*/
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -259,16 +261,33 @@ int main(int argc, char *argv[])
 
 		// Create a timed event
 		currentTime = SDL_GetTicks();
-		if (currentTime > lastTime + 30 * 1000) {
+		if (currentTime > lastTimeT1 + 30 * 1000) {
 			printf("Timed Event: 30 seconds have passed, one more Tower is available.\n");
 			game->createTower();
-			lastTime = currentTime;
+			lastTimeT1 = currentTime;
 		}
-		// every 100ms
-		if (currentTime > lastTime + 100) {
+
+		// every 200ms
+		currentTime = SDL_GetTicks();
+		if (currentTime > lastTimeT2 + 200) {
+			game->towersFire();
+			lastTimeT2 = currentTime;
+		}
+
+		// every 10ms
+		currentTime = SDL_GetTicks();
+		if (currentTime > lastTimeT3 + 100) {
 			//printf("Timed Event: 100ms - Updated Pirate Targets\n");
 			game->updatePirateTargets();
+			lastTimeT3 = currentTime;
 		}
+
+		//// every 10ms
+		//currentTime = SDL_GetTicks();
+		//if (currentTime > lastTimeT4 + 10) {
+		//	game->deleteHitCannonBalls();
+		//	lastTimeT4 = currentTime;
+		//}
 
 		// Update
 		renderer->Update(dt);

@@ -7,7 +7,7 @@ Pirate::Pirate(){
 	this->target_x = 0;
 	this->target_y = 0;
 	this->roadIdx = 0;
-	this->health_points = 10;
+	this->health_points = 100;
 	this->animStart = std::rand() % 1000;
 	m_geometric_objectBody = nullptr;
 	m_geometric_objectSword = nullptr;
@@ -17,6 +17,7 @@ Pirate::Pirate(){
 	this->bound_shpere->setX(18);
 	this->bound_shpere->setY(0.7f);
 	this->bound_shpere->setZ(18);
+	this->bound_shpere->setRadius(12.87075f * 0.09f);
 }
 
 Pirate::~Pirate()
@@ -31,13 +32,13 @@ Pirate::~Pirate()
 void Pirate::setX(float x) {
 	this->x_pirate = x;
 	// Change bounding sphere X pos
-	this->bound_shpere->setX(18 - 2 * x);
+	this->bound_shpere->setX(18 + 4 * x);
 }
 
 void Pirate::setY(float y) {
 	this->y_pirate = y;
 	// Change bounding sphere Z pos
-	this->bound_shpere->setZ(18 - 2 * y);
+	this->bound_shpere->setZ(18 + 4 * y);
 }
 
 void Pirate::setTargetX(float x)

@@ -14,7 +14,9 @@ public:
 	float getZ();
 	float getRadius();
 
-	bool isObjectIntersecting(const float &obj_x,const float &obj_y,const float &obj_z);
+	bool isObjectIntersecting(const float &obj_x,const float &obj_y,const float &obj_z) const;
+
+	bool isSphereIntersecting(BoundingShpere* sphere) const;
 
 private:
 

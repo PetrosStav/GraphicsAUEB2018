@@ -41,8 +41,14 @@ float BoundingShpere::getRadius()
 	return radius;
 }
 
-bool BoundingShpere::isObjectIntersecting(const float & obj_x, const float & obj_y, const float & obj_z)
+bool BoundingShpere::isObjectIntersecting(const float & obj_x, const float & obj_y, const float & obj_z) const
 {
 	float sum = pow((x - obj_x), 2) + pow((y - obj_y), 2) + pow((z - obj_z), 2);
 	return sqrt(sum) <= radius;
+}
+
+bool BoundingShpere::isSphereIntersecting(BoundingShpere * sphere) const
+{
+	float distance = sqrt(pow((x - sphere->getX()), 2) + pow((y - sphere->getY()), 2) + pow((z - sphere->getZ()), 2));
+	return distance <= (radius + sphere->getRadius());
 }

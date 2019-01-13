@@ -2,6 +2,7 @@
 
 #include "Tower.h"
 #include "Pirate.h"
+#include "CannonBall.h"
 #include "GeometricMesh.h"
 
 class GameState {
@@ -24,6 +25,9 @@ public:
 
 	void setPirates(std::vector<Pirate*> pirates);
 	std::vector<Pirate*> getPirates();
+
+	void setCannonBalls(std::vector<CannonBall*> cannonballs);
+	std::vector<CannonBall*> getCannonBalls();
 
 	std::tuple<int, int>* getRoadTiles();
 
@@ -63,14 +67,26 @@ public:
 	void										setTowerMesh(GeometricMesh* mesh);
 	void										assignMeshToTowers();
 
+	void										setCannonballMesh(GeometricMesh* mesh);
+
 	// Adding objects
 
 	void										createTower();
 	void										createPirate();
+	void										shootCannonBall(Tower* tower, Pirate* pirate);
 
 	// Update paths
 
 	void										updatePirateTargets();
+
+	// 
+
+	void										deleteHitCannonBall(CannonBall* cannonball);
+	void										deleteHitCannonBalls();
+
+	void										towersFire();
+
+	void										deletePirate(Pirate* pirate);
 
 private:
 
@@ -88,6 +104,9 @@ private:
 	// Pirates
 	std::vector<Pirate*>						pirates;
 
+	// Cannonballs
+	std::vector<CannonBall*>					cannonballs;
+
 	// Road Tile List
 	std::tuple<int, int>						road_tiles[29];
 
@@ -100,5 +119,7 @@ private:
 	GeometricMesh*								pirateRFootMesh;
 
 	GeometricMesh*								towerMesh;
+
+	GeometricMesh*								cannonballMesh;
 
 };
