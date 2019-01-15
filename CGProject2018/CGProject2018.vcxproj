@@ -140,6 +140,7 @@
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Tools.h" />
     <ClInclude Include="Tower.h" />
+    <ClInclude Include="TreasureChest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoundingSphere.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Tools.cpp" />
     <ClCompile Include="Tower.cpp" />
+    <ClCompile Include="TreasureChest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,14 +8,17 @@ GameState::GameState() {
 	createdTowers = std::vector<Tower*>();
 	pirates = std::vector<Pirate*>();
 	cannonballs = std::vector<CannonBall*>();
+	treasureChest = new TreasureChest();
+
+	gameOver = false;
 
 	// Testing
 
 	// Create a pirate at position 0,0
-	Pirate* p1 = new Pirate();
+	/*Pirate* p1 = new Pirate();
 	p1->setX(0);
 	p1->setY(0);
-	pirates.push_back(p1);
+	pirates.push_back(p1);*/
 
 	//// Create a pirate at position 1,1
 	//Pirate* p2 = new Pirate();
@@ -154,9 +157,29 @@ std::vector<CannonBall*> GameState::getCannonBalls()
 	return cannonballs;
 }
 
+void GameState::setTreasureChest(TreasureChest * chest)
+{
+	this->treasureChest = chest;
+}
+
+TreasureChest * GameState::getTreasureChest()
+{
+	return treasureChest;
+}
+
 std::tuple<int, int>* GameState::getRoadTiles()
 {
 	return road_tiles;
+}
+
+void GameState::setGameOver(bool state)
+{
+	this->gameOver = state;
+}
+
+bool GameState::getGameOver()
+{
+	return gameOver;
 }
 
 void GameState::addTower(float x, float y)
@@ -265,6 +288,61 @@ void GameState::rearrangeTower()
 				createdTowers.erase(createdTowers.begin() + i);
 				availableTowers.push_back(erased);
 				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
+			}
+			i++;
+		}
+	}
+}
+
+void GameState::upgradeTower(float x, float y)
+{
+	if (createdTowers.size() != 0) {
+		getRealPos(x, y);
+		unsigned short i = 0;
+		for (Tower* t : createdTowers) {
+			if (t->getX() == x && t->getY() == y) {
+				Tower* selected = createdTowers[i];
+				int level = selected->getLevel();
+				if (level < 3) {
+					selected->setLevel(level + 1);
+					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level+1);
+				}
+			}
+			i++;
+		}
+	}
+}
+
+void GameState::upgradeTower()
+{
+	if (createdTowers.size() != 0) {
+		float x = (float)tileX;
+		float y = (float)tileY;
+		getRealPos(x, y);
+		unsigned short i = 0;
+		for (Tower* t : createdTowers) {
+			if (t->getX() == x && t->getY() == y) {
+				Tower* selected = createdTowers[i];
+				int level = selected->getLevel();
+				if (level < 3) {
+					level += 1;
+					selected->setLevel(level);
+					if (level == 2) {
+						selected->setFireRate(800);
+						selected->setDamage(10);
+						selected->setRange(3);
+						selected->setTower(new GeometryNode());
+						selected->getTower()->Init(towerLevelTwoMesh);
+					}
+					else {
+						selected->setFireRate(700);
+						selected->setDamage(15);
+						selected->setRange(3);
+						selected->setTower(new GeometryNode());
+						selected->getTower()->Init(towerLevelThreeMesh);
+					}
+					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level + 1);
+				}
 			}
 			i++;
 		}
@@ -448,6 +526,11 @@ void GameState::updatePirateTargets()
 		else {
 			// Set index to 29 as an indicator that it finished -- TODO: or later as the chest coordinates
 			p->setRoadIdx(29);
+			float x_new = 6;
+			float y_new = -1;
+
+			p->setTargetX(x_new);
+			p->setTargetY(y_new);
 		}
 
 	}
@@ -475,16 +558,15 @@ void GameState::towersFire()
 		int state = t->getState();
 		if (state == t->getFireRate()/200) {
 
-			// search for pirates inside the radius of the tower
+			// Search for pirates inside the radius of the tower
 			for (Pirate* p : pirates) {
 				float tx = t->getX();
 				float ty = t->getY();
 				getGridPos(tx,ty);
 				float px = p->getX();
 				float py = p->getY();
-				// TODO: change tile range of tower
-				// now is 2
-				if (abs(tx - px) <= 2 && abs(ty - py) <= 2) {
+				// Range of tower as tiles
+				if (abs(tx - px) <= t->getRange() && abs(ty - py) <= t->getRange()) {
 					shootCannonBall(t, p);
 					break;
 				}
@@ -503,9 +585,37 @@ void GameState::deletePirate(Pirate* pirate)
 	pirates.erase(std::remove(pirates.begin(), pirates.end(), pirate), pirates.end());
 }
 
+void GameState::checkPiratesAtChest()
+{
+	for (Pirate* p : pirates) {
+		if (p->getBoundingSphere()->isSphereIntersecting(treasureChest->getBoundingSphere())) {
+			// Pirate reached gold
+			pirates.erase(std::remove(pirates.begin(), pirates.end(), p), pirates.end());
+			gold -= 10;
+			// Check for gameover
+			if (gold == 0) {
+				// Game Over
+				printf("GAME OVER\n");
+				printf("Score: %d", score);
+				gameOver = true;
+			}
+		}
+	}
+}
+
 void GameState::setTowerMesh(GeometricMesh * mesh)
 {
 	this->towerMesh = mesh;
+}
+
+void GameState::setTowerLevelTwoMesh(GeometricMesh * mesh)
+{
+	this->towerLevelTwoMesh = mesh;
+}
+
+void GameState::setTowerLevelThreeMesh(GeometricMesh * mesh)
+{
+	this->towerLevelThreeMesh = mesh;
 }
 
 void GameState::assignMeshToTowers()
@@ -519,6 +629,17 @@ void GameState::assignMeshToTowers()
 void GameState::setCannonballMesh(GeometricMesh * mesh)
 {
 	cannonballMesh = mesh;
+}
+
+void GameState::setTreasureChestMesh(GeometricMesh * mesh)
+{
+	this->treasureChestMesh = mesh;
+}
+
+void GameState::assignTreasureChest()
+{
+	treasureChest->setChest(new GeometryNode());
+	treasureChest->getChest()->Init(treasureChestMesh);
 }
 
 void GameState::createTower()

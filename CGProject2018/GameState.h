@@ -4,6 +4,7 @@
 #include "Pirate.h"
 #include "CannonBall.h"
 #include "GeometricMesh.h"
+#include "TreasureChest.h"
 
 class GameState {
 public:
@@ -29,7 +30,13 @@ public:
 	void setCannonBalls(std::vector<CannonBall*> cannonballs);
 	std::vector<CannonBall*> getCannonBalls();
 
+	void setTreasureChest(TreasureChest* chest);
+	TreasureChest* getTreasureChest();
+
 	std::tuple<int, int>* getRoadTiles();
+
+	void setGameOver(bool state);
+	bool getGameOver();
 
 	// Tower functions
 	void										addTower(float x, float y);
@@ -40,6 +47,9 @@ public:
 
 	void										rearrangeTower(float x, float y);
 	void										rearrangeTower();
+
+	void										upgradeTower(float x, float y);
+	void										upgradeTower();
 
 	// Grid functions
 	void										getRealPos(float& x, float& y);
@@ -65,9 +75,14 @@ public:
 	void										assignMeshtoPirates();
 
 	void										setTowerMesh(GeometricMesh* mesh);
+	void										setTowerLevelTwoMesh(GeometricMesh* mesh);
+	void										setTowerLevelThreeMesh(GeometricMesh* mesh);
 	void										assignMeshToTowers();
 
 	void										setCannonballMesh(GeometricMesh* mesh);
+
+	void										setTreasureChestMesh(GeometricMesh* mesh);
+	void										assignTreasureChest();
 
 	// Adding objects
 
@@ -88,7 +103,11 @@ public:
 
 	void										deletePirate(Pirate* pirate);
 
+	void										checkPiratesAtChest();
+
 private:
+
+	bool										gameOver;
 
 	// Tile positions
 	int											tileX, tileY;
@@ -107,6 +126,9 @@ private:
 	// Cannonballs
 	std::vector<CannonBall*>					cannonballs;
 
+	// Treasure Chest
+	TreasureChest*								treasureChest;
+
 	// Road Tile List
 	std::tuple<int, int>						road_tiles[29];
 
@@ -119,7 +141,11 @@ private:
 	GeometricMesh*								pirateRFootMesh;
 
 	GeometricMesh*								towerMesh;
+	GeometricMesh*								towerLevelTwoMesh;
+	GeometricMesh*								towerLevelThreeMesh;
 
 	GeometricMesh*								cannonballMesh;
+
+	GeometricMesh*								treasureChestMesh;
 
 };

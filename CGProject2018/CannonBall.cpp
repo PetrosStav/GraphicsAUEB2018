@@ -6,7 +6,7 @@ CannonBall::CannonBall() {
 	this->x_ball = 0;
 	this->y_ball = 0;
 	this->z_ball = 0;
-	this->speed = 1.0f;
+	this->speed = 1.5f;
 	this->hitTarget = false;
 
 	m_geometric_objectCannonBall = nullptr;

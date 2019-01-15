@@ -58,9 +58,9 @@ protected:
 	glm::mat4*										m_geometric_object2_transformation_matrix;
 	glm::mat4*										m_geometric_object2_transformation_normal_matrix;
 	// Treasure Chest
-	class GeometryNode*								m_geometric_object3;
+	/*class GeometryNode*								m_geometric_object3;
 	glm::mat4										m_geometric_object3_transformation_matrix;
-	glm::mat4										m_geometric_object3_transformation_normal_matrix;
+	glm::mat4										m_geometric_object3_transformation_normal_matrix;*/
 	// GreenTile
 	class GeometryNode*								m_geometric_object4;
 	glm::mat4										m_geometric_object4_transformation_matrix;

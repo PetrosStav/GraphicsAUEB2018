@@ -7,6 +7,8 @@ Tower::Tower() {
 	this->state = 0;
 	this->fireRate = 1000;
 	this->damage = 10;
+	this->level = 1;
+	this->range = 2;
 	m_geometric_objectTower = nullptr;
 }
 
@@ -35,6 +37,16 @@ void Tower::setFireRate(int rate)
 void Tower::setDamage(int damage)
 {
 	this->damage = damage;
+}
+
+void Tower::setLevel(int level)
+{
+	this->level = level;
+}
+
+void Tower::setRange(int range)
+{
+	this->range = range;
 }
 
 void Tower::setTower(GeometryNode * tower) {
@@ -70,6 +82,16 @@ int Tower::getFireRate()
 int Tower::getDamage()
 {
 	return damage;
+}
+
+int Tower::getLevel()
+{
+	return level;
+}
+
+int Tower::getRange()
+{
+	return range;
 }
 
 GeometryNode * Tower::getTower()

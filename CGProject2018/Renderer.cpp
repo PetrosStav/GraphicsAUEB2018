@@ -26,7 +26,7 @@ Renderer::Renderer()
 	}
 
 	// Treasure Chest
-	m_geometric_object3 = nullptr;
+	//m_geometric_object3 = nullptr;
 
 	m_fbo = 0;
 	m_fbo_texture = 0;
@@ -84,7 +84,7 @@ Renderer::~Renderer()
 
 	delete m_geometric_object2;
 
-	delete m_geometric_object3;
+	//delete m_geometric_object3;
 
 	delete m_geometric_object4;
 
@@ -261,8 +261,15 @@ void Renderer::Update(float dt)
 		m_geometric_object2_transformation_normal_matrix[i] = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object2_transformation_matrix[i]))));
 	}
 
-	m_geometric_object3_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(2 * 3.f, 0, -2 * 10.f))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))* glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
-	m_geometric_object3_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object3_transformation_matrix))));
+	// TreasureChest
+
+	TreasureChest* chest = game->getTreasureChest();
+
+	glm::mat4 m_geometric_object3_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(-2 * chest->getX(), chest->getY(), -2 * chest->getZ()))*glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))* glm::scale(glm::mat4(1.f), glm::vec3(0.09f));
+	glm::mat4 m_geometric_object3_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object3_transformation_matrix))));
+
+	chest->setChestTM(m_geometric_object3_transformation_matrix);
+	chest->setChestTNM(m_geometric_object3_transformation_normal_matrix);
 
 	float x = (float)game->getTileX();
 	float y = (float)game->getTileY();
@@ -681,15 +688,16 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
-	// load geometric object 3
+	// load geometric object 3 -- tresure chest
 	mesh = loader.load("../Data/Treasure/treasure_chest.obj");
 	if (mesh != nullptr)
 	{
-		m_geometric_object3 = new GeometryNode();
-		m_geometric_object3->Init(mesh);
+		game->setTreasureChestMesh(mesh);
 	}
 	else
 		initialized = false;
+
+	game->assignTreasureChest();
 
 	// load geometric object 4
 	mesh = loader.load("../Data/Various/plane_green.obj");
@@ -753,28 +761,28 @@ bool Renderer::InitGeometricMeshes()
 
 	mesh = loader.load("../Data/Pirate/pirate_body.obj");
 	if (mesh != nullptr) {
-		game->setPirateBodyMesh(loader.load("../Data/Pirate/pirate_body.obj"));
+		game->setPirateBodyMesh(mesh);
 	}
 	else
 		initialized = false;
 
 	mesh = loader.load("../Data/Pirate/pirate_arm.obj");
 	if (mesh != nullptr) {
-		game->setPirateSwordMesh(loader.load("../Data/Pirate/pirate_arm.obj"));
+		game->setPirateSwordMesh(mesh);
 	}
 	else
 		initialized = false;
 
 	mesh = loader.load("../Data/Pirate/pirate_left_foot.obj");
 	if (mesh != nullptr) {
-		game->setPirateLFootMesh(loader.load("../Data/Pirate/pirate_left_foot.obj"));
+		game->setPirateLFootMesh(mesh);
 	}
 	else
 		initialized = false;
 
 	mesh = loader.load("../Data/Pirate/pirate_right_foot.obj");
 	if (mesh != nullptr) {
-		game->setPirateRFootMesh(loader.load("../Data/Pirate/pirate_right_foot.obj"));
+		game->setPirateRFootMesh(mesh);
 	}
 	else
 		initialized = false;
@@ -796,7 +804,7 @@ bool Renderer::InitGeometricMeshes()
 
 	}*/
 
-	// load geometric object 10
+	// load Tower Meshes
 	mesh = loader.load("../Data/MedievalTower/tower.obj");
 	if (mesh != nullptr)
 	{
@@ -811,6 +819,24 @@ bool Renderer::InitGeometricMeshes()
 		//	tower->getTower()->Init(mesh);
 		//	game->getAvailableTowers().push_back(tower);
 		//}
+	}
+	else
+		initialized = false;
+
+	// load Tower Upgrades Meshes
+
+	mesh = loader.load("../Data/MedievalTowerLevel2/tower.obj");
+	if (mesh != nullptr)
+	{
+		game->setTowerLevelTwoMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/MedievalTowerLevel3/tower.obj");
+	if (mesh != nullptr)
+	{
+		game->setTowerLevelThreeMesh(mesh);
 	}
 	else
 		initialized = false;
@@ -847,7 +873,7 @@ void Renderer::Render()
 	GLenum error = Tools::CheckGLError();
 	if (error != GL_NO_ERROR)
 	{
-		printf("Reanderer:Draw GL Error\n");
+		printf("Renderer:Draw GL Error\n");
 		system("pause");
 	}
 }
@@ -887,7 +913,10 @@ void Renderer::RenderShadowMaps()
 		}
 
 		// draw the third object
-		DrawGeometryNodeToShadowMap(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
+
+		TreasureChest* chest = game->getTreasureChest();
+
+		DrawGeometryNodeToShadowMap(chest->getChest(), chest->getChestTM(), chest->getChestTNM());
 		
 		// These don't need shadows
 
@@ -1020,7 +1049,9 @@ void Renderer::RenderGeometry()
 	}
 
 	// draw the third object
-	DrawGeometryNode(m_geometric_object3, m_geometric_object3_transformation_matrix, m_geometric_object3_transformation_normal_matrix);
+	TreasureChest* chest = game->getTreasureChest();
+
+	DrawGeometryNode(chest->getChest(), chest->getChestTM(), chest->getChestTNM());
 
 	//// draw the sixth pbject
 

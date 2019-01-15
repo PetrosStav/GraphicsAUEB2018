@@ -121,11 +121,22 @@ int main(int argc, char *argv[])
 	//renderer->TileSetPos(tileX, tileY);
 
 	// Timers for timed events
-	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, currentTime;
+	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, currentTime, timePaused;
+
+	bool paused = false;
+	bool wasPaused = false;
+
+	unsigned int pirateWave = 0;
 
 	// Wait for user exit
 	while (quit == false)
 	{
+
+		if (game->getGameOver()) {
+			// If game over then pause the game
+			paused = true;
+		}
+
 		// While there are events to handle
 		while (SDL_PollEvent(&event))
 		{
@@ -195,9 +206,23 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_q)
 				{
 					// TEST TO CREATE PIRATE ON THE FLY
-					game->createPirate();
+					//game->createPirate();
 					/*if(game->getCreatedTowers().size() != 0)
 						game->shootCannonBall(game->getCreatedTowers()[0], game->getPirates()[0]);*/
+
+					// Create wave
+					pirateWave = 5;
+
+				}
+				else if (event.key.keysym.sym == SDLK_0)
+				{
+					// Pause the game
+					paused = !paused;
+				}
+				else if (event.key.keysym.sym == SDLK_u)
+				{
+					// Upgrade Tower
+					game->upgradeTower();
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -254,43 +279,85 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		// Compute the ellapsed time
-		auto simulation_end = chrono::steady_clock::now();
-		float dt = chrono::duration <float>(simulation_end - simulation_start).count(); // in seconds
-		simulation_start = chrono::steady_clock::now();
 
-		// Create a timed event
-		currentTime = SDL_GetTicks();
-		if (currentTime > lastTimeT1 + 30 * 1000) {
-			printf("Timed Event: 30 seconds have passed, one more Tower is available.\n");
-			game->createTower();
-			lastTimeT1 = currentTime;
+		if(!paused){
+
+			if (wasPaused) {
+				timePaused = SDL_GetTicks() - timePaused;
+				lastTimeT1 += timePaused;
+				lastTimeT2 += timePaused;
+				lastTimeT3 += timePaused;
+				lastTimeT4 += timePaused;
+				lastTimeT5 += timePaused;
+			}
+			else {
+				timePaused = 0;
+			}
+
+			// Compute the ellapsed time
+			auto simulation_end = chrono::steady_clock::now();
+			float dt = chrono::duration <float>(simulation_end - simulation_start).count(); // in seconds
+			simulation_start = chrono::steady_clock::now();
+
+			// Create a timed event
+			currentTime = SDL_GetTicks();
+			if (currentTime > lastTimeT1 + 30 * 1000) {
+				printf("Timed Event: 30 seconds have passed, one more Tower is available.\n");
+				game->createTower();
+				lastTimeT1 = currentTime;
+			}
+
+			// every 100ms
+			currentTime = SDL_GetTicks();
+			if (currentTime > lastTimeT2 + 100) {
+				game->towersFire();
+				lastTimeT2 = currentTime;
+			}
+
+			// every 10ms
+			currentTime = SDL_GetTicks();
+			if (currentTime > lastTimeT3 + 100) {
+				//printf("Timed Event: 100ms - Updated Pirate Targets\n");
+				game->updatePirateTargets();
+				lastTimeT3 = currentTime;
+			}
+
+			//// every 10ms
+			//currentTime = SDL_GetTicks();
+			//if (currentTime > lastTimeT4 + 10) {
+			//	game->deleteHitCannonBalls();
+			//	lastTimeT4 = currentTime;
+			//}
+
+			// every 10ms
+			currentTime = SDL_GetTicks();
+			if (currentTime > lastTimeT4 + 100) {
+				game->checkPiratesAtChest();
+				lastTimeT4 = currentTime;
+			}
+
+			// Create Pirate
+			currentTime = SDL_GetTicks();
+			if (currentTime > lastTimeT5 + 1500) {
+				if (pirateWave > 0) {
+					game->createPirate();
+					lastTimeT5 = currentTime;
+					pirateWave -= 1;
+				}
+			}
+
+			// Update
+			renderer->Update(dt);
+
+			wasPaused = false;
 		}
-
-		// every 100ms
-		currentTime = SDL_GetTicks();
-		if (currentTime > lastTimeT2 + 100) {
-			game->towersFire();
-			lastTimeT2 = currentTime;
+		else {
+			// pause
+			if (!wasPaused) {
+				timePaused = SDL_GetTicks();
+			}
+			wasPaused = true;
 		}
-
-		// every 10ms
-		currentTime = SDL_GetTicks();
-		if (currentTime > lastTimeT3 + 100) {
-			//printf("Timed Event: 100ms - Updated Pirate Targets\n");
-			game->updatePirateTargets();
-			lastTimeT3 = currentTime;
-		}
-
-		//// every 10ms
-		//currentTime = SDL_GetTicks();
-		//if (currentTime > lastTimeT4 + 10) {
-		//	game->deleteHitCannonBalls();
-		//	lastTimeT4 = currentTime;
-		//}
-
-		// Update
-		renderer->Update(dt);
 
 		// Draw
 		renderer->Render();

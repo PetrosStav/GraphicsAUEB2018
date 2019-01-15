@@ -14,6 +14,8 @@ public:
 	void setState(int s);
 	void setFireRate(int rate);
 	void setDamage(int damage);
+	void setLevel(int level);
+	void setRange(int range);
 
 	void setTower(GeometryNode* tower);
 	void setTowerTM(glm::mat4 tm);
@@ -26,6 +28,10 @@ public:
 	int getFireRate();
 
 	int getDamage();
+
+	int getLevel();
+
+	int getRange();
 
 	GeometryNode* getTower();
 	glm::mat4 getTowerTM();
@@ -43,6 +49,10 @@ private:
 	int fireRate;
 
 	int damage;
+
+	int level;
+
+	int range;
 
 	GeometryNode*									m_geometric_objectTower;
 	glm::mat4										m_geometric_objectTower_transformation_matrix;
