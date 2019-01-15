@@ -12,6 +12,8 @@ public:
 	void setY(float y);
 
 	void setState(int s);
+	void setFireRate(int rate);
+	void setDamage(int damage);
 
 	void setTower(GeometryNode* tower);
 	void setTowerTM(glm::mat4 tm);
@@ -21,6 +23,9 @@ public:
 	float getY();
 
 	int getState();
+	int getFireRate();
+
+	int getDamage();
 
 	GeometryNode* getTower();
 	glm::mat4 getTowerTM();
@@ -31,6 +36,13 @@ private:
 	float y_tower;
 
 	int state;
+
+	// Fire Rate is connected with States
+	// If fire rate is 1000 it means it fires every 1000 ms
+	// If fire rate is 100 (lowest) it fires every 100 ms
+	int fireRate;
+
+	int damage;
 
 	GeometryNode*									m_geometric_objectTower;
 	glm::mat4										m_geometric_objectTower_transformation_matrix;

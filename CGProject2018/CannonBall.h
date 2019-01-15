@@ -16,6 +16,8 @@ public:
 	void setZ(float z);
 	void setSpeed(float speed);
 
+	void setDamage(int damage);
+
 	void setTargetX(float x);
 	void setTargetY(float y);
 	void setTargetZ(float z);
@@ -32,6 +34,8 @@ public:
 	float getY();
 	float getZ();
 	float getSpeed();
+
+	int getDamage();
 
 	float getTargetX();
 	float getTargetY();
@@ -64,6 +68,8 @@ private:
 	Pirate* targetPirate;
 
 	float speed;
+
+	int damage;
 
 	BoundingShpere*									bound_shpere;
 

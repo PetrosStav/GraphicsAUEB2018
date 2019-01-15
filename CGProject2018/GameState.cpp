@@ -416,6 +416,8 @@ void GameState::shootCannonBall(Tower * tower, Pirate * pirate)
 
 	cannonball->setTargetPirate(pirate);
 
+	cannonball->setDamage(tower->getDamage());
+
 	cannonballs.push_back(cannonball);
 
 }
@@ -471,7 +473,7 @@ void GameState::towersFire()
 {
 	for (Tower* t : createdTowers) {
 		int state = t->getState();
-		if (state == 5) {
+		if (state == t->getFireRate()/200) {
 
 			// search for pirates inside the radius of the tower
 			for (Pirate* p : pirates) {

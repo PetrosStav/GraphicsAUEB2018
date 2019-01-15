@@ -18,6 +18,8 @@ public:
 
 	void setHealthPoints(int hp);
 
+	void setSpeed(float speed);
+
 	void setAnimStart(int start);
 
 	void setBody(GeometryNode* body);
@@ -45,6 +47,8 @@ public:
 	int getRoadIdx();
 
 	int getHealthPoints();
+
+	float getSpeed();
 
 	int getAnimStart();
 
@@ -95,6 +99,8 @@ private:
 	int roadIdx;
 
 	int health_points;
+
+	float speed;
 
 	int animStart;
 

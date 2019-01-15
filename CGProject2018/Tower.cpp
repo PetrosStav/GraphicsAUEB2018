@@ -5,6 +5,8 @@ Tower::Tower() {
 	this->x_tower = 0;
 	this->y_tower = 0;
 	this->state = 0;
+	this->fireRate = 1000;
+	this->damage = 10;
 	m_geometric_objectTower = nullptr;
 }
 
@@ -23,6 +25,16 @@ void Tower::setY(float y) {
 void Tower::setState(int s)
 {
 	this->state = s;
+}
+
+void Tower::setFireRate(int rate)
+{
+	fireRate = rate;
+}
+
+void Tower::setDamage(int damage)
+{
+	this->damage = damage;
 }
 
 void Tower::setTower(GeometryNode * tower) {
@@ -48,6 +60,16 @@ float Tower::getY() {
 int Tower::getState()
 {
 	return state;
+}
+
+int Tower::getFireRate()
+{
+	return fireRate;
+}
+
+int Tower::getDamage()
+{
+	return damage;
 }
 
 GeometryNode * Tower::getTower()

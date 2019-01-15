@@ -6,7 +6,7 @@ CannonBall::CannonBall() {
 	this->x_ball = 0;
 	this->y_ball = 0;
 	this->z_ball = 0;
-	this->speed = 2.0f;
+	this->speed = 1.0f;
 	this->hitTarget = false;
 
 	m_geometric_objectCannonBall = nullptr;
@@ -15,7 +15,7 @@ CannonBall::CannonBall() {
 	this->bound_shpere->setX(0);
 	this->bound_shpere->setY(0);
 	this->bound_shpere->setZ(0);
-	this->bound_shpere->setRadius(1.f);
+	this->bound_shpere->setRadius(1 * 0.09f); // recommended by pdf
 
 }
 
@@ -38,6 +38,11 @@ float CannonBall::getZ() {
 
 float CannonBall::getSpeed() {
 	return this->speed;
+}
+
+int CannonBall::getDamage()
+{
+	return damage;
 }
 
 float CannonBall::getTargetX()
@@ -85,6 +90,11 @@ void CannonBall::setZ(float z_ball) {
 
 void CannonBall::setSpeed(float speed) {
 	this->speed = speed;
+}
+
+void CannonBall::setDamage(int damage)
+{
+	this->damage = damage;
 }
 
 void CannonBall::setTargetX(float x)

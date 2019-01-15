@@ -8,6 +8,8 @@ Pirate::Pirate(){
 	this->target_y = 0;
 	this->roadIdx = 0;
 	this->health_points = 100;
+	// speed after 2 starts doing funny stuff
+	this->speed = 1.f;
 	this->animStart = std::rand() % 1000;
 	m_geometric_objectBody = nullptr;
 	m_geometric_objectSword = nullptr;
@@ -17,7 +19,8 @@ Pirate::Pirate(){
 	this->bound_shpere->setX(18);
 	this->bound_shpere->setY(0.7f);
 	this->bound_shpere->setZ(18);
-	this->bound_shpere->setRadius(12.87075f * 0.09f);
+	this->bound_shpere->setRadius(12.87075f * 0.09f); // recommended by pdf
+	//this->bound_shpere->setRadius(5 * 0.09f);
 }
 
 Pirate::~Pirate()
@@ -59,6 +62,11 @@ void Pirate::setRoadIdx(int idx)
 void Pirate::setHealthPoints(int hp)
 {
 	this->health_points = hp;
+}
+
+void Pirate::setSpeed(float speed)
+{
+	this->speed = speed;
 }
 
 void Pirate::setAnimStart(int start)
@@ -140,6 +148,11 @@ int Pirate::getRoadIdx()
 int Pirate::getHealthPoints()
 {
 	return health_points;
+}
+
+float Pirate::getSpeed()
+{
+	return speed;
 }
 
 int Pirate::getAnimStart()

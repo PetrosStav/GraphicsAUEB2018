@@ -267,9 +267,9 @@ int main(int argc, char *argv[])
 			lastTimeT1 = currentTime;
 		}
 
-		// every 200ms
+		// every 100ms
 		currentTime = SDL_GetTicks();
-		if (currentTime > lastTimeT2 + 200) {
+		if (currentTime > lastTimeT2 + 100) {
 			game->towersFire();
 			lastTimeT2 = currentTime;
 		}

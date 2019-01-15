@@ -327,8 +327,8 @@ void Renderer::Update(float dt)
 		auto deltaTargetX = target_x - x;
 		auto deltaTargetY = target_y - y;
 
-		float x_new = x + ((abs(deltaTargetX) < 0.15) ? 0 : (0.01*(deltaTargetX > 0) - 0.01*(deltaTargetX <= 0)));
-		float y_new = y + ((abs(deltaTargetY) < 0.15) ? 0 : (0.01*(deltaTargetY > 0) - 0.01*(deltaTargetY <= 0)));
+		float x_new = x + ((abs(deltaTargetX) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetX > 0) - p->getSpeed() * 0.01*(deltaTargetX <= 0)));
+		float y_new = y + ((abs(deltaTargetY) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetY > 0) - p->getSpeed() * 0.01*(deltaTargetY <= 0)));
 
 		/*float t = float(((int)m_continous_time % 5000))/5000;
 
@@ -373,7 +373,7 @@ void Renderer::Update(float dt)
 		p->setBodyTNM(m_geometric_object6_transformation_normal_matrix);
 
 		//glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), sin(m_continous_time)*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
-		glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(5*m_continous_time+p->getAnimStart())*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
+		glm::mat4 pivotRot = glm::rotate(glm::mat4(1.0f), cos(p->getSpeed() * 5*m_continous_time+p->getAnimStart())*(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
 		glm::mat4 stPivotRot = glm::rotate(glm::mat4(1.0f), -(glm::pi<float>() / 4), glm::vec3(1, 0, 0));
 
 		// sword
@@ -387,7 +387,7 @@ void Renderer::Update(float dt)
 
 		// left foot
 
-		glm::mat4 animLFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 2*0.09f+sin(10*m_continous_time + p->getAnimStart())* 2 * 0.09f));
+		glm::mat4 animLFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 2*0.09f+sin(p->getSpeed() * 10*m_continous_time + p->getAnimStart())* 2 * 0.09f));
 
 		glm::mat4 m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * animLFoot *glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 		glm::mat4 m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
@@ -397,7 +397,7 @@ void Renderer::Update(float dt)
 
 		// right foot
 
-		glm::mat4 animRFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2*0.09f-sin(10*m_continous_time + p->getAnimStart())*2 * 0.09f));
+		glm::mat4 animRFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2*0.09f-sin(p->getSpeed() * 10*m_continous_time + p->getAnimStart())*2 * 0.09f));
 
 		glm::mat4 m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * animRFoot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 		glm::mat4 m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
@@ -430,9 +430,18 @@ void Renderer::Update(float dt)
 		auto deltaTargetY = ty - y;
 		auto deltaTargetZ = tz - z;
 
-		float x_new = x + ((abs(deltaTargetX) < 0.05) ? 0 : cb->getSpeed() * (0.2*(deltaTargetX > 0) - 0.2*(deltaTargetX <= 0)));
-		float y_new = y + ((abs(deltaTargetY) < 0.005) ? 0 : cb->getSpeed() * (0.01*(deltaTargetY > 0) - 0.01*(deltaTargetY <= 0)));
-		float z_new = z + ((abs(deltaTargetZ) < 0.05) ? 0 : cb->getSpeed() * (0.2*(deltaTargetZ > 0) - 0.2*(deltaTargetZ <= 0)));
+		float distance = sqrt(pow(tx - x, 2) + pow(ty - y, 2) + pow(tz - z, 2));
+		float dirX = deltaTargetX / distance;
+		float dirY = deltaTargetY / distance;
+		float dirZ = deltaTargetZ / distance;
+		
+		float x_new = x + dirX * cb->getSpeed() * 0.2;
+		float y_new = y + dirY * cb->getSpeed() * 0.1;
+		float z_new = z + dirZ * cb->getSpeed() * 0.2;
+
+		/*float x_new = x + 0.2*deltaTargetX;
+		float y_new = y + 0.02*deltaTargetY;
+		float z_new = z + 0.2*deltaTargetZ;*/
 
 		cb->setX(x_new);
 		cb->setY(y_new);
@@ -441,8 +450,8 @@ void Renderer::Update(float dt)
 		if (cb->getBoundingSphere()->isSphereIntersecting(targetPirate->getBoundingSphere())) {
 			std::cout << "BAM" << std::endl;
 			game->deleteHitCannonBall(cb);
-			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - 10);
-			if (targetPirate->getHealthPoints() == 0) {
+			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - cb->getDamage());
+			if (targetPirate->getHealthPoints() <= 0) {
 				std::cout << "Pirate died!" << std::endl;
 				game->deletePirate(targetPirate);
 				// increase score
