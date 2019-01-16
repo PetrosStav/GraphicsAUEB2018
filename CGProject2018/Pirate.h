@@ -22,6 +22,12 @@ public:
 
 	void setAnimStart(int start);
 
+	void setSize(float size);
+
+	void setType(int type);
+
+	void setLevel(int level);
+
 	void setBody(GeometryNode* body);
 	void setBodyTM(glm::mat4 tm);
 	void setBodyTNM(glm::mat4 tnm);
@@ -51,6 +57,12 @@ public:
 	float getSpeed();
 
 	int getAnimStart();
+
+	float getSize();
+
+	int getType();
+
+	int getLevel();
 
 	GeometryNode* getBody();
 	glm::mat4 getBodyTM();
@@ -103,6 +115,16 @@ private:
 	float speed;
 
 	int animStart;
+
+	float size;
+
+	// Type 0 -> normal
+	// Type 1 -> fast
+	// Type 2 -> heavy
+	// Type 3 -> boss
+	int type;
+
+	int level;
 
 	BoundingShpere*									bound_shpere;
 

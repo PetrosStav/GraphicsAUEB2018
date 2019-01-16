@@ -21,6 +21,12 @@ public:
 	void setPirateWave(unsigned int wave);
 	unsigned int getPirateWave();
 
+	void setPirateSubWave(unsigned int subwave);
+	unsigned int getPirateSubWave();
+
+	void setPirateRate(unsigned int rate);
+	unsigned int getPirateRate();
+
 	void setAvailableTowers(std::vector<Tower*> availableTowers);
 	std::vector<Tower*> getAvailableTowers();
 
@@ -77,6 +83,16 @@ public:
 	void										setPirateRFootMesh(GeometricMesh* mesh);
 	void										assignMeshtoPirates();
 
+	void										setPirateFastBodyMesh(GeometricMesh* mesh);
+	void										setPirateFastSwordMesh(GeometricMesh* mesh);
+	void										setPirateFastLFootMesh(GeometricMesh* mesh);
+	void										setPirateFastRFootMesh(GeometricMesh* mesh);
+
+	void										setPirateHeavyBodyMesh(GeometricMesh* mesh);
+	void										setPirateHeavySwordMesh(GeometricMesh* mesh);
+	void										setPirateHeavyLFootMesh(GeometricMesh* mesh);
+	void										setPirateHeavyRFootMesh(GeometricMesh* mesh);
+
 	void										setTowerMesh(GeometricMesh* mesh);
 	void										setTowerLevelTwoMesh(GeometricMesh* mesh);
 	void										setTowerLevelThreeMesh(GeometricMesh* mesh);
@@ -90,7 +106,7 @@ public:
 	// Adding objects
 
 	void										createTower();
-	void										createPirate();
+	void										createPirate(int pType, int pLevel);
 	void										shootCannonBall(Tower* tower, Pirate* pirate);
 
 	// Update paths
@@ -108,6 +124,8 @@ public:
 
 	void										checkPiratesAtChest();
 
+	void										deleteToRemoveLists();
+
 private:
 
 	bool										gameOver;
@@ -119,6 +137,8 @@ private:
 	unsigned int								score;
 	unsigned int								gold;
 	unsigned int								pirateWave;
+	unsigned int								pirateSubWave;
+	unsigned int								pirateRate;
 
 	// Towers
 	std::vector<Tower*>							availableTowers;
@@ -129,6 +149,10 @@ private:
 
 	// Cannonballs
 	std::vector<CannonBall*>					cannonballs;
+
+	// to be deleted objects
+	std::vector<Pirate*>						toRemPirates;
+	std::vector<CannonBall*>					toRemCannonBalls;
 
 	// Treasure Chest
 	TreasureChest*								treasureChest;
@@ -143,6 +167,16 @@ private:
 	GeometricMesh*								pirateSwordMesh;
 	GeometricMesh*								pirateLFootMesh;
 	GeometricMesh*								pirateRFootMesh;
+
+	GeometricMesh*								pirateFastBodyMesh;
+	GeometricMesh*								pirateFastSwordMesh;
+	GeometricMesh*								pirateFastLFootMesh;
+	GeometricMesh*								pirateFastRFootMesh;
+
+	GeometricMesh*								pirateHeavyBodyMesh;
+	GeometricMesh*								pirateHeavySwordMesh;
+	GeometricMesh*								pirateHeavyLFootMesh;
+	GeometricMesh*								pirateHeavyRFootMesh;
 
 	GeometricMesh*								towerMesh;
 	GeometricMesh*								towerLevelTwoMesh;

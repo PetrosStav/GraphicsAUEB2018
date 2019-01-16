@@ -121,12 +121,20 @@ int main(int argc, char *argv[])
 	//renderer->TileSetPos(tileX, tileY);
 
 	// Timers for timed events
-	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6=0 ,currentTime, timePaused;
+	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused;
 
 	bool paused = false;
 	bool wasPaused = false;
 
-	unsigned int pirateWave = 0;
+	//unsigned int piratesInWave = 0;
+
+	struct wave {
+		int num_of_pirates;
+		std::vector<int> types;
+		std::vector<int> levels;
+	};
+
+	wave piratesInWave;
 
 	// Wait for user exit
 	while (quit == false)
@@ -211,7 +219,11 @@ int main(int argc, char *argv[])
 						game->shootCannonBall(game->getCreatedTowers()[0], game->getPirates()[0]);*/
 
 					// Create wave
-					pirateWave = 5;
+					piratesInWave.num_of_pirates = 5;
+					for (int i = 0; i < 5; i++) {
+						piratesInWave.types.push_back(0);
+						piratesInWave.levels.push_back(1);
+					}
 
 				}
 				else if (event.key.keysym.sym == SDLK_0)
@@ -289,6 +301,7 @@ int main(int argc, char *argv[])
 				lastTimeT3 += timePaused;
 				lastTimeT4 += timePaused;
 				lastTimeT5 += timePaused;
+				lastTimeT6 += timePaused;
 			}
 			else {
 				timePaused = 0;
@@ -316,8 +329,8 @@ int main(int argc, char *argv[])
 
 			// every 10ms
 			currentTime = SDL_GetTicks();
-			if (currentTime > lastTimeT3 + 100) {
-				//printf("Timed Event: 100ms - Updated Pirate Targets\n");
+			if (currentTime > lastTimeT3 + 10) {
+				//printf("Timed Event: 10ms - Updated Pirate Targets\n");
 				game->updatePirateTargets();
 				lastTimeT3 = currentTime;
 			}
@@ -329,7 +342,7 @@ int main(int argc, char *argv[])
 			//	lastTimeT4 = currentTime;
 			//}
 
-			// every 10ms
+			// every 100ms
 			currentTime = SDL_GetTicks();
 			if (currentTime > lastTimeT4 + 100) {
 				game->checkPiratesAtChest();
@@ -341,13 +354,29 @@ int main(int argc, char *argv[])
 			// if it is the first wave wait for 5 secs not 20
 			if (game->getPirateWave() == 1) {
 				if (currentTime > lastTimeT6 + 5000) {
-					pirateWave = game->getPirateWave() * 2;
+					piratesInWave.num_of_pirates = game->getPirateWave() * 2;
+					piratesInWave.types.clear();
+					piratesInWave.levels.clear();
+					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
+						piratesInWave.types.push_back(0);
+						piratesInWave.levels.push_back(1);
+					}
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
 			}else {
 				if (currentTime > lastTimeT6 + 20000) {
-					pirateWave = game->getPirateWave() * 2;
+					piratesInWave.num_of_pirates = game->getPirateWave() * 2;
+					piratesInWave.types.clear();
+					piratesInWave.levels.clear();
+					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
+						piratesInWave.types.push_back(rand() % 3);
+						piratesInWave.levels.push_back(1);
+					}
+					sort(piratesInWave.types.begin(), piratesInWave.types.end(), greater<int>());
+					if (piratesInWave.types[piratesInWave.types.size()-1] == 0 && piratesInWave.types[piratesInWave.types.size()-2] == 1) {
+						iter_swap(piratesInWave.types.begin() + piratesInWave.types.size() - 1, piratesInWave.types.begin() + piratesInWave.types.size() - 2);
+					}
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
@@ -356,16 +385,16 @@ int main(int argc, char *argv[])
 
 			// Create Pirate
 			currentTime = SDL_GetTicks();
-			if (currentTime > lastTimeT5 + 1000) {
-				if (pirateWave > 0) {
-					game->createPirate();
+			if (currentTime > lastTimeT5 + game->getPirateRate()) {
+				if (piratesInWave.num_of_pirates > 0) {
+					piratesInWave.num_of_pirates -= 1;
+					int type = piratesInWave.types[piratesInWave.num_of_pirates];
+					int level = piratesInWave.levels[piratesInWave.num_of_pirates];
+					game->createPirate(type, level);
 					lastTimeT5 = currentTime;
-					pirateWave -= 1;
 				}
 			}
 
-			
-			
 			// Update
 			renderer->Update(dt);
 

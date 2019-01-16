@@ -373,7 +373,7 @@ void Renderer::Update(float dt)
 
 		// body
 
-		glm::mat4 m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));
+		glm::mat4 m_geometric_object6_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.09f));
 		glm::mat4 m_geometric_object6_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object6_transformation_matrix))));
 
 		p->setBodyTM(m_geometric_object6_transformation_matrix);
@@ -385,8 +385,8 @@ void Renderer::Update(float dt)
 
 		// sword
 
-		glm::mat4 m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4.5*0.09, 9.5 * 0.09, 1 * 0.09))*
-			glm::translate(glm::mat4(1.0f), glm::vec3(0, .3, 0))* pivotRot *glm::translate(glm::mat4(1.0f), glm::vec3(0, -.3, 0))* stPivotRot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 m_geometric_object7_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(p->getSize()*4.5*0.09, p->getSize()* 9.5 * 0.09, p->getSize() * 1 * 0.09))*
+			glm::translate(glm::mat4(1.0f), glm::vec3(0, .3, 0))* pivotRot *glm::translate(glm::mat4(1.0f), glm::vec3(0, -.3, 0))* stPivotRot * glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.09f));;
 		glm::mat4 m_geometric_object7_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object7_transformation_matrix))));
 
 		p->setSwordTM(m_geometric_object7_transformation_matrix);
@@ -394,9 +394,9 @@ void Renderer::Update(float dt)
 
 		// left foot
 
-		glm::mat4 animLFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 2*0.09f+sin(p->getSpeed() * 10*m_continous_time + p->getAnimStart())* 2 * 0.09f));
+		glm::mat4 animLFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, p->getSize() * (2*0.09f+sin(p->getSpeed() * 10*m_continous_time + p->getAnimStart())* 2 * 0.09f)));
 
-		glm::mat4 m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-4 * 0.09, 0, -2 * 0.09)) * animLFoot *glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 m_geometric_object8_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(p->getSize() * -4 * 0.09, p->getSize() * 0, p->getSize() * -2 * 0.09)) * animLFoot *glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.09f));;
 		glm::mat4 m_geometric_object8_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object8_transformation_matrix))));
 
 		p->setLeftFootTM(m_geometric_object8_transformation_matrix);
@@ -404,9 +404,9 @@ void Renderer::Update(float dt)
 
 		// right foot
 
-		glm::mat4 animRFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2*0.09f-sin(p->getSpeed() * 10*m_continous_time + p->getAnimStart())*2 * 0.09f));
+		glm::mat4 animRFoot = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, p->getSize() *(-2*0.09f-sin(p->getSpeed() * 10*m_continous_time + p->getAnimStart())*2 * 0.09f)));
 
-		glm::mat4 m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * animRFoot * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
+		glm::mat4 m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(p->getSize() * 4 * 0.09, p->getSize() * 0, p->getSize() * 2 * 0.09)) * animRFoot * glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.09f));;
 		glm::mat4 m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
 		
 		p->setRightFootTM(m_geometric_object9_transformation_matrix);
@@ -428,6 +428,11 @@ void Renderer::Update(float dt)
 		tz = cb->getTargetZ();*/
 
 		Pirate* targetPirate = cb->getTargetPirate();
+
+		if (targetPirate == nullptr) {
+			game->deleteHitCannonBall(cb);
+			continue;
+		}
 
 		tx = -18 + 4 * targetPirate->getX();
 		ty = 0.5f;
@@ -463,6 +468,13 @@ void Renderer::Update(float dt)
 				game->deletePirate(targetPirate);
 				// increase score
 				game->setScore(game->getScore() + 1);
+
+				for (CannonBall* cb2 : game->getCannonBalls()) {
+					if (cb2->getTargetPirate() == targetPirate) {
+						cb2->setTargetPirate(nullptr);
+					}
+				}
+
 			}
 			cb->setHitTarget(true);
 		}
@@ -474,6 +486,9 @@ void Renderer::Update(float dt)
 		cb->setCannonBallTNM(m_cannonball_transformation_normal_matrix);
 
 	}
+
+	// Free the memory of deleted pirates n cannoballs
+	//game->deleteToRemoveLists();
 
 	//x = 0;
 	//y = 0;
@@ -783,6 +798,66 @@ bool Renderer::InitGeometricMeshes()
 	mesh = loader.load("../Data/Pirate/pirate_right_foot.obj");
 	if (mesh != nullptr) {
 		game->setPirateRFootMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	// pirate fast
+
+	mesh = loader.load("../Data/PirateFast/pirate_body.obj");
+	if (mesh != nullptr) {
+		game->setPirateFastBodyMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/PirateFast/pirate_arm.obj");
+	if (mesh != nullptr) {
+		game->setPirateFastSwordMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/PirateFast/pirate_left_foot.obj");
+	if (mesh != nullptr) {
+		game->setPirateFastLFootMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/PirateFast/pirate_right_foot.obj");
+	if (mesh != nullptr) {
+		game->setPirateFastRFootMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	// pirate heavy
+
+	mesh = loader.load("../Data/PirateHeavy/pirate_body.obj");
+	if (mesh != nullptr) {
+		game->setPirateHeavyBodyMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/PirateHeavy/pirate_arm.obj");
+	if (mesh != nullptr) {
+		game->setPirateHeavySwordMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/PirateHeavy/pirate_left_foot.obj");
+	if (mesh != nullptr) {
+		game->setPirateHeavyLFootMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/PirateHeavy/pirate_right_foot.obj");
+	if (mesh != nullptr) {
+		game->setPirateHeavyRFootMesh(mesh);
 	}
 	else
 		initialized = false;
