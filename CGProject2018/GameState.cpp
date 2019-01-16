@@ -474,33 +474,33 @@ void GameState::assignMeshtoPirates()
 
 		p->setBody(new GeometryNode());
 
-		if(type == 0)
+		if(type == 1)
 			p->getBody()->Init(pirateBodyMesh);
-		else if(type == 1)
+		else if(type == 0)
 			p->getBody()->Init(pirateFastBodyMesh);
 		else if(type == 2 || type == 3)
 			p->getBody()->Init(pirateHeavyBodyMesh);
 
 		p->setSword(new GeometryNode());
-		if (type == 0)
+		if (type == 1)
 			p->getBody()->Init(pirateSwordMesh);
-		else if (type == 1)
+		else if (type == 0)
 			p->getBody()->Init(pirateFastSwordMesh);
 		else if (type == 2 || type == 3)
 			p->getBody()->Init(pirateHeavySwordMesh);
 
 		p->setLeftFoot(new GeometryNode());
-		if (type == 0)
+		if (type == 1)
 			p->getBody()->Init(pirateLFootMesh);
-		else if (type == 1)
+		else if (type == 0)
 			p->getBody()->Init(pirateFastLFootMesh);
 		else if (type == 2 || type == 3)
 			p->getBody()->Init(pirateHeavyLFootMesh);
 
 		p->setRightFoot(new GeometryNode());
-		if (type == 0)
+		if (type == 1)
 			p->getBody()->Init(pirateRFootMesh);
-		else if (type == 1)
+		else if (type == 0)
 			p->getBody()->Init(pirateFastRFootMesh);
 		else if (type == 2 || type == 3)
 			p->getBody()->Init(pirateHeavyRFootMesh);
@@ -557,7 +557,7 @@ void GameState::createPirate(int pType, int pLevel)
 	int type = p->getType();
 
 	// change speed according to type
-	if (type == 1) {
+	if (type == 0) {
 		p->setSpeed(2.0f);
 		p->setHealthPoints(70);
 	}
@@ -573,33 +573,33 @@ void GameState::createPirate(int pType, int pLevel)
 
 	p->setBody(new GeometryNode());
 
-	if (type == 0)
+	if (type == 1)
 		p->getBody()->Init(pirateBodyMesh);
-	else if (type == 1)
+	else if (type == 0)
 		p->getBody()->Init(pirateFastBodyMesh);
 	else if (type == 2 || type == 3)
 		p->getBody()->Init(pirateHeavyBodyMesh);
 
 	p->setSword(new GeometryNode());
-	if (type == 0)
+	if (type == 1)
 		p->getSword()->Init(pirateSwordMesh);
-	else if (type == 1)
+	else if (type == 0)
 		p->getSword()->Init(pirateFastSwordMesh);
 	else if (type == 2 || type == 3)
 		p->getSword()->Init(pirateHeavySwordMesh);
 
 	p->setLeftFoot(new GeometryNode());
-	if (type == 0)
+	if (type == 1)
 		p->getLeftFoot()->Init(pirateLFootMesh);
-	else if (type == 1)
+	else if (type == 0)
 		p->getLeftFoot()->Init(pirateFastLFootMesh);
 	else if (type == 2 || type == 3)
 		p->getLeftFoot()->Init(pirateHeavyLFootMesh);
 
 	p->setRightFoot(new GeometryNode());
-	if (type == 0)
+	if (type == 1)
 		p->getRightFoot()->Init(pirateRFootMesh);
-	else if (type == 1)
+	else if (type == 0)
 		p->getRightFoot()->Init(pirateFastRFootMesh);
 	else if (type == 2 || type == 3)
 		p->getRightFoot()->Init(pirateHeavyRFootMesh);

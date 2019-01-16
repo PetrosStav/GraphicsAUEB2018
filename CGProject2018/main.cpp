@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
 					// Create wave
 					piratesInWave.num_of_pirates = 5;
 					for (int i = 0; i < 5; i++) {
-						piratesInWave.types.push_back(0);
+						piratesInWave.types.push_back(1);
 						piratesInWave.levels.push_back(1);
 					}
 
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
 					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
-						piratesInWave.types.push_back(0);
+						piratesInWave.types.push_back(1);
 						piratesInWave.levels.push_back(1);
 					}
 					lastTimeT6 = currentTime;
@@ -366,19 +366,19 @@ int main(int argc, char *argv[])
 				}
 			}else {
 				if (currentTime > lastTimeT6 + 20000) {
-					piratesInWave.num_of_pirates = game->getPirateWave() * 2;
+					piratesInWave.num_of_pirates = game->getPirateWave() * 2 % 10;
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
 					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
 						piratesInWave.types.push_back(rand() % 3);
 						piratesInWave.levels.push_back(1);
 					}
+					std::sort(piratesInWave.types.begin(), piratesInWave.types.end(), std::greater<int>());
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
 			}
 			
-
 			// Create Pirate
 			currentTime = SDL_GetTicks();
 			if (currentTime > lastTimeT5 + game->getPirateRate()) {
