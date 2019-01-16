@@ -18,6 +18,9 @@ public:
 	void setScore(unsigned int score);
 	unsigned int getScore();
 
+	void setPirateWave(unsigned int wave);
+	unsigned int getPirateWave();
+
 	void setAvailableTowers(std::vector<Tower*> availableTowers);
 	std::vector<Tower*> getAvailableTowers();
 
@@ -115,6 +118,7 @@ private:
 	// Game variables
 	unsigned int								score;
 	unsigned int								gold;
+	unsigned int								pirateWave;
 
 	// Towers
 	std::vector<Tower*>							availableTowers;

@@ -4,6 +4,7 @@ GameState::GameState() {
 	// Initialize everything
 	score = 0;
 	gold = 100;
+	pirateWave = 1;
 	availableTowers = std::vector<Tower*>();
 	createdTowers = std::vector<Tower*>();
 	pirates = std::vector<Pirate*>();
@@ -116,6 +117,16 @@ unsigned int GameState::getScore()
 {
 	return score;
 }
+
+void GameState::setPirateWave(unsigned int wave) {
+	this->pirateWave = wave;
+}
+
+unsigned int GameState::getPirateWave()
+{
+	return pirateWave;
+}
+
 
 void GameState::setAvailableTowers(std::vector<Tower*> availableTowers)
 {

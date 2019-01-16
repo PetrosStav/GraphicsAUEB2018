@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	//renderer->TileSetPos(tileX, tileY);
 
 	// Timers for timed events
-	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, currentTime, timePaused;
+	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6=0 ,currentTime, timePaused;
 
 	bool paused = false;
 	bool wasPaused = false;
@@ -336,9 +336,27 @@ int main(int argc, char *argv[])
 				lastTimeT4 = currentTime;
 			}
 
+			// Create Waves
+			currentTime = SDL_GetTicks();
+			// if it is the first wave wait for 5 secs not 20
+			if (game->getPirateWave() == 1) {
+				if (currentTime > lastTimeT6 + 5000) {
+					pirateWave = game->getPirateWave() * 2;
+					lastTimeT6 = currentTime;
+					game->setPirateWave(game->getPirateWave() + 1);
+				}
+			}else {
+				if (currentTime > lastTimeT6 + 20000) {
+					pirateWave = game->getPirateWave() * 2;
+					lastTimeT6 = currentTime;
+					game->setPirateWave(game->getPirateWave() + 1);
+				}
+			}
+			
+
 			// Create Pirate
 			currentTime = SDL_GetTicks();
-			if (currentTime > lastTimeT5 + 1500) {
+			if (currentTime > lastTimeT5 + 1000) {
 				if (pirateWave > 0) {
 					game->createPirate();
 					lastTimeT5 = currentTime;
@@ -346,6 +364,8 @@ int main(int argc, char *argv[])
 				}
 			}
 
+			
+			
 			// Update
 			renderer->Update(dt);
 
