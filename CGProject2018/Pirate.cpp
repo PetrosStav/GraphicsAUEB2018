@@ -8,6 +8,7 @@ Pirate::Pirate(){
 	this->target_y = 0;
 	this->roadIdx = 0;
 	this->health_points = 100;
+	this->size = 1.f;
 	// speed after 2 starts doing funny stuff
 	this->speed = 1.f;
 	this->animStart = std::rand() % 1000;
@@ -17,9 +18,9 @@ Pirate::Pirate(){
 	m_geometric_objectRightFoot = nullptr;
 	this->bound_shpere = new BoundingShpere();
 	this->bound_shpere->setX(18);
-	this->bound_shpere->setY(0.7f);
+	this->bound_shpere->setY(size * 0.7f);
 	this->bound_shpere->setZ(18);
-	this->bound_shpere->setRadius(12.87075f * 0.09f); // recommended by pdf
+	this->bound_shpere->setRadius(size * 12.87075f * 0.09f); // recommended by pdf
 	//this->bound_shpere->setRadius(5 * 0.09f);
 }
 
@@ -72,6 +73,21 @@ void Pirate::setSpeed(float speed)
 void Pirate::setAnimStart(int start)
 {
 	this->animStart = start;
+}
+
+void Pirate::setSize(float size)
+{
+	this->size = size;
+}
+
+void Pirate::setType(int type)
+{
+	this->type = type;
+}
+
+void Pirate::setLevel(int level)
+{
+	this->level = level;
 }
 
 void Pirate::setBody(GeometryNode * body){
@@ -158,6 +174,21 @@ float Pirate::getSpeed()
 int Pirate::getAnimStart()
 {
 	return animStart;
+}
+
+float Pirate::getSize()
+{
+	return size;
+}
+
+int Pirate::getType()
+{
+	return type;
+}
+
+int Pirate::getLevel()
+{
+	return level;
 }
 
 GeometryNode * Pirate::getBody()

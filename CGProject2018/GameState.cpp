@@ -5,6 +5,8 @@ GameState::GameState() {
 	score = 0;
 	gold = 100;
 	pirateWave = 1;
+	pirateSubWave = 1;
+	pirateRate = 1500;
 	availableTowers = std::vector<Tower*>();
 	createdTowers = std::vector<Tower*>();
 	pirates = std::vector<Pirate*>();
@@ -125,6 +127,26 @@ void GameState::setPirateWave(unsigned int wave) {
 unsigned int GameState::getPirateWave()
 {
 	return pirateWave;
+}
+
+void GameState::setPirateSubWave(unsigned int subwave)
+{
+	this->pirateSubWave = subwave;
+}
+
+unsigned int GameState::getPirateSubWave()
+{
+	return pirateSubWave;
+}
+
+void GameState::setPirateRate(unsigned int rate)
+{
+	this->pirateRate = rate;
+}
+
+unsigned int GameState::getPirateRate()
+{
+	return pirateRate;
 }
 
 
@@ -447,34 +469,140 @@ void GameState::setPirateRFootMesh(GeometricMesh * mesh)
 void GameState::assignMeshtoPirates()
 {
 	for (Pirate* p : pirates) {
+
+		int type = p->getType();
+
 		p->setBody(new GeometryNode());
-		p->getBody()->Init(pirateBodyMesh);
+
+		if(type == 0)
+			p->getBody()->Init(pirateBodyMesh);
+		else if(type == 1)
+			p->getBody()->Init(pirateFastBodyMesh);
+		else if(type == 2 || type == 3)
+			p->getBody()->Init(pirateHeavyBodyMesh);
 
 		p->setSword(new GeometryNode());
-		p->getSword()->Init(pirateSwordMesh);
+		if (type == 0)
+			p->getBody()->Init(pirateSwordMesh);
+		else if (type == 1)
+			p->getBody()->Init(pirateFastSwordMesh);
+		else if (type == 2 || type == 3)
+			p->getBody()->Init(pirateHeavySwordMesh);
 
 		p->setLeftFoot(new GeometryNode());
-		p->getLeftFoot()->Init(pirateLFootMesh);
+		if (type == 0)
+			p->getBody()->Init(pirateLFootMesh);
+		else if (type == 1)
+			p->getBody()->Init(pirateFastLFootMesh);
+		else if (type == 2 || type == 3)
+			p->getBody()->Init(pirateHeavyLFootMesh);
 
 		p->setRightFoot(new GeometryNode());
-		p->getRightFoot()->Init(pirateRFootMesh);
+		if (type == 0)
+			p->getBody()->Init(pirateRFootMesh);
+		else if (type == 1)
+			p->getBody()->Init(pirateFastRFootMesh);
+		else if (type == 2 || type == 3)
+			p->getBody()->Init(pirateHeavyRFootMesh);
 	}
 }
 
-void GameState::createPirate()
+void GameState::setPirateFastBodyMesh(GeometricMesh * mesh)
+{
+	this->pirateFastBodyMesh = mesh;
+}
+
+void GameState::setPirateFastSwordMesh(GeometricMesh * mesh)
+{
+	this->pirateFastSwordMesh = mesh;
+}
+
+void GameState::setPirateFastLFootMesh(GeometricMesh * mesh)
+{
+	this->pirateFastLFootMesh = mesh;
+}
+
+void GameState::setPirateFastRFootMesh(GeometricMesh * mesh)
+{
+	this->pirateFastRFootMesh = mesh;
+}
+
+void GameState::setPirateHeavyBodyMesh(GeometricMesh * mesh)
+{
+	this->pirateHeavyBodyMesh = mesh;
+}
+
+void GameState::setPirateHeavySwordMesh(GeometricMesh * mesh)
+{
+	this->pirateHeavySwordMesh = mesh;
+}
+
+void GameState::setPirateHeavyLFootMesh(GeometricMesh * mesh)
+{
+	this->pirateHeavyLFootMesh = mesh;
+}
+
+void GameState::setPirateHeavyRFootMesh(GeometricMesh * mesh)
+{
+	this->pirateHeavyRFootMesh = mesh;
+}
+
+void GameState::createPirate(int pType, int pLevel)
 {
 	Pirate* p = new Pirate();
+
+	p->setType(pType);
+	p->setLevel(pLevel);
+
+	int type = p->getType();
+
+	// change speed according to type
+	if (type == 1) {
+		p->setSpeed(2.0f);
+		p->setHealthPoints(70);
+	}
+	else if (type == 2) {
+		p->setSpeed(0.8f);
+		p->setHealthPoints(250);
+	}
+	else if (type == 3) {
+		p->setSpeed(0.6f);
+		p->setSize(1.5f);
+		p->setHealthPoints(1500);
+	}
+
 	p->setBody(new GeometryNode());
-	p->getBody()->Init(pirateBodyMesh);
+
+	if (type == 0)
+		p->getBody()->Init(pirateBodyMesh);
+	else if (type == 1)
+		p->getBody()->Init(pirateFastBodyMesh);
+	else if (type == 2 || type == 3)
+		p->getBody()->Init(pirateHeavyBodyMesh);
 
 	p->setSword(new GeometryNode());
-	p->getSword()->Init(pirateSwordMesh);
+	if (type == 0)
+		p->getSword()->Init(pirateSwordMesh);
+	else if (type == 1)
+		p->getSword()->Init(pirateFastSwordMesh);
+	else if (type == 2 || type == 3)
+		p->getSword()->Init(pirateHeavySwordMesh);
 
 	p->setLeftFoot(new GeometryNode());
-	p->getLeftFoot()->Init(pirateLFootMesh);
+	if (type == 0)
+		p->getLeftFoot()->Init(pirateLFootMesh);
+	else if (type == 1)
+		p->getLeftFoot()->Init(pirateFastLFootMesh);
+	else if (type == 2 || type == 3)
+		p->getLeftFoot()->Init(pirateHeavyLFootMesh);
 
 	p->setRightFoot(new GeometryNode());
-	p->getRightFoot()->Init(pirateRFootMesh);
+	if (type == 0)
+		p->getRightFoot()->Init(pirateRFootMesh);
+	else if (type == 1)
+		p->getRightFoot()->Init(pirateFastRFootMesh);
+	else if (type == 2 || type == 3)
+		p->getRightFoot()->Init(pirateHeavyRFootMesh);
 
 	// Default test -- random
 	/*unsigned idx = rand() % 29;
@@ -550,6 +678,12 @@ void GameState::updatePirateTargets()
 void GameState::deleteHitCannonBall(CannonBall * cannonball)
 {
 	cannonballs.erase(std::remove(cannonballs.begin(), cannonballs.end(), cannonball), cannonballs.end());
+	delete cannonball;
+	// add to rem list
+	// If it is not contained in the vector
+	/*if (std::find(toRemCannonBalls.begin(), toRemCannonBalls.end(), cannonball) == toRemCannonBalls.end()) {
+		toRemCannonBalls.push_back(cannonball);
+	}*/
 }
 
 void GameState::deleteHitCannonBalls()
@@ -567,7 +701,7 @@ void GameState::towersFire()
 {
 	for (Tower* t : createdTowers) {
 		int state = t->getState();
-		if (state == t->getFireRate()/200) {
+		if (state == t->getFireRate()/100) {
 
 			// Search for pirates inside the radius of the tower
 			for (Pirate* p : pirates) {
@@ -586,7 +720,7 @@ void GameState::towersFire()
 			t->setState(0);
 		}
 		else {
-			t->setState(state + 1);
+			t->setState((state + 1) % (t->getFireRate() / 100 + 1));
 		}
 	}
 }
@@ -594,6 +728,11 @@ void GameState::towersFire()
 void GameState::deletePirate(Pirate* pirate)
 {
 	pirates.erase(std::remove(pirates.begin(), pirates.end(), pirate), pirates.end());
+	delete pirate;
+	// If it is not contained in the vector
+	/*if (std::find(toRemPirates.begin(), toRemPirates.end(), pirate) == toRemPirates.end()) {
+		toRemPirates.push_back(pirate);
+	}*/
 }
 
 void GameState::checkPiratesAtChest()
@@ -611,6 +750,19 @@ void GameState::checkPiratesAtChest()
 				gameOver = true;
 			}
 		}
+	}
+}
+
+void GameState::deleteToRemoveLists()
+{
+	for (Pirate* p : toRemPirates) {
+		toRemPirates.erase(std::remove(toRemPirates.begin(), toRemPirates.end(), p), toRemPirates.end());
+		delete p;
+	}
+
+	for (CannonBall* c : toRemCannonBalls) {
+		toRemCannonBalls.erase(std::remove(toRemCannonBalls.begin(), toRemCannonBalls.end(), c), toRemCannonBalls.end());
+		delete c;
 	}
 }
 
