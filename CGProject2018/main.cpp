@@ -354,7 +354,7 @@ int main(int argc, char *argv[])
 			// if it is the first wave wait for 5 secs not 20
 			if (game->getPirateWave() == 1) {
 				if (currentTime > lastTimeT6 + 5000) {
-					piratesInWave.num_of_pirates = game->getPirateWave() * 2;
+					piratesInWave.num_of_pirates = 4;
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
 					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
@@ -366,12 +366,12 @@ int main(int argc, char *argv[])
 				}
 			}else {
 				if (currentTime > lastTimeT6 + 20000) {
-					piratesInWave.num_of_pirates = game->getPirateWave() * 2 % 10;
+					piratesInWave.num_of_pirates = (game->getPirateWave() * 2 > 10)? 10 : (game->getPirateWave() * 2);
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
 					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
 						piratesInWave.types.push_back(rand() % 3);
-						piratesInWave.levels.push_back(1);
+						piratesInWave.levels.push_back(1 + rand() % game->getPirateWave());
 					}
 					std::sort(piratesInWave.types.begin(), piratesInWave.types.end(), std::greater<int>());
 					lastTimeT6 = currentTime;

@@ -374,7 +374,7 @@ void GameState::upgradeTower()
 						selected->setTower(new GeometryNode());
 						selected->getTower()->Init(towerLevelThreeMesh);
 					}
-					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level + 1);
+					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level);
 				}
 			}
 			i++;
@@ -559,16 +559,19 @@ void GameState::createPirate(int pType, int pLevel)
 	// change speed according to type
 	if (type == 0) {
 		p->setSpeed(2.0f);
-		p->setHealthPoints(70);
+		p->setHealthPoints(70+5*pLevel);
+	}
+	else if (type == 1) {
+		p->setHealthPoints(100 + 10 * pLevel);
 	}
 	else if (type == 2) {
 		p->setSpeed(0.8f);
-		p->setHealthPoints(250);
+		p->setHealthPoints(250 + 15 * pLevel);
 	}
 	else if (type == 3) {
 		p->setSpeed(0.6f);
 		p->setSize(1.5f);
-		p->setHealthPoints(1500);
+		p->setHealthPoints(1500 + 25 * pLevel);
 	}
 
 	p->setBody(new GeometryNode());
