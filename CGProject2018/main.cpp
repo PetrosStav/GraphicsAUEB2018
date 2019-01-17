@@ -3,6 +3,7 @@
 #include <chrono>
 #include "GLEW\glew.h"
 #include "Renderer.h"
+#include <SDL2/SDL_mixer.h>
 #include "GameState.h"
 
 using namespace std;
@@ -122,7 +123,7 @@ int main(int argc, char *argv[])
 
 	// Timers for timed events
 	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused;
-
+	bool big_boss = false;
 	bool paused = false;
 	bool wasPaused = false;
 
@@ -354,6 +355,7 @@ int main(int argc, char *argv[])
 			// if it is the first wave wait for 5 secs not 20
 			if (game->getPirateWave() == 1) {
 				if (currentTime > lastTimeT6 + 5000) {
+					printf("THE WAVE IS: %d", game->getPirateWave());
 					piratesInWave.num_of_pirates = 4;
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
@@ -364,9 +366,23 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
-			}else {
+			}else if (game->getPirateWave() % 6 == 0){
 				if (currentTime > lastTimeT6 + 20000) {
-					piratesInWave.num_of_pirates = (game->getPirateWave() * 2 > 10)? 10 : (game->getPirateWave() * 2);
+					printf("THE WAVE IS: %d", game->getPirateWave());
+					// Every 6 waves spawn the boss!!
+					piratesInWave.num_of_pirates = 1;
+					piratesInWave.types.clear();
+					piratesInWave.levels.clear();
+					piratesInWave.types.push_back(3);
+					piratesInWave.levels.push_back(1 + rand() % game->getPirateWave());
+					lastTimeT6 = currentTime;
+					game->setPirateWave(game->getPirateWave() + 1);
+					big_boss = true;
+				}
+			}else {
+				if (currentTime > lastTimeT6 + 20000 && !big_boss) {
+					printf("THE WAVE IS: %d", game->getPirateWave());
+					piratesInWave.num_of_pirates = (game->getPirateWave() * 2 > 10) ? 10 : (game->getPirateWave() * 2);
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
 					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {

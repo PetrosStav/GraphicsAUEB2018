@@ -556,7 +556,7 @@ void GameState::createPirate(int pType, int pLevel)
 
 	int type = p->getType();
 
-	// change speed according to type
+	// change stats according to type
 	if (type == 0) {
 		p->setSpeed(2.0f);
 		p->setHealthPoints(70+5*pLevel);
@@ -742,15 +742,22 @@ void GameState::checkPiratesAtChest()
 {
 	for (Pirate* p : pirates) {
 		if (p->getBoundingSphere()->isSphereIntersecting(treasureChest->getBoundingSphere())) {
-			// Pirate reached gold
+			// Pirate reached gold..if it is the boss game over
+			int type = p->getType();
 			pirates.erase(std::remove(pirates.begin(), pirates.end(), p), pirates.end());
-			gold -= 10;
-			// Check for gameover
-			if (gold == 0) {
-				// Game Over
+			if (type == 3) {
 				printf("GAME OVER\n");
 				printf("Score: %d", score);
 				gameOver = true;
+			}else {
+				gold -= 10;
+				// Check for gameover
+				if (gold == 0) {
+					// Game Over
+					printf("GAME OVER\n");
+					printf("Score: %d", score);
+					gameOver = true;
+				}
 			}
 		}
 	}
