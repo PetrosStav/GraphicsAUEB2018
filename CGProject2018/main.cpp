@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
 					// Create wave
 					piratesInWave.num_of_pirates = 5;
 					for (int i = 0; i < 5; i++) {
-						piratesInWave.types.push_back(0);
+						piratesInWave.types.push_back(1);
 						piratesInWave.levels.push_back(1);
 					}
 
@@ -354,11 +354,11 @@ int main(int argc, char *argv[])
 			// if it is the first wave wait for 5 secs not 20
 			if (game->getPirateWave() == 1) {
 				if (currentTime > lastTimeT6 + 5000) {
-					piratesInWave.num_of_pirates = game->getPirateWave() * 2;
+					piratesInWave.num_of_pirates = 4;
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
 					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
-						piratesInWave.types.push_back(0);
+						piratesInWave.types.push_back(1);
 						piratesInWave.levels.push_back(1);
 					}
 					lastTimeT6 = currentTime;
@@ -366,23 +366,19 @@ int main(int argc, char *argv[])
 				}
 			}else {
 				if (currentTime > lastTimeT6 + 20000) {
-					piratesInWave.num_of_pirates = game->getPirateWave() * 2;
+					piratesInWave.num_of_pirates = (game->getPirateWave() * 2 > 10)? 10 : (game->getPirateWave() * 2);
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
 					for (int i = 0; i < piratesInWave.num_of_pirates; i++) {
 						piratesInWave.types.push_back(rand() % 3);
-						piratesInWave.levels.push_back(1);
+						piratesInWave.levels.push_back(1 + rand() % game->getPirateWave());
 					}
-					sort(piratesInWave.types.begin(), piratesInWave.types.end(), greater<int>());
-					if (piratesInWave.types[piratesInWave.types.size()-1] == 0 && piratesInWave.types[piratesInWave.types.size()-2] == 1) {
-						iter_swap(piratesInWave.types.begin() + piratesInWave.types.size() - 1, piratesInWave.types.begin() + piratesInWave.types.size() - 2);
-					}
+					std::sort(piratesInWave.types.begin(), piratesInWave.types.end(), std::greater<int>());
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
 			}
 			
-
 			// Create Pirate
 			currentTime = SDL_GetTicks();
 			if (currentTime > lastTimeT5 + game->getPirateRate()) {

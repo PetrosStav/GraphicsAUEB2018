@@ -118,8 +118,8 @@ private:
 
 	float size;
 
-	// Type 0 -> normal
-	// Type 1 -> fast
+	// Type 0 -> fast
+	// Type 1 -> normal
 	// Type 2 -> heavy
 	// Type 3 -> boss
 	int type;
