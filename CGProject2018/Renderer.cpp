@@ -206,8 +206,11 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	return techniques_initialization && items_initialization && buffers_initialization && meshes_initialization && lights_sources_initialization;
 }
 
-void Renderer::Update(float dt)
+void Renderer::Update(float dt, unsigned int timeRender)
 {
+
+	const float render_speed = 0.1;
+
 	float movement_speed = 15.0f;
 	// compute the direction of the camera
 	glm::vec3 direction = glm::normalize(m_camera_target_position - m_camera_position);
@@ -334,8 +337,8 @@ void Renderer::Update(float dt)
 		auto deltaTargetX = target_x - x;
 		auto deltaTargetY = target_y - y;
 
-		float x_new = x + ((abs(deltaTargetX) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetX > 0) - p->getSpeed() * 0.01*(deltaTargetX <= 0)));
-		float y_new = y + ((abs(deltaTargetY) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetY > 0) - p->getSpeed() * 0.01*(deltaTargetY <= 0)));
+		float x_new = x + ((abs(deltaTargetX) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetX > 0) - p->getSpeed() * 0.01*(deltaTargetX <= 0)))*timeRender*render_speed;
+		float y_new = y + ((abs(deltaTargetY) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetY > 0) - p->getSpeed() * 0.01*(deltaTargetY <= 0)))*timeRender*render_speed;
 
 		/*float t = float(((int)m_continous_time % 5000))/5000;
 
@@ -348,6 +351,40 @@ void Renderer::Update(float dt)
 		auto deltaX = x_new - x;
 		auto deltaY = y_new - y;
 		auto rad = atan2(deltaY, -deltaX);
+
+		int deg = rad * 180 / glm::pi<float>();
+
+		switch (deg) {
+		case 0:
+			p->setDir(2); // left dir
+			break;
+		case -90:
+			p->setDir(0); // up dir
+			break;
+		case 90:
+			p->setDir(1); // down dir
+			break;
+		case -180:case 180:
+			p->setDir(3); // right dir
+			break;
+		case -44:case -45:
+			p->setDir(4); // up left
+			break;
+		case -135:case -136:
+			p->setDir(5); // up right
+			break;
+		case 44:case 45:
+			p->setDir(6); // down left
+			break;
+		case 135:case 136:
+			p->setDir(7); // down right
+			break;
+		default:
+			p->setDir(-1); // unknown angle
+			break;
+		}
+
+		//printf("Dir: %d\n", p->getDir());
 
 		//printf("Rad: %f\n", rad);
 
@@ -370,6 +407,7 @@ void Renderer::Update(float dt)
 
 		p->setX(x_new);
 		p->setY(y_new);
+		
 
 		// body
 
@@ -447,9 +485,9 @@ void Renderer::Update(float dt)
 		float dirY = deltaTargetY / distance;
 		float dirZ = deltaTargetZ / distance;
 		
-		float x_new = x + dirX * cb->getSpeed() * 0.2;
-		float y_new = y + dirY * cb->getSpeed() * 0.1;
-		float z_new = z + dirZ * cb->getSpeed() * 0.2;
+		float x_new = x + dirX * cb->getSpeed() * 0.2 *timeRender*render_speed;
+		float y_new = y + dirY * cb->getSpeed() * 0.1 *timeRender*render_speed;
+		float z_new = z + dirZ * cb->getSpeed() * 0.2 *timeRender*render_speed;
 
 		/*float x_new = x + 0.2*deltaTargetX;
 		float y_new = y + 0.02*deltaTargetY;
@@ -465,6 +503,9 @@ void Renderer::Update(float dt)
 			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - cb->getDamage());
 			if (targetPirate->getHealthPoints() <= 0) {
 				std::cout << "Pirate died!" << std::endl;
+				game->resetPirateSpeeds();
+
+				if(targetPirate->getType()==3) game->setStopWaves(false);
 				game->deletePirate(targetPirate);
 				// increase score
 				game->setScore(game->getScore() + 1);
@@ -513,6 +554,8 @@ void Renderer::Update(float dt)
 
 	//m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 	//m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
+
+	m_particle_emitter.Update(dt);
 
 }
 
@@ -592,6 +635,16 @@ bool Renderer::InitRenderingTechniques()
 	m_spot_light_shadow_map_program.LoadUniform("uniform_view_matrix");
 	m_spot_light_shadow_map_program.LoadUniform("uniform_model_matrix");
 	
+	// Create and Compile Particle Shader
+	vertex_shader_path = "../Data/Shaders/particle_rendering.vert";
+	fragment_shader_path = "../Data/Shaders/particle_rendering.frag";
+	m_particle_rendering_program.LoadVertexShaderFromFile(vertex_shader_path.c_str());
+	m_particle_rendering_program.LoadFragmentShaderFromFile(fragment_shader_path.c_str());
+	initialized = initialized && m_particle_rendering_program.CreateProgram();
+	m_particle_rendering_program.LoadUniform("uniform_view_matrix");
+	m_particle_rendering_program.LoadUniform("uniform_projection_matrix");
+	m_particle_rendering_program.LoadUniform("uniform_color");
+
 	return initialized;
 }
 
@@ -602,6 +655,7 @@ bool Renderer::ReloadShaders()
 	reloaded = reloaded && m_geometry_rendering_program.ReloadProgram();
 	reloaded = reloaded && m_postprocess_program.ReloadProgram();
 	reloaded = reloaded && m_spot_light_shadow_map_program.ReloadProgram();
+	reloaded = reloaded && m_particle_rendering_program.ReloadProgram();
 
 	return reloaded;
 }
@@ -924,6 +978,8 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
+	m_particle_emitter.Init();
+
 	return initialized;
 }
 
@@ -1195,6 +1251,20 @@ void Renderer::RenderGeometry()
 
 	glBindVertexArray(0);
 	m_geometry_rendering_program.Unbind();
+
+	if (game->getShowGoldParticles()) {
+
+		// Render Particles
+		m_particle_rendering_program.Bind();
+		glUniformMatrix4fv(m_particle_rendering_program["uniform_projection_matrix"], 1, GL_FALSE, glm::value_ptr(m_projection_matrix));
+		glUniformMatrix4fv(m_particle_rendering_program["uniform_view_matrix"], 1, GL_FALSE, glm::value_ptr(m_view_matrix));
+		// specify particle color
+		glm::vec3 particle_color = glm::vec3(1, 0.8745, 0);
+		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
+		m_particle_emitter.Render();
+		m_particle_rendering_program.Unbind();
+
+	}
 
 	glDisable(GL_DEPTH_TEST);
 	if(m_rendering_mode != RENDERING_MODE::TRIANGLES)

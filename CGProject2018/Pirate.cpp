@@ -90,6 +90,11 @@ void Pirate::setLevel(int level)
 	this->level = level;
 }
 
+void Pirate::setDir(int dir)
+{
+	this->dir = dir;
+}
+
 void Pirate::setBody(GeometryNode * body){
 	this->m_geometric_objectBody = body;
 }
@@ -189,6 +194,11 @@ int Pirate::getType()
 int Pirate::getLevel()
 {
 	return level;
+}
+
+int Pirate::getDir()
+{
+	return dir;
 }
 
 GeometryNode * Pirate::getBody()

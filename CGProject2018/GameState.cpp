@@ -6,7 +6,7 @@ GameState::GameState() {
 	gold = 100;
 	pirateWave = 1;
 	pirateSubWave = 1;
-	pirateRate = 1500;
+	pirateRate = 2000;
 	availableTowers = std::vector<Tower*>();
 	createdTowers = std::vector<Tower*>();
 	pirates = std::vector<Pirate*>();
@@ -14,6 +14,8 @@ GameState::GameState() {
 	treasureChest = new TreasureChest();
 
 	gameOver = false;
+	stopWaves = false;
+	showGoldParticles = false;
 
 	// Testing
 
@@ -743,6 +745,7 @@ void GameState::checkPiratesAtChest()
 	for (Pirate* p : pirates) {
 		if (p->getBoundingSphere()->isSphereIntersecting(treasureChest->getBoundingSphere())) {
 			// Pirate reached gold..if it is the boss game over
+			showGoldParticles = true;
 			int type = p->getType();
 			pirates.erase(std::remove(pirates.begin(), pirates.end(), p), pirates.end());
 			if (type == 3) {
@@ -774,6 +777,177 @@ void GameState::deleteToRemoveLists()
 		toRemCannonBalls.erase(std::remove(toRemCannonBalls.begin(), toRemCannonBalls.end(), c), toRemCannonBalls.end());
 		delete c;
 	}
+}
+
+void GameState::checkCollidingPirates()
+{
+	for (Pirate* p : pirates) {
+		//bool p_collides = false;
+		for (Pirate* p2 : pirates) {
+			if (p != p2 && p->getBoundingSphere()->isSphereIntersecting(p2->getBoundingSphere())) {
+				//p_collides = true;
+				//printf("Pirate collide!\n");
+
+				if (p->getSpeed() > p2->getSpeed()) {
+
+					switch (p->getDir()) {
+					case 0:
+						// Up
+						if(p->getY() < p2->getY()) p->setSpeed(p2->getSpeed());
+						break;
+					case 1:
+						// Down
+						if (p->getY() > p2->getY()) p->setSpeed(p2->getSpeed());
+						break;
+					case 2:
+						// Left
+						if (p->getX() < p2->getX()) p->setSpeed(p2->getSpeed());
+						break;
+					case 3:
+						// Right
+						if (p->getX() > p2->getX()) p->setSpeed(p2->getSpeed());
+						break;
+
+					}
+					//p->setSpeed(p2->getSpeed());
+				}
+				else if (p2->getSpeed() > p->getSpeed()) {
+
+					switch (p2->getDir()) {
+					case 0:
+						// Up
+						if (p2->getY() < p->getY()) p2->setSpeed(p->getSpeed());
+						break;
+					case 1:
+						// Down
+						if (p2->getY() > p->getY()) p2->setSpeed(p->getSpeed());
+						break;
+					case 2:
+						// Left
+						if (p2->getX() < p->getX()) p2->setSpeed(p->getSpeed());
+						break;
+					case 3:
+						// Right
+						if (p2->getX() > p->getX()) p2->setSpeed(p->getSpeed());
+						break;
+
+					}
+					//p2->setSpeed(p->getSpeed());
+				}
+
+				//switch (p->getDir()) {
+				//case 0:
+				//	// Up
+				//	if (p->getY() > p2->getY()) {
+				//		//p->setX(p->getX() - 0.2f);
+				//		//p->setTargetX(p->getTargetX() - 0.5f);
+				//		//p2->setX(p2->getX() + 0.2f);
+				//		//p2->setTargetX(p2->getTargetX() + 0.5f);
+
+				//		p2->setSpeed(p->getSpeed());
+				//		p2->setY(p2->getY() - 0.01f);
+				//	}
+				//	break;
+				//case 1:
+				//	// Down
+				//	if (p->getY() < p2->getY()) {
+				//		//p->setX(p->getX() + 0.2f);
+				//		//p->setTargetX(p->getTargetX() + 0.5f);
+				//		//p2->setX(p2->getX() - 0.2f);
+				//		//p2->setTargetX(p2->getTargetX() - 0.5f);
+				//		p->setSpeed(p2->getSpeed());
+				//		p2->setY(p2->getY() + 0.01f);
+				//	}
+				//	break;
+				//case 2:
+				//	// Left
+				//	if (p->getX() > p2->getX()) {
+				//		//p->setY(p->getY() + 0.2f);
+				//		//p->setTargetY(p->getTargetY() + 0.5f);
+				//		//p2->setY(p2->getY() - 0.2f);
+				//		//p2->setTargetY(p2->getTargetY() - 0.5f);
+				//		p2->setSpeed(p->getSpeed());
+				//		p2->setX(p2->getX() + 0.01f);
+				//	}
+				//	break;
+				//case 3:
+				//	// Right
+				//	if (p->getX() < p2->getX()) {
+				//		//p->setY(p->getY() - 0.2f);
+				//		//p->setTargetY(p->getTargetY() - 0.5f);
+				//		//p2->setTargetY(p2->getTargetY() + 0.2f);
+				//		//p2->setTargetY(p2->getTargetY() + 0.5f);
+				//		p->setSpeed(p2->getSpeed());
+				//		p2->setX(p2->getX() - 0.01f);
+				//	}
+				//	break;
+				//case -1:
+				//	// Unknown Angle
+				//	break;
+				//}
+				
+			
+			}
+		}
+		/*if (!p_collides) {
+			int type = p->getType();
+			switch (type) {
+			case 0:
+				p->setSpeed(2);
+				break;
+			case 1:
+				p->setSpeed(1);
+				break;
+			case 2:
+				p->setSpeed(0.8f);
+				break;
+			case 3:
+				p->setSpeed(0.6f);
+				break;
+			}
+		}*/
+	}
+}
+
+void GameState::resetPirateSpeeds()
+{
+	for (Pirate* p : pirates) {
+		int type = p->getType();
+		switch (type) {
+		case 0:
+			p->setSpeed(2);
+			break;
+		case 1:
+			p->setSpeed(1);
+			break;
+		case 2:
+			p->setSpeed(0.8f);
+			break;
+		case 3:
+			p->setSpeed(0.6f);
+			break;
+		}
+	}
+}
+
+bool GameState::getStopWaves()
+{
+	return stopWaves;
+}
+
+void GameState::setStopWaves(bool state)
+{
+	stopWaves = state;
+}
+
+bool GameState::getShowGoldParticles()
+{
+	return showGoldParticles;
+}
+
+void GameState::setShowGoldParticles(bool state)
+{
+	showGoldParticles = state;
 }
 
 void GameState::setTowerMesh(GeometricMesh * mesh)
