@@ -123,7 +123,7 @@ public:
 	~Renderer();
 	bool										Init(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 	//bool										inRoad;
-	void										Update(float dt, unsigned int);
+	void										Update(float dt);
 	bool										ResizeBuffers(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 	bool										ReloadShaders();
 	void										Render();

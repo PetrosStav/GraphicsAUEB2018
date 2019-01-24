@@ -206,10 +206,10 @@ bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
 	return techniques_initialization && items_initialization && buffers_initialization && meshes_initialization && lights_sources_initialization;
 }
 
-void Renderer::Update(float dt, unsigned int timeRender)
+void Renderer::Update(float dt)
 {
 
-	const float render_speed = 0.1;
+	float render_speed = 100.f;
 
 	float movement_speed = 15.0f;
 	// compute the direction of the camera
@@ -337,8 +337,8 @@ void Renderer::Update(float dt, unsigned int timeRender)
 		auto deltaTargetX = target_x - x;
 		auto deltaTargetY = target_y - y;
 
-		float x_new = x + ((abs(deltaTargetX) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetX > 0) - p->getSpeed() * 0.01*(deltaTargetX <= 0)))*timeRender*render_speed;
-		float y_new = y + ((abs(deltaTargetY) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetY > 0) - p->getSpeed() * 0.01*(deltaTargetY <= 0)))*timeRender*render_speed;
+		float x_new = x + ((abs(deltaTargetX) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetX > 0) - p->getSpeed() * 0.01*(deltaTargetX <= 0)))*dt*render_speed;
+		float y_new = y + ((abs(deltaTargetY) < 0.15) ? 0 : (p->getSpeed() * 0.01*(deltaTargetY > 0) - p->getSpeed() * 0.01*(deltaTargetY <= 0)))*dt*render_speed;
 
 		/*float t = float(((int)m_continous_time % 5000))/5000;
 
@@ -485,9 +485,9 @@ void Renderer::Update(float dt, unsigned int timeRender)
 		float dirY = deltaTargetY / distance;
 		float dirZ = deltaTargetZ / distance;
 		
-		float x_new = x + dirX * cb->getSpeed() * 0.2 *timeRender*render_speed;
-		float y_new = y + dirY * cb->getSpeed() * 0.1 *timeRender*render_speed;
-		float z_new = z + dirZ * cb->getSpeed() * 0.2 *timeRender*render_speed;
+		float x_new = x + dirX * cb->getSpeed() * 0.2 *dt*render_speed;
+		float y_new = y + dirY * cb->getSpeed() * 0.1 *dt*render_speed;
+		float z_new = z + dirZ * cb->getSpeed() * 0.2 *dt*render_speed;
 
 		/*float x_new = x + 0.2*deltaTargetX;
 		float y_new = y + 0.02*deltaTargetY;
@@ -556,7 +556,6 @@ void Renderer::Update(float dt, unsigned int timeRender)
 	//m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
 
 	m_particle_emitter.Update(dt);
-
 }
 
 bool Renderer::InitCommonItems()

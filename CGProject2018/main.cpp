@@ -1,6 +1,7 @@
 #include "SDL2/SDL.h"
 #include <iostream>
 #include <chrono>
+#include <thread>
 #include "GLEW\glew.h"
 #include "Renderer.h"
 #include "GameState.h"
@@ -143,12 +144,12 @@ int main(int argc, char *argv[])
 		/*
 		// NOT SURE IF HELPS
 
-		lastTimeT1 += prevTimeRender>500?prevTimeRender:0;
-		lastTimeT2 += prevTimeRender > 500 ? prevTimeRender : 0;
-		lastTimeT3 += prevTimeRender > 500 ? prevTimeRender : 0;
-		lastTimeT4 += prevTimeRender > 500 ? prevTimeRender : 0;
-		lastTimeT5 += prevTimeRender > 500 ? prevTimeRender : 0;
-		lastTimeT6 += prevTimeRender > 500 ? prevTimeRender : 0;*/
+		lastTimeT1 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT2 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT3 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT4 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT5 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT6 += dt*1000 > 500 ? dt*1000 : 0;*/
 
 		timeRender = SDL_GetTicks();
 
@@ -303,6 +304,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
+		float dt = 0.0f;
 
 		if(!paused){
 
@@ -321,7 +323,7 @@ int main(int argc, char *argv[])
 
 			// Compute the ellapsed time
 			auto simulation_end = chrono::steady_clock::now();
-			float dt = chrono::duration <float>(simulation_end - simulation_start).count(); // in seconds
+			dt = chrono::duration <float>(simulation_end - simulation_start).count(); // in seconds
 			simulation_start = chrono::steady_clock::now();
 
 			// Create a timed event
@@ -334,7 +336,7 @@ int main(int argc, char *argv[])
 
 			// every 100ms
 			currentTime = SDL_GetTicks();
-			printf("CurrentTime: %d\nLastTimeT2: %d\n", currentTime, lastTimeT2);
+			//printf("CurrentTime: %d\nLastTimeT2: %d\n", currentTime, lastTimeT2);
 			if (currentTime > lastTimeT2 + 100) {
 				game->towersFire();
 				lastTimeT2 = currentTime;
@@ -442,7 +444,7 @@ int main(int argc, char *argv[])
 			}
 
 			// Update
-			renderer->Update(dt, prevTimeRender);
+			renderer->Update(dt);
 
 			wasPaused = false;
 		}
@@ -460,13 +462,14 @@ int main(int argc, char *argv[])
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
 
-		timeRender = SDL_GetTicks() - timeRender;
-		prevTimeRender = timeRender;
-		// Print FPS
-		//int fps = 0;
-		//if (timeRender != 0) fps = 1000 / timeRender;
+		// LIMIT FPS TO 60
+		int timeToSleep = (1000 / 60) - dt*1000;
 
-		//printf("FPS: %d\n", fps);
+		if (timeToSleep > 0) {
+			//printf("Sleeping for: %d\n", timeToSleep);
+			std::this_thread::sleep_for(std::chrono::milliseconds(timeToSleep));
+		}
+
 	}
 
 	// Delete the game state
