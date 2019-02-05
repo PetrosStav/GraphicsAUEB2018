@@ -58,8 +58,8 @@ Mix_Music* MusicAssets::GetMusic(std::string filename) {
 
 
 Mix_Chunk* MusicAssets::GetSFX(std::string filename) {
-	std::string fullpath = SDL_GetBasePath();
-	fullpath.append("Music/" + filename);
+	std::string fullpath = Tools::GetFolderPath("../Data/Music/");
+	fullpath.append(filename);
 
 	if (mSFX[fullpath] == nullptr) {
 
