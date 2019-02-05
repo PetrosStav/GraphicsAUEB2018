@@ -1,11 +1,11 @@
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_ttf.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include "GLEW\glew.h"
 #include "Renderer.h"
 #include "GameState.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
 
 using namespace std;
 

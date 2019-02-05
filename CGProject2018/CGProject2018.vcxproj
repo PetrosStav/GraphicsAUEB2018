@@ -69,7 +69,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -87,7 +87,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2_image.lib;SDL2_ttf.lib;glew32.lib;SDL2.lib;SDL2main.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;glew32.lib;SDL2.lib;SDL2main.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\lib\$(PlatformName)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -132,6 +132,8 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GeometricMesh.h" />
     <ClInclude Include="GeometryNode.h" />
+    <ClInclude Include="MusicAssets.h" />
+    <ClInclude Include="MusicManager.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pirate.h" />
@@ -150,6 +152,8 @@
     <ClCompile Include="GeometricMesh.cpp" />
     <ClCompile Include="GeometryNode.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MusicAssets.cpp" />
+    <ClCompile Include="MusicManager.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pirate.cpp" />

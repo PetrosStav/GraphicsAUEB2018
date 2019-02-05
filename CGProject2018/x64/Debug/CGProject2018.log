@@ -1,11 +1,12 @@
-﻿  Renderer.cpp
+﻿  main.cpp
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\main.cpp(502): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Renderer.cpp
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(342): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(343): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(357): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(490): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(491): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(492): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1396): warning C4244: 'argument': conversion from 'double' to 'GLsizei', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1426): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
@@ -26,6 +27,7 @@ c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\rend
           [
               T=float
           ]
+  Generating Code...
   CGProject2018.vcxproj -> C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\x64\Debug\CGProject2018.exe
   Copying DLLs to output folder..
   C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\freeglut.dll
