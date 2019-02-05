@@ -15,8 +15,12 @@ GameState::GameState() {
 	musicManager = MusicManager::Instance();
 
 	gameOver = false;
+	paused = false;
+	wasPaused = false;
 	stopWaves = false;
 	showGoldParticles = false;
+
+	actions = 9;
 
 	// Testing
 
@@ -218,6 +222,36 @@ void GameState::setGameOver(bool state)
 bool GameState::getGameOver()
 {
 	return gameOver;
+}
+
+void GameState::setPaused(bool state)
+{
+	this->paused = state;
+}
+
+bool GameState::isPaused()
+{
+	return paused;
+}
+
+void GameState::setWasPaused(bool state)
+{
+	this->wasPaused = state;
+}
+
+bool GameState::getWasPaused()
+{
+	return wasPaused;
+}
+
+void GameState::setActions(unsigned int actions)
+{
+	this->actions = actions;
+}
+
+unsigned int GameState::getActions()
+{
+	return actions;
 }
 
 void GameState::addTower(float x, float y)

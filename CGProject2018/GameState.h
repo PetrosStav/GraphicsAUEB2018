@@ -48,6 +48,15 @@ public:
 	void setGameOver(bool state);
 	bool getGameOver();
 
+	void setPaused(bool state);
+	bool isPaused();
+
+	void setWasPaused(bool state);
+	bool getWasPaused();
+
+	void setActions(unsigned int actions);
+	unsigned int getActions();
+
 	// Tower functions
 	void										addTower(float x, float y);
 	void										addTower();
@@ -141,8 +150,12 @@ public:
 private:
 
 	bool										gameOver;
+	bool										paused;
+	bool										wasPaused;
 	bool										stopWaves;
 	bool										showGoldParticles;
+
+	unsigned int								actions;
 
 	// Tile positions
 	int											tileX, tileY;

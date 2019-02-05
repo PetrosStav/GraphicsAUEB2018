@@ -1,4 +1,5 @@
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -32,6 +33,12 @@ bool init(GameState* game)
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
+		return false;
+	}
+
+	// Initialize SDL TTF
+	if (TTF_Init() == -1) {
+		printf("TTF_Init: %s\n", TTF_GetError());
 		return false;
 	}
 
@@ -93,6 +100,9 @@ void clean_up()
 
 	SDL_GL_DeleteContext(gContext);
 	SDL_DestroyWindow(window);
+
+	TTF_Quit();
+
 	SDL_Quit();
 }
 
@@ -123,8 +133,6 @@ int main(int argc, char *argv[])
 
 	// Timers for timed events
 	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused, timeRender=0, prevTimeRender=0;
-	bool paused = false;
-	bool wasPaused = false;
 
 	//unsigned int piratesInWave = 0;
 
@@ -157,7 +165,7 @@ int main(int argc, char *argv[])
 
 		if (game->getGameOver()) {
 			// If game over then pause the game
-			paused = true;
+			game->setPaused(true);
 		}
 
 		// While there are events to handle
@@ -179,7 +187,15 @@ int main(int argc, char *argv[])
 				{
 					bool inroad = game->getInRoad();
 					if (!inroad) {
-						game->addTower();
+						if (game->getActions() >= 3) {
+							if (game->getAvailableTowers().empty()) game->createTower();
+							game->addTower();
+							game->setActions(game->getActions() - 3);
+							printf("Spent 3 action points\nActions: %d\n", game->getActions());
+						}
+						else {
+							printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n", (3 - game->getActions()));
+						}
 					}
 
 				}
@@ -187,7 +203,14 @@ int main(int argc, char *argv[])
 				{
 					bool inroad = game->getInRoad();
 					if (!inroad) {
-						game->rearrangeTower();
+						if (game->getActions() >= 2) {
+							game->rearrangeTower();
+							game->setActions(game->getActions() - 2);
+							printf("Spent 2 action points\nActions: %d\n", game->getActions());
+						}
+						else {
+							printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n", (2 - game->getActions()));
+						}
 					}
 				}
 				else if (event.key.keysym.sym == SDLK_w)
@@ -244,12 +267,19 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_0)
 				{
 					// Pause the game
-					paused = !paused;
+					game->setPaused(!game->isPaused());
 				}
 				else if (event.key.keysym.sym == SDLK_u)
 				{
 					// Upgrade Tower
-					game->upgradeTower();
+					if (game->getActions() >= 3) {
+						game->upgradeTower();
+						game->setActions(game->getActions() - 3);
+						printf("Spent 3 action points\nActions: %d\n", game->getActions());
+					}
+					else {
+						printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n",(3-game->getActions()));
+					}
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -308,9 +338,9 @@ int main(int argc, char *argv[])
 
 		float dt = 0.0f;
 
-		if(!paused){
+		if(!game->isPaused()){
 
-			if (wasPaused) {
+			if (game->getWasPaused()) {
 				timePaused = SDL_GetTicks() - timePaused;
 				lastTimeT1 += timePaused;
 				lastTimeT2 += timePaused;
@@ -330,9 +360,11 @@ int main(int argc, char *argv[])
 
 			// Create a timed event
 			currentTime = SDL_GetTicks();
-			if (currentTime > lastTimeT1 + 30 * 1000) {
-				printf("Timed Event: 30 seconds have passed, one more Tower is available.\n");
-				game->createTower();
+			if (currentTime > lastTimeT1 + 5 * 1000) {
+				printf("Timed Event: 5 seconds have passed, one more action is available.\n");
+				game->setActions(game->getActions() + 1);
+				printf("Actions: %d\n", game->getActions());
+				//game->createTower();
 				lastTimeT1 = currentTime;
 			}
 
@@ -448,18 +480,20 @@ int main(int argc, char *argv[])
 			// Update
 			renderer->Update(dt);
 
-			wasPaused = false;
+			game->setWasPaused(false);
 		}
 		else {
 			// pause
-			if (!wasPaused) {
+			if (!game->getWasPaused()) {
 				timePaused = SDL_GetTicks();
 			}
-			wasPaused = true;
+			game->setWasPaused(true);
 		}
 
 		// Draw
 		renderer->Render();
+		SDL_Color color = { 255,0,0 };
+		renderer->RenderText("Hello World!", color, 0, 0, 18);
 
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
