@@ -14,6 +14,8 @@ GameState::GameState() {
 	treasureChest = new TreasureChest();
 
 	gameOver = false;
+	paused = false;
+	wasPaused = false;
 	stopWaves = false;
 	showGoldParticles = false;
 
@@ -215,6 +217,26 @@ void GameState::setGameOver(bool state)
 bool GameState::getGameOver()
 {
 	return gameOver;
+}
+
+void GameState::setPaused(bool state)
+{
+	this->paused = state;
+}
+
+bool GameState::isPaused()
+{
+	return paused;
+}
+
+void GameState::setWasPaused(bool state)
+{
+	this->wasPaused = state;
+}
+
+bool GameState::getWasPaused()
+{
+	return wasPaused;
 }
 
 void GameState::addTower(float x, float y)

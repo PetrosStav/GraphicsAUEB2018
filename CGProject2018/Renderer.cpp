@@ -211,6 +211,8 @@ void Renderer::Update(float dt)
 
 	float render_speed = 100.f;
 
+	if (game->getWasPaused()) render_speed = 0.f;
+
 	float movement_speed = 15.0f;
 	// compute the direction of the camera
 	glm::vec3 direction = glm::normalize(m_camera_target_position - m_camera_position);
@@ -498,9 +500,10 @@ void Renderer::Update(float dt)
 		cb->setZ(z_new);
 
 		if (cb->getBoundingSphere()->isSphereIntersecting(targetPirate->getBoundingSphere())) {
-			std::cout << "BAM" << std::endl;
-			game->deleteHitCannonBall(cb);
+			//std::cout << "BAM" << std::endl;
 			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - cb->getDamage());
+			game->deleteHitCannonBall(cb);
+			//printf("TargetPirate: %d\n", targetPirate->getHealthPoints());
 			if (targetPirate->getHealthPoints() <= 0) {
 				std::cout << "Pirate died!" << std::endl;
 				game->resetPirateSpeeds();
@@ -517,7 +520,7 @@ void Renderer::Update(float dt)
 				}
 
 			}
-			cb->setHitTarget(true);
+			//cb->setHitTarget(true);
 		}
 
 		glm::mat4 m_cannonball_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(cb->getX(), cb->getY(), cb->getZ()))* terrainTransform * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));

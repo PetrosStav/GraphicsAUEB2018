@@ -123,8 +123,6 @@ int main(int argc, char *argv[])
 
 	// Timers for timed events
 	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused, timeRender=0, prevTimeRender=0;
-	bool paused = false;
-	bool wasPaused = false;
 
 	//unsigned int piratesInWave = 0;
 
@@ -155,7 +153,7 @@ int main(int argc, char *argv[])
 
 		if (game->getGameOver()) {
 			// If game over then pause the game
-			paused = true;
+			game->setPaused(true);
 		}
 
 		// While there are events to handle
@@ -242,7 +240,7 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_0)
 				{
 					// Pause the game
-					paused = !paused;
+					game->setPaused(!game->isPaused());
 				}
 				else if (event.key.keysym.sym == SDLK_u)
 				{
@@ -306,9 +304,9 @@ int main(int argc, char *argv[])
 
 		float dt = 0.0f;
 
-		if(!paused){
+		if(!game->isPaused()){
 
-			if (wasPaused) {
+			if (game->getWasPaused()) {
 				timePaused = SDL_GetTicks() - timePaused;
 				lastTimeT1 += timePaused;
 				lastTimeT2 += timePaused;
@@ -386,7 +384,7 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
-			}else if (game->getPirateWave() % 6 == 0){
+			}else if (game->getPirateWave() % 2 == 0){
 				if (currentTime > lastTimeT6 + 20000) {
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					// Every 6 waves spawn the boss!!
@@ -446,14 +444,14 @@ int main(int argc, char *argv[])
 			// Update
 			renderer->Update(dt);
 
-			wasPaused = false;
+			game->setWasPaused(false);
 		}
 		else {
 			// pause
-			if (!wasPaused) {
+			if (!game->getWasPaused()) {
 				timePaused = SDL_GetTicks();
 			}
-			wasPaused = true;
+			game->setWasPaused(true);
 		}
 
 		// Draw

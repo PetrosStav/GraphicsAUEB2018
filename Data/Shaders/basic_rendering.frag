@@ -55,6 +55,101 @@ float shadow_pcf2x2(vec3 light_space_xyz)
     return factor;
 }
 
+float shadow_pcf(vec3 light_space_xyz)
+{
+	ivec2 shadow_map_size = textureSize(shadowmap_texture, 0);
+	float xOffset = 1.0 / shadow_map_size.x;
+    float yOffset = 1.0 / shadow_map_size.y;
+	
+	// compute the weights of the neighboring pixels
+	vec2 uv = light_space_xyz.xy - 0.5 * vec2(xOffset, yOffset);
+	
+	float u_ratio = mod(uv.x, xOffset) / xOffset;
+	float v_ratio = mod(uv.y, yOffset) / yOffset;
+	float u_opposite = 1 - u_ratio;
+	float v_opposite = 1 - v_ratio;
+	
+	// compute the distance with a small bias
+	float z = light_space_xyz.z - uniform_constant_bias;
+	
+	float factor = 0;
+	
+	int pcfCount = 16;
+	
+	for(int i=-(pcfCount/2)-1;i<pcfCount/2;i++){
+		for(int j=-(pcfCount/2)-1;j<pcfCount/2;j++){
+				factor += (texture(shadowmap_texture, uv + vec2(i*xOffset*0.2, j*yOffset*0.2)).r > z)? 1.0: 0.1;
+			
+		}
+	}
+	
+	//for(int i=-1;i<pcfCount;i++){
+	//	for(int j=-1;j<pcfCount;j++){
+	//			factor += (texture(shadowmap_texture, uv + vec2(i*xOffset*0.2, j*yOffset*0.2)).r > z)? 1.0: 0.1;
+	//		
+	//	}
+	//}
+	
+	factor /= pcfCount*pcfCount;
+	
+    return factor;
+}
+
+// Returns a random number based on a vec3 and an int.
+float random(vec3 seed, int i){
+	vec4 seed4 = vec4(seed,i);
+	float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
+float stratifiedPoisson(vec3 light_space_xyz)
+{
+
+	ivec2 shadow_map_size = textureSize(shadowmap_texture, 0);
+	float xOffset = 1.0 / shadow_map_size.x;
+    float yOffset = 1.0 / shadow_map_size.y;
+	
+	// compute the weights of the neighboring pixels
+	vec2 uv = light_space_xyz.xy - 0.5 * vec2(xOffset, yOffset);
+	
+	// compute the distance with a small bias
+	float z = light_space_xyz.z - uniform_constant_bias;
+	
+	vec2 poissonDisk[16] = vec2[]( 
+	   vec2( -0.94201624, -0.39906216 ), 
+	   vec2( 0.94558609, -0.76890725 ), 
+	   vec2( -0.094184101, -0.92938870 ), 
+	   vec2( 0.34495938, 0.29387760 ), 
+	   vec2( -0.91588581, 0.45771432 ), 
+	   vec2( -0.81544232, -0.87912464 ), 
+	   vec2( -0.38277543, 0.27676845 ), 
+	   vec2( 0.97484398, 0.75648379 ), 
+	   vec2( 0.44323325, -0.97511554 ), 
+	   vec2( 0.53742981, -0.47373420 ), 
+	   vec2( -0.26496911, -0.41893023 ), 
+	   vec2( 0.79197514, 0.19090188 ), 
+	   vec2( -0.24188840, 0.99706507 ), 
+	   vec2( -0.81409955, 0.91437590 ), 
+	   vec2( 0.19984126, 0.78641367 ), 
+	   vec2( 0.14383161, -0.14100790 ) 
+	);
+
+	float factor = 1;
+	
+	float noise = 100.0;
+	
+	for (int i=0;i<4;i++){
+	
+	  int index = int(16.0*random(floor(f_position_wcs.xyz*noise), i))%16;
+	
+	  if ( texture( shadowmap_texture, uv + poissonDisk[index]/700.0 ).r  <  z ){
+		factor-=0.3;
+	  }
+	}
+
+	return factor;
+}
+
 float shadow_nearest(vec3 light_space_xyz)
 {
 	// sample shadow map
@@ -87,7 +182,9 @@ float shadow(vec3 pwcs)
 	
 	// sample shadow map
 	//return shadow_nearest(plcs.xyz);
-	return shadow_pcf2x2(plcs.xyz);
+	//return shadow_pcf2x2(plcs.xyz);
+	return shadow_pcf(plcs.xyz);
+	//return stratifiedPoisson(plcs.xyz);
 }
 
 float compute_spotlight(vec3 vertex_to_light_direction)

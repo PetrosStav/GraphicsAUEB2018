@@ -202,7 +202,10 @@ void ParticleEmitter::Update(float dt)
 
 void ParticleEmitter::Render()
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glPointSize(10);
 	glBindVertexArray(m_vao);
 	glDrawArrays(GL_POINTS, 0, (GLsizei)m_particles_position.size());
+	glDisable(GL_BLEND);
 }
