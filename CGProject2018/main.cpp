@@ -136,6 +136,8 @@ int main(int argc, char *argv[])
 
 	wave piratesInWave;
 
+	// start the background music
+	game->getMusicManager()->PlayMusic("imperial_march.wav");
 
 	// Wait for user exit
 	while (quit == false)

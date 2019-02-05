@@ -5,6 +5,7 @@
 #include "CannonBall.h"
 #include "GeometricMesh.h"
 #include "TreasureChest.h"
+#include "MusicManager.h"
 
 class GameState {
 public:
@@ -135,6 +136,8 @@ public:
 	bool										getShowGoldParticles();
 	void										setShowGoldParticles(bool state);
 
+	MusicManager*								getMusicManager();
+
 private:
 
 	bool										gameOver;
@@ -196,5 +199,8 @@ private:
 	GeometricMesh*								cannonballMesh;
 
 	GeometricMesh*								treasureChestMesh;
+
+	// Music Manager
+	MusicManager*								musicManager;
 
 };

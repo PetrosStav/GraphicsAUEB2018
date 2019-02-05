@@ -12,6 +12,7 @@ GameState::GameState() {
 	pirates = std::vector<Pirate*>();
 	cannonballs = std::vector<CannonBall*>();
 	treasureChest = new TreasureChest();
+	musicManager = MusicManager::Instance();
 
 	gameOver = false;
 	stopWaves = false;
@@ -80,6 +81,8 @@ GameState::GameState() {
 GameState::~GameState()
 {
 	// delete everything
+	MusicManager::Release();
+	musicManager = NULL;
 
 	// delete all pirates
 	for (Pirate* p : pirates) {
@@ -997,4 +1000,8 @@ void GameState::createTower()
 	t->getTower()->Init(towerMesh);
 
 	availableTowers.push_back(t);
+}
+
+MusicManager* GameState::getMusicManager() {
+	return musicManager;
 }
