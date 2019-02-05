@@ -19,6 +19,8 @@ GameState::GameState() {
 	stopWaves = false;
 	showGoldParticles = false;
 
+	actions = 9;
+
 	// Testing
 
 	// Create a pirate at position 0,0
@@ -237,6 +239,16 @@ void GameState::setWasPaused(bool state)
 bool GameState::getWasPaused()
 {
 	return wasPaused;
+}
+
+void GameState::setActions(unsigned int actions)
+{
+	this->actions = actions;
+}
+
+unsigned int GameState::getActions()
+{
+	return actions;
 }
 
 void GameState::addTower(float x, float y)

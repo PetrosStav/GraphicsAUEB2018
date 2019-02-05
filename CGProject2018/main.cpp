@@ -175,7 +175,15 @@ int main(int argc, char *argv[])
 				{
 					bool inroad = game->getInRoad();
 					if (!inroad) {
-						game->addTower();
+						if (game->getActions() >= 3) {
+							if (game->getAvailableTowers().empty()) game->createTower();
+							game->addTower();
+							game->setActions(game->getActions() - 3);
+							printf("Spent 3 action points\nActions: %d\n", game->getActions());
+						}
+						else {
+							printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n", (3 - game->getActions()));
+						}
 					}
 
 				}
@@ -183,7 +191,14 @@ int main(int argc, char *argv[])
 				{
 					bool inroad = game->getInRoad();
 					if (!inroad) {
-						game->rearrangeTower();
+						if (game->getActions() >= 2) {
+							game->rearrangeTower();
+							game->setActions(game->getActions() - 2);
+							printf("Spent 2 action points\nActions: %d\n", game->getActions());
+						}
+						else {
+							printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n", (2 - game->getActions()));
+						}
 					}
 				}
 				else if (event.key.keysym.sym == SDLK_w)
@@ -245,7 +260,14 @@ int main(int argc, char *argv[])
 				else if (event.key.keysym.sym == SDLK_u)
 				{
 					// Upgrade Tower
-					game->upgradeTower();
+					if (game->getActions() >= 3) {
+						game->upgradeTower();
+						game->setActions(game->getActions() - 3);
+						printf("Spent 3 action points\nActions: %d\n", game->getActions());
+					}
+					else {
+						printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n",(3-game->getActions()));
+					}
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -326,9 +348,11 @@ int main(int argc, char *argv[])
 
 			// Create a timed event
 			currentTime = SDL_GetTicks();
-			if (currentTime > lastTimeT1 + 30 * 1000) {
-				printf("Timed Event: 30 seconds have passed, one more Tower is available.\n");
-				game->createTower();
+			if (currentTime > lastTimeT1 + 5 * 1000) {
+				printf("Timed Event: 5 seconds have passed, one more action is available.\n");
+				game->setActions(game->getActions() + 1);
+				printf("Actions: %d\n", game->getActions());
+				//game->createTower();
 				lastTimeT1 = currentTime;
 			}
 
@@ -384,7 +408,7 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
-			}else if (game->getPirateWave() % 2 == 0){
+			}else if (game->getPirateWave() % 6 == 0){
 				if (currentTime > lastTimeT6 + 20000) {
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					// Every 6 waves spawn the boss!!

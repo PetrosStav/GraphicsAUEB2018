@@ -53,6 +53,9 @@ public:
 	void setWasPaused(bool state);
 	bool getWasPaused();
 
+	void setActions(unsigned int actions);
+	unsigned int getActions();
+
 	// Tower functions
 	void										addTower(float x, float y);
 	void										addTower();
@@ -148,6 +151,8 @@ private:
 	bool										wasPaused;
 	bool										stopWaves;
 	bool										showGoldParticles;
+
+	unsigned int								actions;
 
 	// Tile positions
 	int											tileX, tileY;
