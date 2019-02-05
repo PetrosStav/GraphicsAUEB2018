@@ -627,6 +627,14 @@ bool Renderer::InitRenderingTechniques()
 	m_postprocess_program.LoadUniform("uniform_depth");
 	m_postprocess_program.LoadUniform("uniform_projection_inverse_matrix");
 
+	// Text Rendering Program
+	auto vertex_path = "../Data/Shaders/textshader.vert";
+	auto fragment_path = "../Data/Shaders/textshader.frag";
+	m_text_shader_program.LoadVertexShaderFromFile(vertex_path);
+	m_text_shader_program.LoadFragmentShaderFromFile(fragment_path);
+	initialized = initialized && m_text_shader_program.CreateProgram();
+	m_text_shader_program.LoadUniform("uniform_texture");
+
 	// Shadow mapping Program
 	vertex_shader_path = "../Data/Shaders/shadow_map_rendering.vert";
 	fragment_shader_path = "../Data/Shaders/shadow_map_rendering.frag";
@@ -658,6 +666,7 @@ bool Renderer::ReloadShaders()
 	reloaded = reloaded && m_postprocess_program.ReloadProgram();
 	reloaded = reloaded && m_spot_light_shadow_map_program.ReloadProgram();
 	reloaded = reloaded && m_particle_rendering_program.ReloadProgram();
+	reloaded = reloaded && m_text_shader_program.ReloadProgram();
 
 	return reloaded;
 }
@@ -1341,6 +1350,75 @@ void Renderer::RenderToOutFB()
 
 	// Unbind the post processing program
 	m_postprocess_program.Unbind();
+}
+
+void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, int size)
+{
+
+	glDisable(GL_DEPTH_TEST);
+	//glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	TTF_Font * font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", size);
+	SDL_Surface * sFont = TTF_RenderText_Blended(font, message.c_str(), color);
+
+	GLuint vao, fbo_vertices;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	/*float lenW = sFont->w / m_screen_width;
+	float lenH = sFont->h / m_screen_height;
+
+	float xPos = x / m_screen_width;
+	float yPos = y / m_screen_height;*/
+
+	GLfloat vertices[] = {
+		-1, 0.75f,
+		0, 0.75f,
+		-1, 1,
+		0, 1,
+	};
+
+	glGenBuffers(1, &fbo_vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, fbo_vertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sFont->w, sFont->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, sFont->pixels);
+
+	// bind the post processing program
+	m_text_shader_program.Bind();
+
+	glBindVertexArray(vao);
+	// Bind the intermediate color image to texture unit 0
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glUniform1i(m_text_shader_program["uniform_texture"], 0);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	glBindVertexArray(0);
+
+	// Unbind the post processing program
+	m_text_shader_program.Unbind();
+
+	glDisable(GL_BLEND);
+	//glDisable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
+
+	glDeleteTextures(1, &texture);
+	TTF_CloseFont(font);
+	SDL_FreeSurface(sFont);
+
 }
 
 void Renderer::CameraMoveForward(bool enable)

@@ -1,4 +1,5 @@
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -32,6 +33,12 @@ bool init(GameState* game)
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
+		return false;
+	}
+
+	// Initialize SDL TTF
+	if (TTF_Init() == -1) {
+		printf("TTF_Init: %s\n", TTF_GetError());
 		return false;
 	}
 
@@ -93,6 +100,9 @@ void clean_up()
 
 	SDL_GL_DeleteContext(gContext);
 	SDL_DestroyWindow(window);
+
+	TTF_Quit();
+
 	SDL_Quit();
 }
 
@@ -480,6 +490,8 @@ int main(int argc, char *argv[])
 
 		// Draw
 		renderer->Render();
+		SDL_Color color = { 255,0,0 };
+		renderer->RenderText("Hello World!", color, 0, 0, 18);
 
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
