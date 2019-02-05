@@ -1373,11 +1373,18 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	float xPos = x / m_screen_width;
 	float yPos = y / m_screen_height;*/
 
-	GLfloat vertices[] = {
+	/*GLfloat vertices[] = {
 		-1, 0.75f,
 		0, 0.75f,
 		-1, 1,
 		0, 1,
+	};*/
+
+	GLfloat vertices[] = {
+		-1, 0.75f,
+		-0.5, 0.75f,
+		-1, 1,
+		-0.5, 1,
 	};
 
 	glGenBuffers(1, &fbo_vertices);

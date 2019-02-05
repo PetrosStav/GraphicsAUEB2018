@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
 		// Draw
 		renderer->Render();
 		SDL_Color color = { 255,0,0 };
-		renderer->RenderText("Hello World!", color, 0, 0, 18);
+		renderer->RenderText("Score: " + std::to_string(game->getScore()), color, 0, 0, 24);
 
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
