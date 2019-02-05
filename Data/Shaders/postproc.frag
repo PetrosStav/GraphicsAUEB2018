@@ -9,7 +9,7 @@ uniform mat4 uniform_projection_inverse_matrix;
 in vec2 f_texcoord;
 
 #define DOF_RADIUS 4
-#define BLOOM_RADIUS 3
+#define BLOOM_RADIUS 1
 
 #define PI 3.14159
 
@@ -33,7 +33,7 @@ void main(void)
 	vec3 color = texture2D(uniform_texture, f_texcoord).rgb;
 	vec2 uv = f_texcoord;
 	
-//#define BLOOM
+#define BLOOM
 #ifdef BLOOM
 	
 	vec2 texSize = textureSize(uniform_texture, 0);

@@ -7,6 +7,7 @@
 #include "ShaderProgram.h"
 #include "SpotlightNode.h"
 #include "GameState.h"
+#include "ParticleSystem.h"
 
 class Renderer
 {
@@ -112,6 +113,10 @@ protected:
 	ShaderProgram								m_geometry_rendering_program;
 	ShaderProgram								m_postprocess_program;
 	ShaderProgram								m_spot_light_shadow_map_program;
+
+	ParticleEmitter								m_particle_emitter;
+	ParticleSwirl								m_particle_swirld;
+	ShaderProgram								m_particle_rendering_program;
 
 public:
 	Renderer();

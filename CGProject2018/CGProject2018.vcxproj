@@ -133,6 +133,7 @@
     <ClInclude Include="GeometricMesh.h" />
     <ClInclude Include="GeometryNode.h" />
     <ClInclude Include="OBJLoader.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pirate.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="GeometryNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pirate.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

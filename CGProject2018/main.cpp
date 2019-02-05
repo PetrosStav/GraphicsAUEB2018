@@ -1,9 +1,9 @@
 #include "SDL2/SDL.h"
 #include <iostream>
 #include <chrono>
+#include <thread>
 #include "GLEW\glew.h"
 #include "Renderer.h"
-#include <SDL2/SDL_mixer.h>
 #include "GameState.h"
 
 using namespace std;
@@ -122,8 +122,7 @@ int main(int argc, char *argv[])
 	//renderer->TileSetPos(tileX, tileY);
 
 	// Timers for timed events
-	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused;
-	bool big_boss = false;
+	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused, timeRender=0, prevTimeRender=0;
 	bool paused = false;
 	bool wasPaused = false;
 
@@ -137,9 +136,22 @@ int main(int argc, char *argv[])
 
 	wave piratesInWave;
 
+
 	// Wait for user exit
 	while (quit == false)
 	{
+
+		/*
+		// NOT SURE IF HELPS
+
+		lastTimeT1 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT2 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT3 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT4 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT5 += dt*1000 > 500 ? dt*1000 : 0;
+		lastTimeT6 += dt*1000 > 500 ? dt*1000 : 0;*/
+
+		timeRender = SDL_GetTicks();
 
 		if (game->getGameOver()) {
 			// If game over then pause the game
@@ -292,6 +304,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
+		float dt = 0.0f;
 
 		if(!paused){
 
@@ -310,7 +323,7 @@ int main(int argc, char *argv[])
 
 			// Compute the ellapsed time
 			auto simulation_end = chrono::steady_clock::now();
-			float dt = chrono::duration <float>(simulation_end - simulation_start).count(); // in seconds
+			dt = chrono::duration <float>(simulation_end - simulation_start).count(); // in seconds
 			simulation_start = chrono::steady_clock::now();
 
 			// Create a timed event
@@ -323,6 +336,7 @@ int main(int argc, char *argv[])
 
 			// every 100ms
 			currentTime = SDL_GetTicks();
+			//printf("CurrentTime: %d\nLastTimeT2: %d\n", currentTime, lastTimeT2);
 			if (currentTime > lastTimeT2 + 100) {
 				game->towersFire();
 				lastTimeT2 = currentTime;
@@ -333,6 +347,7 @@ int main(int argc, char *argv[])
 			if (currentTime > lastTimeT3 + 10) {
 				//printf("Timed Event: 10ms - Updated Pirate Targets\n");
 				game->updatePirateTargets();
+				game->checkCollidingPirates();
 				lastTimeT3 = currentTime;
 			}
 
@@ -345,7 +360,8 @@ int main(int argc, char *argv[])
 
 			// every 100ms
 			currentTime = SDL_GetTicks();
-			if (currentTime > lastTimeT4 + 100) {
+			if (currentTime > lastTimeT4 + 500) {
+				if (game->getShowGoldParticles()) game->setShowGoldParticles(false);
 				game->checkPiratesAtChest();
 				lastTimeT4 = currentTime;
 			}
@@ -355,7 +371,7 @@ int main(int argc, char *argv[])
 			// if it is the first wave wait for 5 secs not 20
 			if (game->getPirateWave() == 1) {
 				if (currentTime > lastTimeT6 + 5000) {
-					printf("THE WAVE IS: %d", game->getPirateWave());
+					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					piratesInWave.num_of_pirates = 4;
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
@@ -363,12 +379,16 @@ int main(int argc, char *argv[])
 						piratesInWave.types.push_back(1);
 						piratesInWave.levels.push_back(1);
 					}
+					// testing only TODO:REMOVE
+					//piratesInWave.types[2] = 0;
+					//piratesInWave.types[1] = 0;
+					//
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
 			}else if (game->getPirateWave() % 6 == 0){
 				if (currentTime > lastTimeT6 + 20000) {
-					printf("THE WAVE IS: %d", game->getPirateWave());
+					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					// Every 6 waves spawn the boss!!
 					piratesInWave.num_of_pirates = 1;
 					piratesInWave.types.clear();
@@ -377,11 +397,11 @@ int main(int argc, char *argv[])
 					piratesInWave.levels.push_back(1 + rand() % game->getPirateWave());
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
-					big_boss = true;
+					game->setStopWaves(true);
 				}
 			}else {
-				if (currentTime > lastTimeT6 + 20000 && !big_boss) {
-					printf("THE WAVE IS: %d", game->getPirateWave());
+				if (currentTime > lastTimeT6 + 20000 && !game->getStopWaves()) {
+					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					piratesInWave.num_of_pirates = (game->getPirateWave() * 2 > 10) ? 10 : (game->getPirateWave() * 2);
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
@@ -403,6 +423,22 @@ int main(int argc, char *argv[])
 					int type = piratesInWave.types[piratesInWave.num_of_pirates];
 					int level = piratesInWave.levels[piratesInWave.num_of_pirates];
 					game->createPirate(type, level);
+					// Change rate that pirates are placed according to their type
+					// in order to avoid collisions
+					switch (type) {
+					case 0:
+						game->setPirateRate(1000);
+						break;
+					case 1:
+						game->setPirateRate(2000);
+						break;
+					case 2:
+						game->setPirateRate(3000);
+						break;
+					case 3:
+						game->setPirateRate(2000);
+						break;
+					}
 					lastTimeT5 = currentTime;
 				}
 			}
@@ -425,6 +461,15 @@ int main(int argc, char *argv[])
 
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
+
+		// LIMIT FPS TO 60
+		int timeToSleep = (1000 / 60) - dt*1000;
+
+		if (timeToSleep > 0) {
+			//printf("Sleeping for: %d\n", timeToSleep);
+			std::this_thread::sleep_for(std::chrono::milliseconds(timeToSleep));
+		}
+
 	}
 
 	// Delete the game state

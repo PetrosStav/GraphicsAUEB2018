@@ -126,9 +126,20 @@ public:
 
 	void										deleteToRemoveLists();
 
+	void										checkCollidingPirates();
+	void										resetPirateSpeeds();
+
+	bool										getStopWaves();
+	void										setStopWaves(bool state);
+
+	bool										getShowGoldParticles();
+	void										setShowGoldParticles(bool state);
+
 private:
 
 	bool										gameOver;
+	bool										stopWaves;
+	bool										showGoldParticles;
 
 	// Tile positions
 	int											tileX, tileY;

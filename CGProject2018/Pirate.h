@@ -28,6 +28,8 @@ public:
 
 	void setLevel(int level);
 
+	void setDir(int dir);
+
 	void setBody(GeometryNode* body);
 	void setBodyTM(glm::mat4 tm);
 	void setBodyTNM(glm::mat4 tnm);
@@ -63,6 +65,8 @@ public:
 	int getType();
 
 	int getLevel();
+
+	int getDir();
 
 	GeometryNode* getBody();
 	glm::mat4 getBodyTM();
@@ -125,6 +129,12 @@ private:
 	int type;
 
 	int level;
+
+	// Dir 0 -> Up
+	// Dir 1 -> Down
+	// Dir 2 -> Left
+	// Dir 3 -> Right
+	int dir;
 
 	BoundingShpere*									bound_shpere;
 
