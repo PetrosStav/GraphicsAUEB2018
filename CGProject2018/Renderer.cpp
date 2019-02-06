@@ -63,7 +63,7 @@ Renderer::Renderer()
 	m_camera_up_vector = glm::vec3(0, 1, 0);
 
 	// Load font
-	font_size = 40;
+	font_size = 74;
 	font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", font_size);
 	
 }
@@ -1376,7 +1376,7 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	}
 	SDL_Surface * sFont = TTF_RenderText_Blended(font, message.c_str(), color);
 
-	GLuint vao, fbo_vertices, vbo_texcoords;
+	GLuint vao, vbo_vertices, vbo_texcoords;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -1403,8 +1403,8 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 		1, 0,
 	};
 
-	glGenBuffers(1, &fbo_vertices);
-	glBindBuffer(GL_ARRAY_BUFFER, fbo_vertices);
+	glGenBuffers(1, &vbo_vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -1453,6 +1453,9 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	glEnable(GL_DEPTH_TEST);
 
 	glDeleteTextures(1, &texture);
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo_vertices);
+	glDeleteBuffers(1, &vbo_texcoords);
 	SDL_FreeSurface(sFont);
 
 }
