@@ -35,6 +35,10 @@ protected:
 	// Road Tile List
 	//std::tuple<int,int> road_tiles[29];
 
+	// Font for Text Rendering
+	TTF_Font * font;
+	unsigned int font_size;
+
 	// Geometry Rendering Intermediate Buffer
 	GLuint m_fbo;
 	GLuint m_fbo_depth_texture;

@@ -58,17 +58,17 @@ public:
 	unsigned int getActions();
 
 	// Tower functions
-	void										addTower(float x, float y);
-	void										addTower();
+	bool										addTower(float x, float y);
+	bool										addTower();
 
 	void										removeTower(float x, float y);
 	void										removeTower();
 
-	void										rearrangeTower(float x, float y);
-	void										rearrangeTower();
+	bool										rearrangeTower(float x, float y);
+	bool										rearrangeTower();
 
-	void										upgradeTower(float x, float y);
-	void										upgradeTower();
+	bool										upgradeTower(float x, float y);
+	bool										upgradeTower();
 
 	// Grid functions
 	void										getRealPos(float& x, float& y);

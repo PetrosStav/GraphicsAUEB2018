@@ -4,7 +4,7 @@ GameState::GameState() {
 	// Initialize everything
 	score = 0;
 	gold = 100;
-	pirateWave = 1;
+	pirateWave = 0;
 	pirateSubWave = 1;
 	pirateRate = 2000;
 	availableTowers = std::vector<Tower*>();
@@ -254,7 +254,7 @@ unsigned int GameState::getActions()
 	return actions;
 }
 
-void GameState::addTower(float x, float y)
+bool GameState::addTower(float x, float y)
 {
 	if (availableTowers.size() != 0) {
 		getRealPos(x, y);
@@ -263,17 +263,19 @@ void GameState::addTower(float x, float y)
 			if (t->getX() == x && t->getY() == y) {
 				// TODO
 				// If we found then [MESSAGE] OR [ANOTHER TILE COLOR] + return
-				return;
+				return false;
 			}
 		}
 		availableTowers.back()->setX(x);
 		availableTowers.back()->setY(y);
 		createdTowers.push_back(availableTowers.back());
 		availableTowers.pop_back();
+		return true;
 	}
+	return false;
 }
 
-void GameState::addTower()
+bool GameState::addTower()
 {
 	if (availableTowers.size() != 0) {
 		float x = (float)tileX;
@@ -284,14 +286,16 @@ void GameState::addTower()
 			if (t->getX() == x && t->getY() == y) {
 				// TODO
 				// If we found then [MESSAGE] OR [ANOTHER TILE COLOR] + return
-				return;
+				return false;
 			}
 		}
 		availableTowers.back()->setX(x);
 		availableTowers.back()->setY(y);
 		createdTowers.push_back(availableTowers.back());
 		availableTowers.pop_back();
+		return true;
 	}
+	return false;
 }
 
 void GameState::removeTower(float x, float y)
@@ -330,7 +334,7 @@ void GameState::removeTower()
 	}
 }
 
-void GameState::rearrangeTower(float x, float y)
+bool GameState::rearrangeTower(float x, float y)
 {
 	if (createdTowers.size() != 0) {
 		getRealPos(x, y);
@@ -341,13 +345,15 @@ void GameState::rearrangeTower(float x, float y)
 				createdTowers.erase(createdTowers.begin() + i);
 				availableTowers.push_back(erased);
 				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
+				return true;
 			}
 			i++;
 		}
 	}
+	return false;
 }
 
-void GameState::rearrangeTower()
+bool GameState::rearrangeTower()
 {
 	if (createdTowers.size() != 0) {
 		float x = (float)tileX;
@@ -360,13 +366,15 @@ void GameState::rearrangeTower()
 				createdTowers.erase(createdTowers.begin() + i);
 				availableTowers.push_back(erased);
 				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
+				return true;
 			}
 			i++;
 		}
 	}
+	return false;
 }
 
-void GameState::upgradeTower(float x, float y)
+bool GameState::upgradeTower(float x, float y)
 {
 	if (createdTowers.size() != 0) {
 		getRealPos(x, y);
@@ -378,14 +386,16 @@ void GameState::upgradeTower(float x, float y)
 				if (level < 3) {
 					selected->setLevel(level + 1);
 					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level+1);
+					return true;
 				}
 			}
 			i++;
 		}
 	}
+	return false;
 }
 
-void GameState::upgradeTower()
+bool GameState::upgradeTower()
 {
 	if (createdTowers.size() != 0) {
 		float x = (float)tileX;
@@ -414,11 +424,13 @@ void GameState::upgradeTower()
 						selected->getTower()->Init(towerLevelThreeMesh);
 					}
 					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level);
+					return true;
 				}
 			}
 			i++;
 		}
 	}
+	return false;
 }
 
 void GameState::getRealPos(float & x, float & y)
