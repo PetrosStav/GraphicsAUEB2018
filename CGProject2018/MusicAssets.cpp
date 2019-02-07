@@ -64,7 +64,7 @@ Mix_Chunk* MusicAssets::GetSFX(std::string filename) {
 	if (mSFX[fullpath] == nullptr) {
 
 		mSFX[fullpath] = Mix_LoadWAV(fullpath.c_str());
-		if (mMusic[fullpath] == nullptr) {
+		if (mSFX[fullpath] == nullptr) {
 			printf("Error loading special effects sound");
 		}
 	}

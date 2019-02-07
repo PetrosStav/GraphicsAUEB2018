@@ -21,6 +21,7 @@ const int SCREEN_HEIGHT = 1024;	//600;	//480;
 SDL_Event event;
 
 Renderer * renderer = nullptr;
+//GameState* game = nullptr;
 
 void func()
 {
@@ -106,6 +107,20 @@ void clean_up()
 	SDL_Quit();
 }
 
+//void changeMusic() {
+//	if (game->getPirateWave() % 2 == 0) {
+//
+//		game->getMusicManager()->PlayMusic("epic_boss.wav", true);
+//
+//	}
+//	else {
+//
+//		game->getMusicManager()->PlayMusic("dark.wav", false);
+//
+//	}
+//}
+
+
 int main(int argc, char *argv[])
 {
 	// Initialize the Game State
@@ -146,6 +161,7 @@ int main(int argc, char *argv[])
 
 	// start the background music
 	//game->getMusicManager()->PlayMusic("imperial_march.wav");
+	//game->getMusicManager()->setMusicPause(false);
 
 	// Wait for user exit
 	while (quit == false)
@@ -166,6 +182,7 @@ int main(int argc, char *argv[])
 		if (game->getGameOver()) {
 			// If game over then pause the game
 			game->setPaused(true);
+			game->getMusicManager()->QuitMusic();
 		}
 
 		// While there are events to handle
@@ -273,6 +290,9 @@ int main(int argc, char *argv[])
 				{
 					// Pause the game
 					game->setPaused(!game->isPaused());
+					// Pause the music as well
+					game->getMusicManager()->PauseMusic();
+					game->getMusicManager()->setMusicPause(true);
 				}
 				else if (event.key.keysym.sym == SDLK_u)
 				{
@@ -358,6 +378,9 @@ int main(int argc, char *argv[])
 				lastTimeT4 += timePaused;
 				lastTimeT5 += timePaused;
 				lastTimeT6 += timePaused;
+				// the game was paused so was the music..so resume it
+				game->getMusicManager()->ResumeMusic();
+				game->getMusicManager()->setMusicPause(false);
 			}
 			else {
 				timePaused = 0;
@@ -416,6 +439,8 @@ int main(int argc, char *argv[])
 			// if it is the first wave wait for 5 secs not 20
 			if (game->getPirateWave() == 0) {
 				if (currentTime > lastTimeT6 + 5000) {
+					game->getMusicManager()->PlayMusic("dark.wav",false);
+					game->getMusicManager()->setMusicPause(false);
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					piratesInWave.num_of_pirates = 4;
 					piratesInWave.types.clear();
@@ -435,6 +460,14 @@ int main(int argc, char *argv[])
 				if (currentTime > lastTimeT6 + 20000) {
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					// Every 6 waves spawn the boss!!
+					// and play the boss music
+					// first halt the background music
+
+					//Mix_HookMusicFinished(changeMusic);
+					game->getMusicManager()->QuitMusic();
+					game->getMusicManager()->PlayMusic("epic_boss.wav", true);
+					game->getMusicManager()->setMusicPause(false);
+					//
 					piratesInWave.num_of_pirates = 1;
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
@@ -443,10 +476,27 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 					game->setStopWaves(true);
+					game->setBoss(true);
 				}
-			}else {
-				if (currentTime > lastTimeT6 + 20000 && !game->getStopWaves()) {
+			}
+			else if (!game->getStopWaves() && game->getBoss()) {
+				// halt the boss music if it is playing and start the background music again
+				//Mix_HookMusicFinished(changeMusic); //NOTE: an thelete na to tsekarete kante global thn game
+				game->getMusicManager()->QuitMusic();
+				// Mix_HookMusicFinished(changeMusic); lene einai poly kako na to kaneis etsi 
+				game->getMusicManager()->PlayMusic("dark.wav", false);
+				game->getMusicManager()->setMusicPause(false);
+				game->setBoss(false);
+			}
+			else{	
+				if (currentTime > lastTimeT6 + 20000 && !game->getStopWaves()) {	
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
+					//if ((game->getPirateWave() - 1) % 2 == 0) {
+					//	game->getMusicManager()->QuitMusic();
+					//	//Mix_HookMusicFinished(changeMusic); lene einai poly kako na to kaneis etsi 
+					//	game->getMusicManager()->PlayMusic("dark.wav", false);
+					//	game->getMusicManager()->setMusicPause(false);
+					//}
 					piratesInWave.num_of_pirates = (game->getPirateWave() * 2 > 10) ? 10 : (game->getPirateWave() * 2);
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();

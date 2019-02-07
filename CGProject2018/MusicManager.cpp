@@ -1,5 +1,4 @@
 #include "MusicManager.h"
-
 MusicManager* MusicManager::sInstance = NULL;
 
 MusicManager* MusicManager::Instance() {
@@ -17,7 +16,7 @@ void MusicManager::Release() {
 }
 
 MusicManager::MusicManager() {
-
+	isMusicPaused = false;
 	mAssetManager = MusicAssets::Instance();
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
@@ -31,7 +30,14 @@ MusicManager::~MusicManager() {
 	Mix_Quit();
 }
 
-void MusicManager::PlayMusic(std::string filename, int loops) {
+void MusicManager::PlayMusic(std::string filename,bool boss,int loops) {
+	if (boss) {
+		Mix_VolumeMusic(10);
+	}
+	else {
+		Mix_VolumeMusic(128);
+	}
+	//Mix_Music * music = mAssetManager->GetMusic(filename);
 	Mix_PlayMusic(mAssetManager->GetMusic(filename), loops);
 }
 
@@ -47,6 +53,21 @@ void MusicManager::ResumeMusic() {
 	}
 }
 
+void MusicManager::QuitMusic() {
+	//Mix_FadeOutMusic(10);
+	Mix_HaltMusic();
+}
+
 void MusicManager::PlaySFX(std::string filename, int loops, int channel) {
-	Mix_PlayChannel(channel, mAssetManager->GetSFX(filename), loops);
+	Mix_Chunk* chunk = mAssetManager->GetSFX(filename);
+	Mix_VolumeChunk(chunk, 10);
+	Mix_PlayChannel(channel, chunk, loops);
+}
+
+void MusicManager::setMusicPause(bool pause) {
+	isMusicPaused = pause;
+}
+
+bool MusicManager::getMusicIsPaused() {
+	return isMusicPaused;
 }
