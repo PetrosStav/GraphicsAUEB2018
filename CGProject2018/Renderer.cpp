@@ -508,7 +508,10 @@ void Renderer::Update(float dt)
 				std::cout << "Pirate died!" << std::endl;
 				game->resetPirateSpeeds();
 
-				if(targetPirate->getType()==3) game->setStopWaves(false);
+				if (targetPirate->getType() == 3) {
+					game->setStopWaves(false);
+					game->getMusicManager()->QuitMusic();
+				}
 				game->deletePirate(targetPirate);
 				// increase score
 				game->setScore(game->getScore() + 1);

@@ -84,6 +84,9 @@ public:
 	void										updateInRoad();
 	bool										getInRoad();
 	bool										isInRoad(int x, int y);
+	bool										boss;
+	void										setBoss(bool boss);
+	bool										getBoss();
 
 	// Meshes
 

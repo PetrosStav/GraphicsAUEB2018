@@ -610,7 +610,7 @@ void GameState::createPirate(int pType, int pLevel)
 	else if (type == 3) {
 		p->setSpeed(0.6f);
 		p->setSize(1.5f);
-		p->setHealthPoints(1500 + 25 * pLevel);
+		p->setHealthPoints(150 + 25 * pLevel);
 	}
 
 	p->setBody(new GeometryNode());
@@ -754,6 +754,7 @@ void GameState::towersFire()
 				float py = p->getY();
 				// Range of tower as tiles
 				if (abs(tx - px) <= t->getRange() && abs(ty - py) <= t->getRange()) {
+					getMusicManager()->PlaySFX("mortar.wav",0,-1);
 					shootCannonBall(t, p);
 					break;
 				}
@@ -1038,4 +1039,12 @@ void GameState::createTower()
 
 MusicManager* GameState::getMusicManager() {
 	return musicManager;
+}
+
+void GameState::setBoss(bool boss) {
+	this->boss = boss;
+}
+
+bool GameState::getBoss() {
+	return boss;
 }
