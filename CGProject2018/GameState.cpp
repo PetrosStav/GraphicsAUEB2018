@@ -622,7 +622,7 @@ void GameState::createPirate(int pType, int pLevel)
 	else if (type == 3) {
 		p->setSpeed(0.6f);
 		p->setSize(1.5f);
-		p->setHealthPoints(150 + 25 * pLevel);
+		p->setHealthPoints(1500 + 25 * pLevel);
 	}
 
 	p->setBody(new GeometryNode());
