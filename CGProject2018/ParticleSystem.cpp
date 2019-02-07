@@ -112,6 +112,8 @@ void ParticleSwirl::Render()
 
 ParticleEmitter::ParticleEmitter()
 {
+	center = glm::vec3(23.2, 1, -2.2);
+	treasureChest = true;
 	m_continous_time = 0.0;
 	m_vbo = 0;
 	m_vao = 0;
@@ -160,8 +162,6 @@ void ParticleEmitter::Update(float dt)
 {
 	float movement_speed = 1.f;
 
-	glm::vec3 center = glm::vec3(23.2, 1, -2.2);
-
 	for (int i = 0; i < m_particles_position.size(); ++i)
 	{
 		if (m_particles_life[i] <= 0.f)
@@ -181,7 +181,13 @@ void ParticleEmitter::Update(float dt)
 			// we have 120 particles that will be emitted from 3 points.
 			float pos = (i / 40) / 5.f * 3.14159f;
 			// each emitter will be positioned on a circle with radius 1.5
-			m_particles_position[i] = 1.5f * glm::vec3(sin(pos), 0, 0) + center;
+			if (treasureChest) {
+				m_particles_position[i] = 1.5f * glm::vec3(sin(pos), 0, 0) + center;
+			}
+			else {
+				float pos = i / 5.f * 3.14159f;
+				m_particles_position[i] = 0.5f * glm::vec3(sin(pos), 0, cos(pos)) + center;
+			}
 		}
 		else
 		{
@@ -208,4 +214,24 @@ void ParticleEmitter::Render()
 	glBindVertexArray(m_vao);
 	glDrawArrays(GL_POINTS, 0, (GLsizei)m_particles_position.size());
 	glDisable(GL_BLEND);
+}
+
+glm::vec3 ParticleEmitter::getCenter()
+{
+	return center;
+}
+
+void ParticleEmitter::setCenter(glm::vec3 center)
+{
+	this->center = center;
+}
+
+bool ParticleEmitter::isTreasureChest()
+{
+	return treasureChest;
+}
+
+void ParticleEmitter::setTreasureChest(bool state)
+{
+	treasureChest = state;
 }

@@ -1,33 +1,5 @@
-﻿  Renderer.cpp
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(349): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(350): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(364): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(497): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(498): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(499): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1465): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1469): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1474): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1478): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  main.cpp
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\main.cpp(521): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
+﻿  main.cpp
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\main.cpp(523): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   CGProject2018.vcxproj -> C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\x64\Debug\CGProject2018.exe
   Copying DLLs to output folder..
   C:\Users\petro\source\repos\GraphicsAUEB2018\GraphicsAUEB2018\3rdParty\bin\x64\freeglut.dll

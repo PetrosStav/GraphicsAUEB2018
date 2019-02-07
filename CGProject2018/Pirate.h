@@ -3,6 +3,7 @@
 #include "GeometryNode.h"
 #include "GeometricMesh.h"
 #include "BoundingSphere.h"
+#include "ParticleSystem.h"
 
 class Pirate{
 
@@ -56,6 +57,9 @@ public:
 
 	int getHealthPoints();
 
+	bool isDead();
+	void setDead(bool state);
+
 	float getSpeed();
 
 	int getAnimStart();
@@ -86,6 +90,8 @@ public:
 
 	BoundingShpere* getBoundingSphere();
 
+	ParticleEmitter* getParticleEmmiter();
+
 private:
 
 	GeometryNode*									m_geometric_objectBody;
@@ -115,6 +121,7 @@ private:
 	int roadIdx;
 
 	int health_points;
+	bool dead;
 
 	float speed;
 
@@ -137,5 +144,7 @@ private:
 	int dir;
 
 	BoundingShpere*									bound_shpere;
+
+	ParticleEmitter*								m_particle_emitter;
 
 };

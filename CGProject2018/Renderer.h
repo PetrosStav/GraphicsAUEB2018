@@ -169,6 +169,9 @@ public:
 	void										setGameState(GameState* game);
 	GameState*									getGameState();
 
+	unsigned int								getFontSize();
+	void										setFontSize(unsigned int size);
+
 };
 
 #endif

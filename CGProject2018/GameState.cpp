@@ -697,6 +697,8 @@ void GameState::updatePirateTargets()
 {
 	for (Pirate* p : pirates) {
 
+		if (p->isDead()) continue;
+
 		// Check if pirate has reached the prev target
 		bool reached = false;
 		if (abs(p->getX() - p->getTargetX()) < 0.2 && abs(p->getY() - p->getTargetY()) < 0.2) {
@@ -759,6 +761,7 @@ void GameState::towersFire()
 
 			// Search for pirates inside the radius of the tower
 			for (Pirate* p : pirates) {
+				if (p->isDead()) continue;
 				float tx = t->getX();
 				float ty = t->getY();
 				getGridPos(tx,ty);
@@ -792,6 +795,7 @@ void GameState::deletePirate(Pirate* pirate)
 void GameState::checkPiratesAtChest()
 {
 	for (Pirate* p : pirates) {
+		if (p->isDead()) continue;
 		if (p->getBoundingSphere()->isSphereIntersecting(treasureChest->getBoundingSphere())) {
 			// Pirate reached gold..if it is the boss game over
 			showGoldParticles = true;
@@ -815,6 +819,15 @@ void GameState::checkPiratesAtChest()
 	}
 }
 
+void GameState::checkDeadPirates()
+{
+	for (Pirate* p : pirates) {
+		if (p->isDead()) {
+			deletePirate(p);
+		}
+	}
+}
+
 void GameState::deleteToRemoveLists()
 {
 	for (Pirate* p : toRemPirates) {
@@ -831,8 +844,10 @@ void GameState::deleteToRemoveLists()
 void GameState::checkCollidingPirates()
 {
 	for (Pirate* p : pirates) {
+		if (p->isDead()) continue;
 		//bool p_collides = false;
 		for (Pirate* p2 : pirates) {
+			if (p2->isDead()) continue;
 			if (p != p2 && p->getBoundingSphere()->isSphereIntersecting(p2->getBoundingSphere())) {
 				//p_collides = true;
 				//printf("Pirate collide!\n");
@@ -961,6 +976,7 @@ void GameState::checkCollidingPirates()
 void GameState::resetPirateSpeeds()
 {
 	for (Pirate* p : pirates) {
+		if (p->isDead()) continue;
 		int type = p->getType();
 		switch (type) {
 		case 0:

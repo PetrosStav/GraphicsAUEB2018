@@ -8,6 +8,7 @@ Pirate::Pirate(){
 	this->target_y = 0;
 	this->roadIdx = 0;
 	this->health_points = 100;
+	this->dead = false;
 	this->size = 1.f;
 	// speed after 2 starts doing funny stuff
 	this->speed = 1.f;
@@ -22,6 +23,9 @@ Pirate::Pirate(){
 	this->bound_shpere->setZ(18);
 	this->bound_shpere->setRadius(size * 12.87075f * 0.09f); // recommended by pdf
 	//this->bound_shpere->setRadius(5 * 0.09f);
+	m_particle_emitter = new ParticleEmitter();
+	m_particle_emitter->Init();
+	m_particle_emitter->setTreasureChest(false);
 }
 
 Pirate::~Pirate()
@@ -31,6 +35,7 @@ Pirate::~Pirate()
 	delete m_geometric_objectLeftFoot;
 	delete m_geometric_objectRightFoot;
 	delete bound_shpere;
+	delete m_particle_emitter;
 }
 
 void Pirate::setX(float x) {
@@ -171,6 +176,16 @@ int Pirate::getHealthPoints()
 	return health_points;
 }
 
+bool Pirate::isDead()
+{
+	return dead;
+}
+
+void Pirate::setDead(bool state)
+{
+	dead = state;
+}
+
 float Pirate::getSpeed()
 {
 	return speed;
@@ -264,4 +279,9 @@ glm::mat4 Pirate::getRightFootTNM()
 BoundingShpere* Pirate::getBoundingSphere()
 {
 	return bound_shpere;
+}
+
+ParticleEmitter * Pirate::getParticleEmmiter()
+{
+	return m_particle_emitter;
 }

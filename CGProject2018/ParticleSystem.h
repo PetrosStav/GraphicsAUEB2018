@@ -29,6 +29,7 @@ public:
 class ParticleEmitter
 {
 protected:
+	glm::vec3										center;
 	std::vector<glm::vec3>							m_particles_position;
 	std::vector<glm::vec3>							m_particles_velocity;
 	std::vector<float>								m_particles_life;
@@ -39,6 +40,8 @@ protected:
 
 	float m_continous_time;
 
+	bool treasureChest;
+
 
 public:
 	ParticleEmitter();
@@ -46,6 +49,12 @@ public:
 	bool										Init();
 	void										Update(float dt);
 	void										Render();
+	
+	glm::vec3									getCenter();
+	void										setCenter(glm::vec3 center);
+
+	bool										isTreasureChest();
+	void										setTreasureChest(bool state);
 
 };
 

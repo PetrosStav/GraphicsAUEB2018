@@ -208,18 +208,13 @@ int main(int argc, char *argv[])
 				{
 					bool inroad = game->getInRoad();
 					if (!inroad) {
-						if (game->getActions() >= 1) {
-							bool rearranged = game->rearrangeTower();
-							if (rearranged) {
-								game->setActions(game->getActions() - 1);
-								printf("Spent 1 action points\nActions: %d\n", game->getActions());
-							}
-							else {
-								printf("There is no tower in this tile!\n");
-							}
+						bool rearranged = game->rearrangeTower();
+						if (rearranged) {
+							game->setActions(game->getActions() + 2);
+							printf("Gained 2 action points\nActions: %d\n", game->getActions());
 						}
 						else {
-							printf("You don't have 1 action points!\nYou need %d more action points to perform this action.\n", (2 - game->getActions()));
+							printf("There is no tower in this tile!\n");
 						}
 					}
 				}
@@ -407,11 +402,12 @@ int main(int argc, char *argv[])
 			//	lastTimeT4 = currentTime;
 			//}
 
-			// every 100ms
+			// every 500ms
 			currentTime = SDL_GetTicks();
 			if (currentTime > lastTimeT4 + 500) {
 				if (game->getShowGoldParticles()) game->setShowGoldParticles(false);
 				game->checkPiratesAtChest();
+				game->checkDeadPirates();
 				lastTimeT4 = currentTime;
 			}
 
@@ -512,7 +508,13 @@ int main(int argc, char *argv[])
 		renderer->RenderText("Actions: " + std::to_string(game->getActions()), color, 0, 50, 74);
 		renderer->RenderText("Gold: " + std::to_string(game->getGold()), color, 0, 100, 74);
 		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()), color, 0, 150, 74);
+		renderer->RenderText("FPS: " + std::to_string(int(1.0f/dt)), color, SCREEN_WIDTH-200, 0, 74);
+		renderer->setFontSize(74);
 
+		if (game->getGameOver()) {
+			renderer->RenderText("GAME OVER", color, SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3, 240);
+			renderer->setFontSize(240);
+		}
 
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);

@@ -62,7 +62,7 @@ Renderer::Renderer()
 	m_camera_target_position = glm::vec3(4.005, 12.634, -5.66336);
 	m_camera_up_vector = glm::vec3(0, 1, 0);
 
-	// Load font
+	// Load starting font
 	font_size = 74;
 	font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", font_size);
 	
@@ -328,6 +328,16 @@ void Renderer::Update(float dt)
 	// For Pirates
 
 	for (Pirate* p : game->getPirates()) {
+		if (p->isDead()) {
+			float x = p->getX();
+			float y = p->getY();
+			game->getRealPos(x, y);
+
+			glm::vec3 center = glm::vec3(18 - 2 * x, 1.0f, 18 - 2 * y);
+			p->getParticleEmmiter()->setCenter(center);
+			p->getParticleEmmiter()->Update(dt);
+			continue;
+		}
 		x = p->getX();
 		y = p->getY();
 
@@ -459,6 +469,7 @@ void Renderer::Update(float dt)
 		p->setRightFootTM(m_geometric_object9_transformation_matrix);
 		p->setRightFootTNM(m_geometric_object9_transformation_normal_matrix);
 
+
 	}
 
 	// For the CannonBalls
@@ -506,7 +517,7 @@ void Renderer::Update(float dt)
 		cb->setY(y_new);
 		cb->setZ(z_new);
 
-		if (cb->getBoundingSphere()->isSphereIntersecting(targetPirate->getBoundingSphere())) {
+		if (targetPirate!=nullptr && !targetPirate->isDead() && cb->getBoundingSphere()->isSphereIntersecting(targetPirate->getBoundingSphere())) {
 			//std::cout << "BAM" << std::endl;
 			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - cb->getDamage());
 			game->deleteHitCannonBall(cb);
@@ -516,7 +527,10 @@ void Renderer::Update(float dt)
 				game->resetPirateSpeeds();
 
 				if(targetPirate->getType()==3) game->setStopWaves(false);
-				game->deletePirate(targetPirate);
+
+				//game->deletePirate(targetPirate);
+				targetPirate->setDead(true);
+
 				// increase score
 				game->setScore(game->getScore() + 1);
 
@@ -564,8 +578,9 @@ void Renderer::Update(float dt)
 
 	//m_geometric_object9_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, 0.1f, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(4 * 0.09, 0, 2 * 0.09)) * glm::scale(glm::mat4(1.0), glm::vec3(0.09f));;
 	//m_geometric_object9_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object9_transformation_matrix))));
-
+	
 	m_particle_emitter.Update(dt);
+
 }
 
 bool Renderer::InitCommonItems()
@@ -1101,6 +1116,9 @@ void Renderer::RenderShadowMaps()
 		//DrawGeometryNodeToShadowMap(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
 
 		for (Pirate* p : game->getPirates()) {
+
+			if (p->isDead()) continue;
+
 			// body
 			DrawGeometryNodeToShadowMap(p->getBody(), p->getBodyTM(), p->getBodyTNM());
 
@@ -1219,6 +1237,7 @@ void Renderer::RenderGeometry()
 	//DrawGeometryNode(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
 
 	for (Pirate* p : game->getPirates()) {
+		if (p->isDead()) continue;
 		// body
 		DrawGeometryNode(p->getBody(), p->getBodyTM(), p->getBodyTNM());
 
@@ -1282,6 +1301,20 @@ void Renderer::RenderGeometry()
 		m_particle_emitter.Render();
 		m_particle_rendering_program.Unbind();
 
+	}
+
+	// render pirate particles
+	for (Pirate* p : game->getPirates()) {
+		if (!p->isDead()) continue;
+		// Render Particles
+		m_particle_rendering_program.Bind();
+		glUniformMatrix4fv(m_particle_rendering_program["uniform_projection_matrix"], 1, GL_FALSE, glm::value_ptr(m_projection_matrix));
+		glUniformMatrix4fv(m_particle_rendering_program["uniform_view_matrix"], 1, GL_FALSE, glm::value_ptr(m_view_matrix));
+		// specify particle color
+		glm::vec3 particle_color = glm::vec3(1, 0.2f, 0.2f);
+		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
+		p->getParticleEmmiter()->Render();
+		m_particle_rendering_program.Unbind();
 	}
 
 	glDisable(GL_DEPTH_TEST);
@@ -1491,6 +1524,16 @@ void Renderer::setGameState(GameState * game)
 GameState * Renderer::getGameState()
 {
 	return game;
+}
+
+unsigned int Renderer::getFontSize()
+{
+	return font_size;
+}
+
+void Renderer::setFontSize(unsigned int size)
+{
+	font_size = size;
 }
 
 //void Renderer::TileSetPos(int x, int y)

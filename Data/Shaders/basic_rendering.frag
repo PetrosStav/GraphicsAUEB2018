@@ -78,7 +78,7 @@ float shadow_pcf(vec3 light_space_xyz)
 	
 	for(int i=-(pcfCount/2)-1;i<pcfCount/2;i++){
 		for(int j=-(pcfCount/2)-1;j<pcfCount/2;j++){
-				factor += (texture(shadowmap_texture, uv + vec2(i*xOffset*0.2, j*yOffset*0.2)).r > z)? 1.0: 0.1;
+				factor += (texture(shadowmap_texture, uv + vec2(i*xOffset*0.2, j*yOffset*0.2)).r > z)? 0.9: 0.1;
 			
 		}
 	}
@@ -89,7 +89,7 @@ float shadow_pcf(vec3 light_space_xyz)
 	//		
 	//	}
 	//}
-	
+		
 	factor /= pcfCount*pcfCount;
 	
     return factor;

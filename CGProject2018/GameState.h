@@ -134,6 +134,8 @@ public:
 
 	void										checkPiratesAtChest();
 
+	void										checkDeadPirates();
+
 	void										deleteToRemoveLists();
 
 	void										checkCollidingPirates();
