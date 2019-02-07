@@ -61,6 +61,10 @@ Renderer::Renderer()
 	m_camera_position = glm::vec3(0.720552, 18.1377, -11.3135);
 	m_camera_target_position = glm::vec3(4.005, 12.634, -5.66336);
 	m_camera_up_vector = glm::vec3(0, 1, 0);
+
+	// Load font
+	font_size = 74;
+	font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", font_size);
 	
 }
 
@@ -122,6 +126,9 @@ Renderer::~Renderer()
 	for (Tower* t : createdTowers) {
 		delete t;
 	}*/
+
+	TTF_CloseFont(font);
+
 }
 
 bool Renderer::Init(int SCREEN_WIDTH, int SCREEN_HEIGHT)
@@ -1357,34 +1364,50 @@ void Renderer::RenderToOutFB()
 
 void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, int size)
 {
-
+	bool same_size = (size == font_size);
+	
 	glDisable(GL_DEPTH_TEST);
 	//glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	TTF_Font * font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", size);
+	if (!same_size) {
+		// Close the previous font
+		TTF_CloseFont(font);
+		// Open with new size
+		font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", size);
+	}
 	SDL_Surface * sFont = TTF_RenderText_Blended(font, message.c_str(), color);
 
-	GLuint vao, fbo_vertices;
+	GLuint vao, vbo_vertices, vbo_texcoords;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	/*float lenW = sFont->w / m_screen_width;
-	float lenH = sFont->h / m_screen_height;
+	float lenW = float(sFont->w) / m_screen_width;
+	float lenH = float(sFont->h) / m_screen_height;
 
-	float xPos = x / m_screen_width;
-	float yPos = y / m_screen_height;*/
+	float xPos = float(x) / m_screen_width;
+	float yPos = float(y) / m_screen_height;
+
+	xPos = 2 * xPos - 1;
+	yPos = -2 * yPos + 1;
 
 	GLfloat vertices[] = {
-		-1, 0.75f,
-		0, 0.75f,
-		-1, 1,
-		0, 1,
+		xPos, yPos - lenH,
+		xPos + lenW, yPos - lenH,
+		xPos, yPos,
+		xPos+lenW, yPos,
 	};
 
-	glGenBuffers(1, &fbo_vertices);
-	glBindBuffer(GL_ARRAY_BUFFER, fbo_vertices);
+	GLfloat texCoords[] = {
+		0, 1,
+		1, 1,
+		0, 0,
+		1, 0,
+	};
+
+	glGenBuffers(1, &vbo_vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -1397,6 +1420,20 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sFont->w, sFont->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, sFont->pixels);
+
+	glGenBuffers(1, &vbo_texcoords);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_texcoords);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(
+		1,				// attribute index
+		2,              // number of elements per vertex, here (x,y,z)
+		GL_FLOAT,		// the type of each element
+		GL_FALSE,       // take our values as-is
+		0,		         // no extra data between each position
+		0				// pointer to the C array or an offset to our buffer
+	);
 
 	// bind the post processing program
 	m_text_shader_program.Bind();
@@ -1419,7 +1456,9 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	glEnable(GL_DEPTH_TEST);
 
 	glDeleteTextures(1, &texture);
-	TTF_CloseFont(font);
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo_vertices);
+	glDeleteBuffers(1, &vbo_texcoords);
 	SDL_FreeSurface(sFont);
 
 }

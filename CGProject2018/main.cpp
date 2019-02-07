@@ -206,9 +206,14 @@ int main(int argc, char *argv[])
 					if (!inroad) {
 						if (game->getActions() >= 3) {
 							if (game->getAvailableTowers().empty()) game->createTower();
-							game->addTower();
-							game->setActions(game->getActions() - 3);
-							printf("Spent 3 action points\nActions: %d\n", game->getActions());
+							bool added = game->addTower();
+							if (added) {
+								game->setActions(game->getActions() - 3);
+								printf("Spent 3 action points\nActions: %d\n", game->getActions());
+							}
+							else {
+								printf("There is already a tower in this tile!\n");
+							}
 						}
 						else {
 							printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n", (3 - game->getActions()));
@@ -220,13 +225,18 @@ int main(int argc, char *argv[])
 				{
 					bool inroad = game->getInRoad();
 					if (!inroad) {
-						if (game->getActions() >= 2) {
-							game->rearrangeTower();
-							game->setActions(game->getActions() - 2);
-							printf("Spent 2 action points\nActions: %d\n", game->getActions());
+						if (game->getActions() >= 1) {
+							bool rearranged = game->rearrangeTower();
+							if (rearranged) {
+								game->setActions(game->getActions() - 1);
+								printf("Spent 1 action points\nActions: %d\n", game->getActions());
+							}
+							else {
+								printf("There is no tower in this tile!\n");
+							}
 						}
 						else {
-							printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n", (2 - game->getActions()));
+							printf("You don't have 1 action points!\nYou need %d more action points to perform this action.\n", (2 - game->getActions()));
 						}
 					}
 				}
@@ -274,11 +284,11 @@ int main(int argc, char *argv[])
 						game->shootCannonBall(game->getCreatedTowers()[0], game->getPirates()[0]);*/
 
 					// Create wave
-					piratesInWave.num_of_pirates = 5;
+					/*piratesInWave.num_of_pirates = 5;
 					for (int i = 0; i < 5; i++) {
 						piratesInWave.types.push_back(1);
 						piratesInWave.levels.push_back(1);
-					}
+					}*/
 
 				}
 				else if (event.key.keysym.sym == SDLK_0)
@@ -293,9 +303,14 @@ int main(int argc, char *argv[])
 				{
 					// Upgrade Tower
 					if (game->getActions() >= 3) {
-						game->upgradeTower();
-						game->setActions(game->getActions() - 3);
-						printf("Spent 3 action points\nActions: %d\n", game->getActions());
+						bool upgraded = game->upgradeTower();
+						if (upgraded) {
+							game->setActions(game->getActions() - 3);
+							printf("Spent 3 action points\nActions: %d\n", game->getActions());
+						}
+						else {
+							printf("Can't perform upgrade!\n");
+						}
 					}
 					else {
 						printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n",(3-game->getActions()));
@@ -426,7 +441,7 @@ int main(int argc, char *argv[])
 			// Create Waves
 			currentTime = SDL_GetTicks();
 			// if it is the first wave wait for 5 secs not 20
-			if (game->getPirateWave() == 1) {
+			if (game->getPirateWave() == 0) {
 				if (currentTime > lastTimeT6 + 5000) {
 					game->getMusicManager()->PlayMusic("dark.wav",false);
 					game->getMusicManager()->setMusicPause(false);
@@ -543,7 +558,11 @@ int main(int argc, char *argv[])
 		// Draw
 		renderer->Render();
 		SDL_Color color = { 255,0,0 };
-		renderer->RenderText("Hello World!", color, 0, 0, 18);
+		renderer->RenderText("Score: " + std::to_string(game->getScore()), color, 0, 0, 74);
+		renderer->RenderText("Actions: " + std::to_string(game->getActions()), color, 0, 50, 74);
+		renderer->RenderText("Gold: " + std::to_string(game->getGold()), color, 0, 100, 74);
+		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()), color, 0, 150, 74);
+
 
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
