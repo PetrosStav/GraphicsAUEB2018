@@ -116,6 +116,8 @@ public:
 	void										setTreasureChestMesh(GeometricMesh* mesh);
 	void										assignTreasureChest();
 
+	void										setLightSaberArm(GeometricMesh* mesh);
+
 	// Adding objects
 
 	void										createTower();
@@ -217,6 +219,8 @@ private:
 	GeometricMesh*								cannonballMesh;
 
 	GeometricMesh*								treasureChestMesh;
+
+	GeometricMesh*								lightsaberArm;
 
 	// Music Manager
 	MusicManager*								musicManager;

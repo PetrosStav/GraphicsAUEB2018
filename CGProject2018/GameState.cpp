@@ -20,7 +20,7 @@ GameState::GameState() {
 	stopWaves = false;
 	showGoldParticles = false;
 
-	actions = 9;
+	actions = 90;
 
 	// Testing
 
@@ -624,6 +624,11 @@ void GameState::createPirate(int pType, int pLevel)
 		p->setSize(1.5f);
 		p->setHealthPoints(1500 + 25 * pLevel);
 	}
+	else if (type == 4) {
+		p->setSpeed(1.0f);
+		p->setSize(1.5f);
+		p->setHealthPoints(1000 + 25 * pLevel);
+	}
 
 	p->setBody(new GeometryNode());
 
@@ -631,7 +636,7 @@ void GameState::createPirate(int pType, int pLevel)
 		p->getBody()->Init(pirateBodyMesh);
 	else if (type == 0)
 		p->getBody()->Init(pirateFastBodyMesh);
-	else if (type == 2 || type == 3)
+	else if (type == 2 || type == 3 || type==4)
 		p->getBody()->Init(pirateHeavyBodyMesh);
 
 	p->setSword(new GeometryNode());
@@ -641,13 +646,15 @@ void GameState::createPirate(int pType, int pLevel)
 		p->getSword()->Init(pirateFastSwordMesh);
 	else if (type == 2 || type == 3)
 		p->getSword()->Init(pirateHeavySwordMesh);
+	else if (type == 4)
+		p->getSword()->Init(lightsaberArm);
 
 	p->setLeftFoot(new GeometryNode());
 	if (type == 1)
 		p->getLeftFoot()->Init(pirateLFootMesh);
 	else if (type == 0)
 		p->getLeftFoot()->Init(pirateFastLFootMesh);
-	else if (type == 2 || type == 3)
+	else if (type == 2 || type == 3 || type == 4)
 		p->getLeftFoot()->Init(pirateHeavyLFootMesh);
 
 	p->setRightFoot(new GeometryNode());
@@ -655,7 +662,7 @@ void GameState::createPirate(int pType, int pLevel)
 		p->getRightFoot()->Init(pirateRFootMesh);
 	else if (type == 0)
 		p->getRightFoot()->Init(pirateFastRFootMesh);
-	else if (type == 2 || type == 3)
+	else if (type == 2 || type == 3 || type == 4)
 		p->getRightFoot()->Init(pirateHeavyRFootMesh);
 
 	// Default test -- random
@@ -769,7 +776,10 @@ void GameState::towersFire()
 				float py = p->getY();
 				// Range of tower as tiles
 				if (abs(tx - px) <= t->getRange() && abs(ty - py) <= t->getRange()) {
-					getMusicManager()->PlaySFX("mortar.wav",0,-1);
+					float r = ((float)rand() / (RAND_MAX));
+					if (r<=0.3f) getMusicManager()->PlaySFX("mortar.wav", 0, 4);
+					else if(r <= 0.6) getMusicManager()->PlaySFX("mortar.wav", 0, 5);
+					else getMusicManager()->PlaySFX("mortar.wav", 0, 6);
 					shootCannonBall(t, p);
 					break;
 				}
@@ -1054,6 +1064,11 @@ void GameState::assignTreasureChest()
 {
 	treasureChest->setChest(new GeometryNode());
 	treasureChest->getChest()->Init(treasureChestMesh);
+}
+
+void GameState::setLightSaberArm(GeometricMesh * mesh)
+{
+	lightsaberArm = mesh;
 }
 
 void GameState::createTower()

@@ -528,7 +528,7 @@ void Renderer::Update(float dt)
 				std::cout << "Pirate died!" << std::endl;
 				game->resetPirateSpeeds();
 
-				if(targetPirate->getType()==3) game->setStopWaves(false);
+				if(targetPirate->getType()==3 || targetPirate->getType() == 4) game->setStopWaves(false);
 
 				//game->deletePirate(targetPirate);
 
@@ -950,7 +950,15 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 	
-	game->assignMeshtoPirates();
+	// load lightsaber mesh
+	mesh = loader.load("../Data/PirateHeavy/lightsaber_arm.obj");
+	if (mesh != nullptr) {
+		game->setLightSaberArm(mesh);
+	}
+	else
+		initialized = false;
+
+	//game->assignMeshtoPirates(); // TODO:REMOVE IT FROM GAMESTATE ALSO
 
 	/*for (Pirate* p : game->getPirates()) {
 		p->setBody(new GeometryNode());

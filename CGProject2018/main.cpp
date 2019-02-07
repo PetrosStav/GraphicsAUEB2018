@@ -463,22 +463,35 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
-			}else if (game->getPirateWave() % 6 == 0){
+			}else if (game->getPirateWave() % 2 == 0){
 				if (currentTime > lastTimeT6 + 20000) {
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					// Every 6 waves spawn the boss!!
 					// and play the boss music
-					// first halt the background music
 
-					//Mix_HookMusicFinished(changeMusic);
-					game->getMusicManager()->QuitMusic();
-					game->getMusicManager()->PlayMusic("epic_boss.wav", true);
-					game->getMusicManager()->setMusicPause(false);
-					//
 					piratesInWave.num_of_pirates = 1;
 					piratesInWave.types.clear();
 					piratesInWave.levels.clear();
-					piratesInWave.types.push_back(3);
+
+					float r = float(rand()) / RAND_MAX;
+					game->getMusicManager()->QuitMusic();
+					if (r <= 0.5) {
+
+						// first halt the background music
+
+						//Mix_HookMusicFinished(changeMusic);
+						game->getMusicManager()->PlayMusic("epic_boss.wav", true);
+						game->getMusicManager()->setMusicPause(false);
+
+						piratesInWave.types.push_back(3);
+					}
+					else {
+						game->getMusicManager()->PlayMusic("imperial_march.wav", true);
+						game->getMusicManager()->setMusicPause(false);
+
+						piratesInWave.types.push_back(4);
+					}
+					
 					piratesInWave.levels.push_back(1 + rand() % game->getPirateWave());
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
@@ -537,7 +550,7 @@ int main(int argc, char *argv[])
 					case 2:
 						game->setPirateRate(3000);
 						break;
-					case 3:
+					case 3:case 4:
 						game->setPirateRate(2000);
 						break;
 					}
@@ -564,8 +577,8 @@ int main(int argc, char *argv[])
 		renderer->RenderText("Score: " + std::to_string(game->getScore()), color, 0, 0, 74);
 		renderer->RenderText("Actions: " + std::to_string(game->getActions()), color, 0, 50, 74);
 		renderer->RenderText("Gold: " + std::to_string(game->getGold()), color, 0, 100, 74);
-		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()), color, 0, 150, 74);
-		renderer->RenderText("FPS: " + std::to_string(int(1.0f/dt)), color, SCREEN_WIDTH-200, 0, 74);
+		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()-1), color, 0, 150, 74);
+		renderer->RenderText("FPS: " + std::to_string(int(1.0f/dt)>=60?60: int(1.0f / dt)), color, SCREEN_WIDTH-200, 0, 74);
 		renderer->setFontSize(74);
 
 		if (game->getGameOver()) {
