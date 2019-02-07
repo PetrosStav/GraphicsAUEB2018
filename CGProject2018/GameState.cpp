@@ -808,6 +808,7 @@ void GameState::checkPiratesAtChest()
 				gameOver = true;
 			}else {
 				gold -= 10;
+				getMusicManager()->PlaySFX("coin_fall.wav", 0, 1);
 				// Check for gameover
 				if (gold == 0) {
 					// Game Over

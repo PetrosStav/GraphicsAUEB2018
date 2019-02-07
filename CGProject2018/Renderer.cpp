@@ -523,13 +523,14 @@ void Renderer::Update(float dt)
 			game->deleteHitCannonBall(cb);
 			//printf("TargetPirate: %d\n", targetPirate->getHealthPoints());
 			if (targetPirate->getHealthPoints() <= 0) {
+				game->getMusicManager()->PlaySFX("skeleton_death.wav", 0, 3);
+				targetPirate->setDead(true);
 				std::cout << "Pirate died!" << std::endl;
 				game->resetPirateSpeeds();
 
 				if(targetPirate->getType()==3) game->setStopWaves(false);
 
 				//game->deletePirate(targetPirate);
-				targetPirate->setDead(true);
 
 				// increase score
 				game->setScore(game->getScore() + 1);

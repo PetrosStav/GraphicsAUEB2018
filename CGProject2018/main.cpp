@@ -181,8 +181,11 @@ int main(int argc, char *argv[])
 
 		if (game->getGameOver()) {
 			// If game over then pause the game
-			game->setPaused(true);
 			game->getMusicManager()->QuitMusic();
+			if (!game->isPaused()) {
+				game->getMusicManager()->PlaySFX("gameover.wav", 0, 2);
+			}
+			game->setPaused(true);
 		}
 
 		// While there are events to handle
@@ -394,6 +397,10 @@ int main(int argc, char *argv[])
 			// Create a timed event
 			currentTime = SDL_GetTicks();
 			if (currentTime > lastTimeT1 + 5 * 1000) {
+				size_t sz = game->getPirates().size();
+				if(sz < 5) game->getMusicManager()->PlaySFX("skeleton_breath.wav", 0, 0);
+				else if(sz < 10) game->getMusicManager()->PlaySFX("skeleton_breath2.wav", 0, 0);
+				else game->getMusicManager()->PlaySFX("skeleton_breath3.wav", 0, 0);
 				printf("Timed Event: 5 seconds have passed, one more action is available.\n");
 				game->setActions(game->getActions() + 1);
 				printf("Actions: %d\n", game->getActions());
