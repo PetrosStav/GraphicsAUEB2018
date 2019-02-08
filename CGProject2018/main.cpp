@@ -479,11 +479,18 @@ int main(int argc, char *argv[])
 					// first halt the background music
 					game->getMusicManager()->QuitMusic();
 
-					if (r <= 0.1) {
+					if (r <= 0.5) {
 						game->setBoss(true);
 						
 						//Mix_HookMusicFinished(changeMusic);
-						game->getMusicManager()->PlayMusic("epic_boss.wav", 2);
+						float r_music = float(rand()) / RAND_MAX;
+						if (r_music <= 0.5) {
+							game->getMusicManager()->PlayMusic("epic_boss.wav", 2);
+						}
+						else {
+							game->getMusicManager()->PlayMusic("bensound-epic.wav", 2);
+						}
+						
 						game->getMusicManager()->setMusicPause(false);
 						piratesInWave.types.push_back(3);
 						
