@@ -481,12 +481,12 @@ int main(int argc, char *argv[])
 					// first halt the background music
 					game->getMusicManager()->QuitMusic();
 
-					if (r <= 0.5) {
+					if (r <= 0.5f) {
 						game->setBoss(true);
 						
 						//Mix_HookMusicFinished(changeMusic);
 						float r_music = float(rand()) / RAND_MAX;
-						if (r_music <= 0.5) {
+						if (r_music <= 0.5f) {
 							game->getMusicManager()->PlayMusic("epic_boss.wav", 2);
 						}
 						else {
