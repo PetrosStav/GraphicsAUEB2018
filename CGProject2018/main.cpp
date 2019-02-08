@@ -481,7 +481,7 @@ int main(int argc, char *argv[])
 					// first halt the background music
 					game->getMusicManager()->QuitMusic();
 
-					if (r <= 0.5f) {
+					if (r <= 0.01f) {
 						game->setBoss(true);
 						
 						//Mix_HookMusicFinished(changeMusic);

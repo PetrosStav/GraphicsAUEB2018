@@ -118,6 +118,8 @@ public:
 
 	void										setLightSaberArm(GeometricMesh* mesh);
 
+	void										setDarthVaderBody(GeometricMesh* mesh);
+
 	void										setGreenTileMesh(GeometricMesh* mesh);
 	GeometricMesh*								getGreenTileMesh();
 
@@ -231,6 +233,8 @@ private:
 	GeometricMesh*								treasureChestMesh;
 
 	GeometricMesh*								lightsaberArm;
+
+	GeometricMesh*								DarthVaderBody;
 
 	GeometricMesh*								greenTileMesh;
 	GeometricMesh*								redTileMesh;

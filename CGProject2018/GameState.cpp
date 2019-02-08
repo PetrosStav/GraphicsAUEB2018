@@ -643,8 +643,10 @@ void GameState::createPirate(int pType, int pLevel)
 		p->getBody()->Init(pirateBodyMesh);
 	else if (type == 0)
 		p->getBody()->Init(pirateFastBodyMesh);
-	else if (type == 2 || type == 3 || type==4)
+	else if (type == 2 || type == 3)
 		p->getBody()->Init(pirateHeavyBodyMesh);
+	else if(type == 4)
+		p->getBody()->Init(DarthVaderBody);
 
 	p->setSword(new GeometryNode());
 	if (type == 1)
@@ -1099,6 +1101,11 @@ void GameState::assignTreasureChest()
 void GameState::setLightSaberArm(GeometricMesh * mesh)
 {
 	lightsaberArm = mesh;
+}
+
+void GameState::setDarthVaderBody(GeometricMesh * mesh)
+{
+	DarthVaderBody = mesh;
 }
 
 void GameState::setGreenTileMesh(GeometricMesh* mesh)

@@ -1030,6 +1030,13 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
+	mesh = loader.load("../Data/PirateHeavy/vader_body.obj");
+	if (mesh != nullptr) {
+		game->setDarthVaderBody(mesh);
+	}
+	else
+		initialized = false;
+
 	//game->assignMeshtoPirates(); // TODO:REMOVE IT FROM GAMESTATE ALSO
 
 	/*for (Pirate* p : game->getPirates()) {
