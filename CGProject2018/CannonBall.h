@@ -23,6 +23,7 @@ public:
 	void setTargetZ(float z);
 
 	void setHitTarget(bool hitTarget);
+	void setFireBall(bool state);
 
 	void setTargetPirate(Pirate* pirate);
 
@@ -42,6 +43,7 @@ public:
 	float getTargetZ();
 
 	bool hasHitTarget();
+	bool isFireBall();
 
 	Pirate* getTargetPirate();
 
@@ -50,6 +52,8 @@ public:
 	glm::mat4 getCannonBallTNM();
 
 	BoundingShpere* getBoundingSphere();
+
+	ParticleEmitter* getParticleEmmiter();
 
 private:
 
@@ -73,6 +77,10 @@ private:
 
 	BoundingShpere*									bound_shpere;
 
+	ParticleEmitter*								m_particle_emitter;
+
 	bool hitTarget;
+
+	bool fireBall;
 
 };

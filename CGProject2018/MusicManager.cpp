@@ -78,8 +78,8 @@ void MusicManager::PlaySFX(std::string filename, int sfx_type ,int loops, int ch
 		}
 		else if (sfx_type == 1) {
 			//skeleton_breath
-			std::cout << "BREATHHHHH" << std::endl;
-			Mix_VolumeChunk(chunk, 15);
+			//std::cout << "BREATHHHHH" << std::endl;
+			Mix_VolumeChunk(chunk, 5);
 		}
 		else if (sfx_type == 2) {
 			//vader breath
@@ -87,7 +87,7 @@ void MusicManager::PlaySFX(std::string filename, int sfx_type ,int loops, int ch
 		}
 		else if (sfx_type == 3) {
 			//death sound / game_over / coin_fall
-			Mix_VolumeChunk(chunk, 25);
+			Mix_VolumeChunk(chunk, 35);
 
 		}
 		else if (sfx_type == 4) {

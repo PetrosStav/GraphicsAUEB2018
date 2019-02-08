@@ -709,6 +709,16 @@ void GameState::shootCannonBall(Tower * tower, Pirate * pirate)
 
 	cannonball->setDamage(tower->getDamage());
 
+	if (tower->getLevel()==3) {
+
+		float r = (float)rand() / RAND_MAX;
+		if (r <= 0.5f) {
+			cannonball->setSpeed(0.5f);
+			cannonball->setDamage(tower->getDamage() * 2);
+			cannonball->setFireBall(true);
+		}
+	}
+
 	cannonballs.push_back(cannonball);
 
 }
@@ -825,7 +835,7 @@ void GameState::checkPiratesAtChest()
 			showGoldParticles = true;
 			int type = p->getType();
 			pirates.erase(std::remove(pirates.begin(), pirates.end(), p), pirates.end());
-			if (type == 3) {
+			if (type == 3 || type==4) {
 				printf("GAME OVER\n");
 				printf("Score: %d", score);
 				gameOver = true;
@@ -857,6 +867,7 @@ void GameState::checkDeadPirates()
 			}
 		}
 	}
+	if (pirates.empty()) musicManager->QuitSFX(0);
 }
 
 void GameState::deleteToRemoveLists()

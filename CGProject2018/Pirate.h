@@ -70,6 +70,9 @@ public:
 	bool isDead();
 	void setDead(bool state);
 
+	bool isGoo();
+	void setGoo(bool state);
+
 	void setDeadCycle(int i);
 	int getDeadCycle();
 
@@ -152,6 +155,7 @@ private:
 	int start_health;
 	int health_points;
 	bool dead;
+	bool goo;
 	int dead_cycle;
 
 	float speed;

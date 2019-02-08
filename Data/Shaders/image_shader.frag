@@ -9,5 +9,5 @@ in vec2 f_texcoord;
 void main(void)
 {
 	vec4 color = texture2D(uniform_texture, f_texcoord);
-	out_color = color;	
+	out_color = color;
 }

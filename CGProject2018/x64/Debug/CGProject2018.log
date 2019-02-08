@@ -5,27 +5,27 @@ c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\rend
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(537): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(538): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(539): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1605): warning C4838: conversion from 'int' to 'GLfloat' requires a narrowing conversion
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1601): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1602): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1603): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1604): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1672): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1646): warning C4838: conversion from 'int' to 'GLfloat' requires a narrowing conversion
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1642): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1643): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1644): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1645): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1718): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1676): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1722): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1681): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1727): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1685): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1731): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float

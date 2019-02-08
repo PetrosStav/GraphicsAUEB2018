@@ -494,7 +494,7 @@ void Renderer::Update(float dt)
 		p->setHealthGreenTM(green_health_transformation_matrix);
 		p->setHealthGreenTNM(green_health_transformation_normal_matrix);
 
-		glm::mat4 red_health_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, bar_height, -2 * y))* terrainTransform * pirateRot * glm::rotate(glm::mat4(1.0f), -glm::pi<float>() / 2, glm::vec3(-1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.8f, p->getSize()*1.f, p->getSize()*0.1f));
+		glm::mat4 red_health_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, bar_height, -2 * y))* terrainTransform * pirateRot * glm::rotate(glm::mat4(1.0f), -glm::pi<float>() / 2, glm::vec3(-1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.8f, p->getSize()*0.8f, p->getSize()*0.1f));
 		glm::mat4 red_health_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(red_health_transformation_matrix))));
 		p->setHealthRedTM(red_health_transformation_matrix);
 		p->setHealthRedTNM(red_health_transformation_normal_matrix);
@@ -546,10 +546,21 @@ void Renderer::Update(float dt)
 		cb->setY(y_new);
 		cb->setZ(z_new);
 
+		if (cb->isFireBall()) {
+			float x = cb->getX();
+			float y = cb->getY();
+			float z = cb->getZ();
+
+			glm::vec3 center = glm::vec3(18+x, y, 18+z);
+			cb->getParticleEmmiter()->setCenter(center);
+			cb->getParticleEmmiter()->Update(dt*5);
+
+		}
+
+
 		if (targetPirate!=nullptr && !targetPirate->isDead() && cb->getBoundingSphere()->isSphereIntersecting(targetPirate->getBoundingSphere())) {
 			//std::cout << "BAM" << std::endl;
 			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - cb->getDamage());
-			game->deleteHitCannonBall(cb);
 			//printf("TargetPirate: %d\n", targetPirate->getHealthPoints());
 			if (targetPirate->getHealthPoints() <= 0) {
 				if (targetPirate->getType() == 4) {
@@ -558,6 +569,7 @@ void Renderer::Update(float dt)
 				game->getMusicManager()->PlaySFX("skeleton_death.wav", 3, 0, 3);
 				targetPirate->setDead(true);
 				targetPirate->setDeadCycle(1);
+				if (cb->isFireBall()) targetPirate->setGoo(true);
 				std::cout << "Pirate died!" << std::endl;
 				game->resetPirateSpeeds();
 
@@ -574,6 +586,7 @@ void Renderer::Update(float dt)
 				}
 
 			}
+			game->deleteHitCannonBall(cb);
 			//cb->setHitTarget(true);
 		}
 
@@ -1386,8 +1399,25 @@ void Renderer::RenderGeometry()
 		glUniformMatrix4fv(m_particle_rendering_program["uniform_view_matrix"], 1, GL_FALSE, glm::value_ptr(m_view_matrix));
 		// specify particle color
 		glm::vec3 particle_color = glm::vec3(1, 0.2f, 0.2f);
+		if (p->isGoo()) {
+			particle_color = glm::vec3(0.2, 1.f, 0.2f);
+		}
 		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
 		p->getParticleEmmiter()->Render();
+		m_particle_rendering_program.Unbind();
+	}
+
+	// render cannonball particles
+	for (CannonBall* cb : game->getCannonBalls()) {
+		if (!cb->isFireBall()) continue;
+		// Render Particles
+		m_particle_rendering_program.Bind();
+		glUniformMatrix4fv(m_particle_rendering_program["uniform_projection_matrix"], 1, GL_FALSE, glm::value_ptr(m_projection_matrix));
+		glUniformMatrix4fv(m_particle_rendering_program["uniform_view_matrix"], 1, GL_FALSE, glm::value_ptr(m_view_matrix));
+		// specify particle color
+		glm::vec3 particle_color = glm::vec3(0.2, 1.f, 0.2f);
+		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
+		cb->getParticleEmmiter()->Render();
 		m_particle_rendering_program.Unbind();
 	}
 
@@ -1532,7 +1562,7 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(
 		1,				// attribute index
-		2,              // number of elements per vertex, here (x,y,z)
+		2,              // number of elements per vertex, here (x,y)
 		GL_FLOAT,		// the type of each element
 		GL_FALSE,       // take our values as-is
 		0,		         // no extra data between each position
@@ -1565,6 +1595,15 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	glDeleteBuffers(1, &vbo_texcoords);
 	SDL_FreeSurface(sFont);
 
+}
+
+bool hasEnding(std::string const &fullString, std::string const &ending) {
+	if (fullString.length() >= ending.length()) {
+		return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(), ending));
+	}
+	else {
+		return false;
+	}
 }
 
 void Renderer::RenderImage(std::string filename, int x, int y, float scaleX, float scaleY, bool mirrored)
@@ -1626,7 +1665,12 @@ void Renderer::RenderImage(std::string filename, int x, int y, float scaleX, flo
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, image->pixels);
+	if (hasEnding(filename, std::string("jpeg")) || hasEnding(filename, std::string("jpg"))) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+	}else{
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, image->pixels); 
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->pixels);
+	}
 
 	glGenBuffers(1, &vbo_texcoords);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_texcoords);

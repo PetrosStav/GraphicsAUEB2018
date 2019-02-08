@@ -10,6 +10,7 @@ Pirate::Pirate(){
 	this->start_health = 100;
 	this->health_points = 100;
 	this->dead = false;
+	this->goo = false;
 	this->dead_cycle = 0;
 	this->size = 1.f;
 	// speed after 2 starts doing funny stuff
@@ -230,6 +231,16 @@ bool Pirate::isDead()
 void Pirate::setDead(bool state)
 {
 	dead = state;
+}
+
+bool Pirate::isGoo()
+{
+	return goo;
+}
+
+void Pirate::setGoo(bool state)
+{
+	goo = state;
 }
 
 void Pirate::setDeadCycle(int i)

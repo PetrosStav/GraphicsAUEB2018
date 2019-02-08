@@ -149,6 +149,8 @@ int main(int argc, char *argv[])
 	// Timers for timed events
 	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused, timeRender=0, prevTimeRender=0;
 
+	unsigned int img_toggle = 0;
+
 	//unsigned int piratesInWave = 0;
 
 	struct wave {
@@ -588,8 +590,9 @@ int main(int argc, char *argv[])
 			// pause
 			if (!game->getWasPaused()) {
 				timePaused = SDL_GetTicks();
+				//game->getMusicManager()->QuitSFX(0); // stop breath
+				game->setWasPaused(true);
 			}
-			game->setWasPaused(true);
 		}
 
 		// Draw
@@ -604,12 +607,32 @@ int main(int argc, char *argv[])
 
 		if (game->getGameOver()) {
 			renderer->RenderText("GAME OVER", color, SCREEN_WIDTH / 4, SCREEN_HEIGHT / 3, 240);
+			game->getMusicManager()->QuitSFX(0); // stop playing breath
 			renderer->setFontSize(240);
 		}
 
 		// Test image rendering
-		renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
-		renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3*SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+		if (game->getBoss() || game->getDarth()) {
+			if (img_toggle <= 30) {
+				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
+				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+			}
+			else if(img_toggle <= 60) {
+				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
+				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + 3 * SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+			}
+			else {
+				img_toggle = -1;
+			}
+			img_toggle += 1;
+		}
+		else {
+			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
+			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+		}
+
+		// test image no alpha
+		//renderer->RenderImage("../Data/Images/testj.jpeg", 0, 0, 1.5, 1.5, false);
 
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);

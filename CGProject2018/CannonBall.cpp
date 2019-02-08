@@ -8,6 +8,7 @@ CannonBall::CannonBall() {
 	this->z_ball = 0;
 	this->speed = 1.5f;
 	this->hitTarget = false;
+	this->fireBall = false;
 
 	m_geometric_objectCannonBall = nullptr;
 
@@ -17,11 +18,16 @@ CannonBall::CannonBall() {
 	this->bound_shpere->setZ(0);
 	this->bound_shpere->setRadius(1 * 0.09f); // recommended by pdf
 
+	this->m_particle_emitter = new ParticleEmitter();
+	this->m_particle_emitter->Init();
+	this->m_particle_emitter->setTreasureChest(false);
+
 }
 
 CannonBall::~CannonBall() {
 	delete m_geometric_objectCannonBall;
 	delete bound_shpere;
+	delete m_particle_emitter;
 }
 
 float CannonBall::getX() {
@@ -63,6 +69,11 @@ float CannonBall::getTargetZ()
 bool CannonBall::hasHitTarget()
 {
 	return hitTarget;
+}
+
+bool CannonBall::isFireBall()
+{
+	return fireBall;
 }
 
 Pirate * CannonBall::getTargetPirate()
@@ -117,6 +128,11 @@ void CannonBall::setHitTarget(bool hitTarget)
 	this->hitTarget = hitTarget;
 }
 
+void CannonBall::setFireBall(bool state)
+{
+	fireBall = state;
+}
+
 void CannonBall::setTargetPirate(Pirate * pirate)
 {
 	this->targetPirate = pirate;
@@ -149,4 +165,9 @@ glm::mat4 CannonBall::getCannonBallTNM(){
 BoundingShpere* CannonBall::getBoundingSphere()
 {
 	return bound_shpere;
+}
+
+ParticleEmitter * CannonBall::getParticleEmmiter()
+{
+	return m_particle_emitter;
 }
