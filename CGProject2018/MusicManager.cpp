@@ -34,18 +34,21 @@ MusicManager::~MusicManager() {
 void MusicManager::PlayMusic(std::string filename,int music_type,int loops) {
 	
 	//Mix_Music * music = mAssetManager->GetMusic(filename);
-	Mix_PlayMusic(mAssetManager->GetMusic(filename), loops);
+	
 	if (music_type == 0) {
 		// imperial_march
 		Mix_VolumeMusic(30);
+		Mix_FadeInMusic(mAssetManager->GetMusic(filename), loops, 2000);
 	}
 	else if (music_type == 1) {
 		// dark
 		Mix_VolumeMusic(128);
+		Mix_PlayMusic(mAssetManager->GetMusic(filename), loops);
 	}
 	else if (music_type == 2) {
 		//bensound_epic / epic boss
 		Mix_VolumeMusic(25);
+		Mix_PlayMusic(mAssetManager->GetMusic(filename), loops);
 	}
 }
 
