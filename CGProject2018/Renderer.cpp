@@ -688,6 +688,14 @@ bool Renderer::InitRenderingTechniques()
 	initialized = initialized && m_text_shader_program.CreateProgram();
 	m_text_shader_program.LoadUniform("uniform_texture");
 
+	// Text Rendering Program
+	vertex_path = "../Data/Shaders/image_shader.vert";
+	fragment_path = "../Data/Shaders/image_shader.frag";
+	m_image_shader_program.LoadVertexShaderFromFile(vertex_path);
+	m_image_shader_program.LoadFragmentShaderFromFile(fragment_path);
+	initialized = initialized && m_image_shader_program.CreateProgram();
+	m_image_shader_program.LoadUniform("uniform_texture");
+
 	// Shadow mapping Program
 	vertex_shader_path = "../Data/Shaders/shadow_map_rendering.vert";
 	fragment_shader_path = "../Data/Shaders/shadow_map_rendering.frag";
@@ -720,6 +728,7 @@ bool Renderer::ReloadShaders()
 	reloaded = reloaded && m_spot_light_shadow_map_program.ReloadProgram();
 	reloaded = reloaded && m_particle_rendering_program.ReloadProgram();
 	reloaded = reloaded && m_text_shader_program.ReloadProgram();
+	reloaded = reloaded && m_image_shader_program.ReloadProgram();
 
 	return reloaded;
 }
@@ -1554,6 +1563,108 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 	glDeleteBuffers(1, &vbo_texcoords);
 	SDL_FreeSurface(sFont);
 
+}
+
+void Renderer::RenderImage(std::string filename, int x, int y, float scaleX, float scaleY, bool mirrored)
+{
+	glDisable(GL_DEPTH_TEST);
+	//glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	SDL_Surface * image = IMG_Load(filename.c_str());
+
+	GLuint vao, vbo_vertices, vbo_texcoords;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	float lenW = float(image->w) / m_screen_width;
+	float lenH = float(image->h) / m_screen_height;
+
+	lenW *= scaleX;
+	lenH *= scaleY;
+
+	float xPos = float(x) / m_screen_width;
+	float yPos = float(y) / m_screen_height;
+
+	xPos = 2 * xPos - 1;
+	yPos = -2 * yPos + 1;
+
+	GLfloat vertices[] = {
+		xPos, yPos - lenH,
+		xPos + lenW, yPos - lenH,
+		xPos, yPos,
+		xPos + lenW, yPos,
+	};
+
+	GLfloat texCoords[] = {
+	mirrored?1:0, 1,
+	mirrored?0:1, 1,
+	mirrored?1:0, 0,
+	mirrored?0:1, 0,
+	};
+
+	/*GLfloat texCoords[] = {
+		0, 1,
+		1, 1,
+		0, 0,
+		1, 0,
+	};*/
+
+	glGenBuffers(1, &vbo_vertices);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, image->pixels);
+
+	glGenBuffers(1, &vbo_texcoords);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_texcoords);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(
+		1,				// attribute index
+		2,              // number of elements per vertex, here (x,y,z)
+		GL_FLOAT,		// the type of each element
+		GL_FALSE,       // take our values as-is
+		0,		         // no extra data between each position
+		0				// pointer to the C array or an offset to our buffer
+	);
+
+	// bind the post processing program
+	m_image_shader_program.Bind();
+
+	glBindVertexArray(vao);
+	// Bind the intermediate color image to texture unit 0
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glUniform1i(m_image_shader_program["uniform_texture"], 0);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	glBindVertexArray(0);
+
+	// Unbind the post processing program
+	m_image_shader_program.Unbind();
+
+	glDisable(GL_BLEND);
+	//glDisable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
+
+	glDeleteTextures(1, &texture);
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo_vertices);
+	glDeleteBuffers(1, &vbo_texcoords);
+	SDL_FreeSurface(image);
 }
 
 void Renderer::CameraMoveForward(bool enable)

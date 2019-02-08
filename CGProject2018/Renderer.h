@@ -10,6 +10,7 @@
 #include "ParticleSystem.h"
 #include "SDL2\SDL.h"
 #include "SDL2\SDL_ttf.h"
+#include "SDL2\SDL_image.h"
 
 class Renderer
 {
@@ -121,6 +122,7 @@ protected:
 	ShaderProgram								m_postprocess_program;
 	ShaderProgram								m_spot_light_shadow_map_program;
 	ShaderProgram								m_text_shader_program;
+	ShaderProgram								m_image_shader_program;
 
 	ParticleEmitter								m_particle_emitter;
 	ParticleSwirl								m_particle_swirld;
@@ -142,6 +144,7 @@ public:
 	void										RenderToOutFB();
 	
 	void										RenderText(std::string message, SDL_Color color, int x, int y, int size);
+	void										RenderImage(std::string filename, int x, int y,float scaleX, float scaleY, bool mirrored);
 
 	// Set functions
 	void										SetRenderingMode(RENDERING_MODE mode);

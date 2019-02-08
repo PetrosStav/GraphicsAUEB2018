@@ -588,6 +588,10 @@ int main(int argc, char *argv[])
 			renderer->setFontSize(240);
 		}
 
+		// Test image rendering
+		renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
+		renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3*SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+
 		//Update screen (swap buffer for double buffering)
 		SDL_GL_SwapWindow(window);
 
