@@ -43,7 +43,7 @@ MusicAssets::~MusicAssets() {
 Mix_Music* MusicAssets::GetMusic(std::string filename) {
 	std::string fullpath = Tools::GetFolderPath("../Data/Music/");
 	fullpath.append(filename);
-	printf("the full path: %s",fullpath.c_str());
+	printf("the full path: %s\n",fullpath.c_str());
 	if (mMusic[fullpath] == nullptr) {
 
 		mMusic[fullpath] = Mix_LoadMUS(fullpath.c_str());

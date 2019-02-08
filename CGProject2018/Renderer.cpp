@@ -469,6 +469,35 @@ void Renderer::Update(float dt)
 		p->setRightFootTM(m_geometric_object9_transformation_matrix);
 		p->setRightFootTNM(m_geometric_object9_transformation_normal_matrix);
 
+		// health bar
+
+		int start_health = p->getStartHealth();
+		int curr_health = p->getHealthPoints();
+
+		float hp_left = float(curr_health) / start_health;
+
+		float bar_height, bar_offset;
+
+		if (p->getType() == 3 || p->getType() == 4) {
+			bar_height = 4.f;
+			//bar_offset = p->getSize() * ((1 - hp_left) / 1.1f);
+		}
+		else {
+			bar_height = 2.5f;
+			//bar_offset = (1 - hp_left) / 1.1f;
+		}
+
+		bar_offset = p->getSize() * (1 - hp_left) * 0.81f;
+
+		glm::mat4 green_health_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, bar_height, -2 * y))* terrainTransform * pirateRot * glm::translate(glm::mat4(1.0f), glm::vec3(-bar_offset,0,0)) * glm::rotate(glm::mat4(1.0f), -glm::pi<float>()/2, glm::vec3(-1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.81f*hp_left, p->getSize()*1.1f, p->getSize()*0.11f));
+		glm::mat4 green_health_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(green_health_transformation_matrix))));
+		p->setHealthGreenTM(green_health_transformation_matrix);
+		p->setHealthGreenTNM(green_health_transformation_normal_matrix);
+
+		glm::mat4 red_health_transformation_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2 * x, bar_height, -2 * y))* terrainTransform * pirateRot * glm::rotate(glm::mat4(1.0f), -glm::pi<float>() / 2, glm::vec3(-1, 0, 0)) * glm::scale(glm::mat4(1.0), glm::vec3(p->getSize()*0.8f, p->getSize()*1.f, p->getSize()*0.1f));
+		glm::mat4 red_health_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(red_health_transformation_matrix))));
+		p->setHealthRedTM(red_health_transformation_matrix);
+		p->setHealthRedTNM(red_health_transformation_normal_matrix);
 
 	}
 
@@ -525,6 +554,7 @@ void Renderer::Update(float dt)
 			if (targetPirate->getHealthPoints() <= 0) {
 				game->getMusicManager()->PlaySFX("skeleton_death.wav", 0, 3);
 				targetPirate->setDead(true);
+				targetPirate->setDeadCycle(1);
 				std::cout << "Pirate died!" << std::endl;
 				game->resetPirateSpeeds();
 
@@ -806,6 +836,7 @@ bool Renderer::InitGeometricMeshes()
 	mesh = loader.load("../Data/Various/plane_green.obj");
 	if (mesh != nullptr)
 	{
+		game->setGreenTileMesh(mesh);
 		m_geometric_object4 = new GeometryNode();
 		m_geometric_object4->Init(mesh);
 	}
@@ -816,8 +847,25 @@ bool Renderer::InitGeometricMeshes()
 	mesh = loader.load("../Data/Various/plane_red.obj");
 	if (mesh != nullptr)
 	{
+		game->setRedTileMesh(mesh);
 		m_geometric_object5 = new GeometryNode();
 		m_geometric_object5->Init(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/Various/health_green.obj");
+	if (mesh != nullptr)
+	{
+		game->setGreenTileMesh(mesh);
+	}
+	else
+		initialized = false;
+
+	mesh = loader.load("../Data/Various/health_red.obj");
+	if (mesh != nullptr)
+	{
+		game->setRedTileMesh(mesh);
 	}
 	else
 		initialized = false;
@@ -1259,6 +1307,12 @@ void Renderer::RenderGeometry()
 		//rightfoot
 		DrawGeometryNode(p->getRightFoot(), p->getRightFootTM(), p->getRightFootTNM());
 
+		// green health bar
+		DrawGeometryNode(p->getHealthGreen(), p->getHealthGreenTM(), p->getHealthGreenTNM());
+
+		// red health bar
+		DrawGeometryNode(p->getHealthRed(), p->getHealthRedTM(), p->getHealthRedTNM());
+
 	}
 
 	// draw the cannonballs
@@ -1544,6 +1598,8 @@ void Renderer::setFontSize(unsigned int size)
 {
 	font_size = size;
 }
+
+
 
 //void Renderer::TileSetPos(int x, int y)
 //{

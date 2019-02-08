@@ -17,6 +17,7 @@ public:
 	void setTargetY(float y);
 	void setRoadIdx(int idx);
 
+	void setStartHealth(int hp);
 	void setHealthPoints(int hp);
 
 	void setSpeed(float speed);
@@ -47,6 +48,14 @@ public:
 	void setRightFootTM(glm::mat4 tm);
 	void setRightFootTNM(glm::mat4 tnm);
 
+	void setHealthGreen(GeometryNode* healthgreen);
+	void setHealthGreenTM(glm::mat4 tm);
+	void setHealthGreenTNM(glm::mat4 tnm);
+
+	void setHealthRed(GeometryNode* healthred);
+	void setHealthRedTM(glm::mat4 tm);
+	void setHealthRedTNM(glm::mat4 tnm);
+
 	float getX();
 	float getY();
 
@@ -55,10 +64,14 @@ public:
 
 	int getRoadIdx();
 
+	int getStartHealth();
 	int getHealthPoints();
 
 	bool isDead();
 	void setDead(bool state);
+
+	void setDeadCycle(int i);
+	int getDeadCycle();
 
 	float getSpeed();
 
@@ -88,6 +101,14 @@ public:
 	glm::mat4 getRightFootTM();
 	glm::mat4 getRightFootTNM();
 
+	GeometryNode* getHealthGreen();
+	glm::mat4 getHealthGreenTM();
+	glm::mat4 getHealthGreenTNM();
+
+	GeometryNode* getHealthRed();
+	glm::mat4 getHealthRedTM();
+	glm::mat4 getHealthRedTNM();
+
 	BoundingShpere* getBoundingSphere();
 
 	ParticleEmitter* getParticleEmmiter();
@@ -110,6 +131,14 @@ private:
 	glm::mat4										m_geometric_objectRightFoot_transformation_matrix;
 	glm::mat4										m_geometric_objectRightFoot_transformation_normal_matrix;
 
+	GeometryNode*									m_geometric_objectHealthGreen;
+	glm::mat4										m_geometric_objectHealthGreen_transformation_matrix;
+	glm::mat4										m_geometric_objectHealthGreen_transformation_normal_matrix;
+
+	GeometryNode*									m_geometric_objectHealthRed;
+	glm::mat4										m_geometric_objectHealthRed_transformation_matrix;
+	glm::mat4										m_geometric_objectHealthRed_transformation_normal_matrix;
+
 	GeometricMesh*									obj_mesh;
 
 	float x_pirate;
@@ -120,8 +149,10 @@ private:
 
 	int roadIdx;
 
+	int start_health;
 	int health_points;
 	bool dead;
+	int dead_cycle;
 
 	float speed;
 

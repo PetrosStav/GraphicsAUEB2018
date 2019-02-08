@@ -118,6 +118,12 @@ public:
 
 	void										setLightSaberArm(GeometricMesh* mesh);
 
+	void										setGreenTileMesh(GeometricMesh* mesh);
+	GeometricMesh*								getGreenTileMesh();
+
+	void										setRedTileMesh(GeometricMesh* mesh);
+	GeometricMesh*								getRedTileMesh();
+
 	// Adding objects
 
 	void										createTower();
@@ -221,6 +227,9 @@ private:
 	GeometricMesh*								treasureChestMesh;
 
 	GeometricMesh*								lightsaberArm;
+
+	GeometricMesh*								greenTileMesh;
+	GeometricMesh*								redTileMesh;
 
 	// Music Manager
 	MusicManager*								musicManager;

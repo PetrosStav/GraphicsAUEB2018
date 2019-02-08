@@ -611,23 +611,28 @@ void GameState::createPirate(int pType, int pLevel)
 	if (type == 0) {
 		p->setSpeed(2.0f);
 		p->setHealthPoints(70+5*pLevel);
+		p->setStartHealth(70 + 5 * pLevel);
 	}
 	else if (type == 1) {
 		p->setHealthPoints(100 + 10 * pLevel);
+		p->setStartHealth(100 + 10 * pLevel);
 	}
 	else if (type == 2) {
 		p->setSpeed(0.8f);
 		p->setHealthPoints(250 + 15 * pLevel);
+		p->setStartHealth(250 + 15 * pLevel);
 	}
 	else if (type == 3) {
 		p->setSpeed(0.6f);
 		p->setSize(1.5f);
 		p->setHealthPoints(1500 + 25 * pLevel);
+		p->setStartHealth(1500 + 25 * pLevel);
 	}
 	else if (type == 4) {
 		p->setSpeed(1.0f);
 		p->setSize(1.5f);
 		p->setHealthPoints(1000 + 25 * pLevel);
+		p->setStartHealth(1000 + 25 * pLevel);
 	}
 
 	p->setBody(new GeometryNode());
@@ -664,6 +669,12 @@ void GameState::createPirate(int pType, int pLevel)
 		p->getRightFoot()->Init(pirateFastRFootMesh);
 	else if (type == 2 || type == 3 || type == 4)
 		p->getRightFoot()->Init(pirateHeavyRFootMesh);
+
+	p->setHealthGreen(new GeometryNode());
+	p->getHealthGreen()->Init(greenTileMesh);
+
+	p->setHealthRed(new GeometryNode());
+	p->getHealthRed()->Init(redTileMesh);
 
 	// Default test -- random
 	/*unsigned idx = rand() % 29;
@@ -835,7 +846,13 @@ void GameState::checkDeadPirates()
 {
 	for (Pirate* p : pirates) {
 		if (p->isDead()) {
-			deletePirate(p);
+			int cycle = p->getDeadCycle();
+			if (cycle <= 0) {
+				deletePirate(p);
+			}
+			else {
+				p->setDeadCycle(cycle - 1);
+			}
 		}
 	}
 }
@@ -1069,6 +1086,26 @@ void GameState::assignTreasureChest()
 void GameState::setLightSaberArm(GeometricMesh * mesh)
 {
 	lightsaberArm = mesh;
+}
+
+void GameState::setGreenTileMesh(GeometricMesh* mesh)
+{
+	greenTileMesh = mesh;
+}
+
+GeometricMesh * GameState::getGreenTileMesh()
+{
+	return greenTileMesh;
+}
+
+void GameState::setRedTileMesh(GeometricMesh * mesh)
+{
+	redTileMesh = mesh;
+}
+
+GeometricMesh * GameState::getRedTileMesh()
+{
+	return redTileMesh;
 }
 
 void GameState::createTower()

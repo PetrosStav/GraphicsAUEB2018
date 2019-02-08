@@ -76,6 +76,7 @@ protected:
 	class GeometryNode*								m_geometric_object5;
 	glm::mat4										m_geometric_object5_transformation_matrix;
 	glm::mat4										m_geometric_object5_transformation_normal_matrix;
+
 	//// Pirate Body
 	//class GeometryNode*								m_geometric_object6;
 	//glm::mat4										m_geometric_object6_transformation_matrix;

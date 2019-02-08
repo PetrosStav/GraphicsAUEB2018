@@ -7,8 +7,10 @@ Pirate::Pirate(){
 	this->target_x = 0;
 	this->target_y = 0;
 	this->roadIdx = 0;
+	this->start_health = 100;
 	this->health_points = 100;
 	this->dead = false;
+	this->dead_cycle = 0;
 	this->size = 1.f;
 	// speed after 2 starts doing funny stuff
 	this->speed = 1.f;
@@ -17,6 +19,8 @@ Pirate::Pirate(){
 	m_geometric_objectSword = nullptr;
 	m_geometric_objectLeftFoot = nullptr;
 	m_geometric_objectRightFoot = nullptr;
+	m_geometric_objectHealthGreen = nullptr;
+	m_geometric_objectHealthRed = nullptr;
 	this->bound_shpere = new BoundingShpere();
 	this->bound_shpere->setX(18);
 	this->bound_shpere->setY(size * 0.7f);
@@ -34,6 +38,8 @@ Pirate::~Pirate()
 	delete m_geometric_objectSword;
 	delete m_geometric_objectLeftFoot;
 	delete m_geometric_objectRightFoot;
+	delete m_geometric_objectHealthGreen;
+	delete m_geometric_objectHealthRed;
 	delete bound_shpere;
 	delete m_particle_emitter;
 }
@@ -63,6 +69,11 @@ void Pirate::setTargetY(float y)
 void Pirate::setRoadIdx(int idx)
 {
 	this->roadIdx = idx;
+}
+
+void Pirate::setStartHealth(int hp)
+{
+	start_health = hp;
 }
 
 void Pirate::setHealthPoints(int hp)
@@ -148,6 +159,36 @@ void Pirate::setRightFootTNM(glm::mat4 tnm){
 	this->m_geometric_objectRightFoot_transformation_normal_matrix = tnm;
 }
 
+void Pirate::setHealthGreen(GeometryNode * healthgreen)
+{
+	m_geometric_objectHealthGreen = healthgreen;
+}
+
+void Pirate::setHealthGreenTM(glm::mat4 tm)
+{
+	m_geometric_objectHealthGreen_transformation_matrix = tm;
+}
+
+void Pirate::setHealthGreenTNM(glm::mat4 tnm)
+{
+	m_geometric_objectHealthGreen_transformation_normal_matrix = tnm;
+}
+
+void Pirate::setHealthRed(GeometryNode * healthred)
+{
+	m_geometric_objectHealthRed = healthred;
+}
+
+void Pirate::setHealthRedTM(glm::mat4 tm)
+{
+	m_geometric_objectHealthRed_transformation_matrix = tm;
+}
+
+void Pirate::setHealthRedTNM(glm::mat4 tnm)
+{
+	m_geometric_objectHealthRed_transformation_normal_matrix = tnm;
+}
+
 float Pirate::getX() {
 	return this->x_pirate;
 }
@@ -171,6 +212,11 @@ int Pirate::getRoadIdx()
 	return roadIdx;
 }
 
+int Pirate::getStartHealth()
+{
+	return start_health;
+}
+
 int Pirate::getHealthPoints()
 {
 	return health_points;
@@ -184,6 +230,16 @@ bool Pirate::isDead()
 void Pirate::setDead(bool state)
 {
 	dead = state;
+}
+
+void Pirate::setDeadCycle(int i)
+{
+	dead_cycle = i;
+}
+
+int Pirate::getDeadCycle()
+{
+	return dead_cycle;
 }
 
 float Pirate::getSpeed()
@@ -274,6 +330,36 @@ glm::mat4 Pirate::getRightFootTM()
 glm::mat4 Pirate::getRightFootTNM()
 {
 	return m_geometric_objectRightFoot_transformation_normal_matrix;
+}
+
+GeometryNode * Pirate::getHealthGreen()
+{
+	return m_geometric_objectHealthGreen;
+}
+
+glm::mat4 Pirate::getHealthGreenTM()
+{
+	return m_geometric_objectHealthGreen_transformation_matrix;
+}
+
+glm::mat4 Pirate::getHealthGreenTNM()
+{
+	return m_geometric_objectHealthGreen_transformation_normal_matrix;
+}
+
+GeometryNode * Pirate::getHealthRed()
+{
+	return m_geometric_objectHealthRed;
+}
+
+glm::mat4 Pirate::getHealthRedTM()
+{
+	return m_geometric_objectHealthRed_transformation_matrix;
+}
+
+glm::mat4 Pirate::getHealthRedTNM()
+{
+	return m_geometric_objectHealthRed_transformation_normal_matrix;
 }
 
 BoundingShpere* Pirate::getBoundingSphere()
