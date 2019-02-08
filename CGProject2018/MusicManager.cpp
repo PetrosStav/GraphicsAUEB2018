@@ -71,30 +71,32 @@ void MusicManager::QuitMusic() {
 
 void MusicManager::PlaySFX(std::string filename, int sfx_type ,int loops, int channel) {
 	Mix_Chunk* chunk = mAssetManager->GetSFX(filename);
-	if (sfx_type == 0) {
-		//tower
-		Mix_VolumeChunk(chunk, 10);
-	}
-	else if (sfx_type == 1) {
-		//skeleton_breath
-		std::cout << "BREATHHHHH" << std::endl;
-		Mix_VolumeChunk(chunk, 15);
-	}
-	else if (sfx_type == 2) {
-		//vader breath
-		Mix_VolumeChunk(chunk, 15);
-	}
-	else if (sfx_type == 3) {
-		//death sound / game_over / coin_fall
-		Mix_VolumeChunk(chunk, 20);
+	if (chunk != nullptr) {
+		if (sfx_type == 0) {
+			//tower
+			Mix_VolumeChunk(chunk, 10);
+		}
+		else if (sfx_type == 1) {
+			//skeleton_breath
+			std::cout << "BREATHHHHH" << std::endl;
+			Mix_VolumeChunk(chunk, 15);
+		}
+		else if (sfx_type == 2) {
+			//vader breath
+			Mix_VolumeChunk(chunk, 15);
+		}
+		else if (sfx_type == 3) {
+			//death sound / game_over / coin_fall
+			Mix_VolumeChunk(chunk, 25);
 
-	}
-	else if (sfx_type == 4) {
-		//saber on / saber off
-		Mix_VolumeChunk(chunk, 20);
+		}
+		else if (sfx_type == 4) {
+			//saber on / saber off
+			Mix_VolumeChunk(chunk, 20);
+		}
+		Mix_PlayChannel(channel, chunk, loops);
 	}
 	
-	Mix_PlayChannel(channel, chunk, loops);
 }
 
 void MusicManager::setMusicPause(bool pause) {
