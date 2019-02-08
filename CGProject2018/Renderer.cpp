@@ -1030,7 +1030,7 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
-	mesh = loader.load("../Data/PirateHeavy/vader_body.obj");
+	mesh = loader.load("../Data/PirateHeavy/vader_body_thicker.obj");
 	if (mesh != nullptr) {
 		game->setDarthVaderBody(mesh);
 	}
