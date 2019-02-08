@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 			// If game over then pause the game
 			game->getMusicManager()->QuitMusic();
 			if (!game->isPaused()) {
-				game->getMusicManager()->PlaySFX("gameover.wav", 0, 2);
+				game->getMusicManager()->PlaySFX("gameover.wav", 3, 0, 2);
 			}
 			game->setPaused(true);
 		}
@@ -398,10 +398,10 @@ int main(int argc, char *argv[])
 			currentTime = SDL_GetTicks();
 			if (currentTime > lastTimeT1 + 5 * 1000) {
 				size_t sz = game->getPirates().size();
-				if (sz != 0) {
-					if (sz < 5) game->getMusicManager()->PlaySFX("skeleton_breath.wav", 0, 0);
-					else if (sz < 10) game->getMusicManager()->PlaySFX("skeleton_breath2.wav", 0, 0);
-					else game->getMusicManager()->PlaySFX("skeleton_breath3.wav", 0, 0);
+				if (sz != 0 && !game->getDarth()) {
+					if (sz < 5) game->getMusicManager()->PlaySFX("skeleton_breath.wav", 1 ,0, 0);
+					else if (sz < 10) game->getMusicManager()->PlaySFX("skeleton_breath2.wav", 1 ,0, 0);
+					else game->getMusicManager()->PlaySFX("skeleton_breath3.wav", 1 ,0, 0);
 				}
 				printf("Timed Event: 5 seconds have passed, one more action is available.\n");
 				game->setActions(game->getActions() + 1);
@@ -448,7 +448,7 @@ int main(int argc, char *argv[])
 			// if it is the first wave wait for 5 secs not 20
 			if (game->getPirateWave() == 0) {
 				if (currentTime > lastTimeT6 + 5000) {
-					game->getMusicManager()->PlayMusic("dark.wav",false);
+					game->getMusicManager()->PlayMusic("dark.wav",1);
 					game->getMusicManager()->setMusicPause(false);
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					piratesInWave.num_of_pirates = 4;
@@ -476,19 +476,23 @@ int main(int argc, char *argv[])
 					piratesInWave.levels.clear();
 
 					float r = float(rand()) / RAND_MAX;
+					// first halt the background music
 					game->getMusicManager()->QuitMusic();
-					if (r <= 0.5) {
 
-						// first halt the background music
-
+					if (r <= 0.1) {
+						game->setBoss(true);
+						
 						//Mix_HookMusicFinished(changeMusic);
-						game->getMusicManager()->PlayMusic("epic_boss.wav", true);
+						game->getMusicManager()->PlayMusic("epic_boss.wav", 2);
 						game->getMusicManager()->setMusicPause(false);
-
 						piratesInWave.types.push_back(3);
+						
 					}
 					else {
-						game->getMusicManager()->PlayMusic("imperial_march.wav", true);
+						game->setDarth(true);
+						game->getMusicManager()->PlaySFX("saber_on.wav", 4 ,0, 7);
+						game->getMusicManager()->PlayMusic("imperial_march.wav",0);
+						game->getMusicManager()->PlaySFX("vader_breath.wav",2,-1,0);
 						game->getMusicManager()->setMusicPause(false);
 
 						piratesInWave.types.push_back(4);
@@ -498,7 +502,6 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 					game->setStopWaves(true);
-					game->setBoss(true);
 				}
 			}
 			else if (!game->getStopWaves() && game->getBoss()) {
@@ -506,9 +509,18 @@ int main(int argc, char *argv[])
 				//Mix_HookMusicFinished(changeMusic); //NOTE: an thelete na to tsekarete kante global thn game
 				game->getMusicManager()->QuitMusic();
 				// Mix_HookMusicFinished(changeMusic); lene einai poly kako na to kaneis etsi 
-				game->getMusicManager()->PlayMusic("dark.wav", false);
+				game->getMusicManager()->PlayMusic("dark.wav", 1);
 				game->getMusicManager()->setMusicPause(false);
 				game->setBoss(false);
+			}
+			else if (!game->getStopWaves() && game->getDarth()) {
+				
+				game->getMusicManager()->QuitMusic();
+				game->getMusicManager()->QuitSFX(0);
+				// Mix_HookMusicFinished(changeMusic); lene einai poly kako na to kaneis etsi 
+				game->getMusicManager()->PlayMusic("dark.wav", 1);
+				game->getMusicManager()->setMusicPause(false);
+				game->setDarth(false);
 			}
 			else{	
 				if (currentTime > lastTimeT6 + 20000 && !game->getStopWaves()) {	

@@ -1,4 +1,5 @@
 #include "MusicManager.h"
+#include <iostream>
 MusicManager* MusicManager::sInstance = NULL;
 
 MusicManager* MusicManager::Instance() {
@@ -30,15 +31,22 @@ MusicManager::~MusicManager() {
 	Mix_Quit();
 }
 
-void MusicManager::PlayMusic(std::string filename,bool boss,int loops) {
-	if (boss) {
-		Mix_VolumeMusic(10);
-	}
-	else {
-		Mix_VolumeMusic(128);
-	}
+void MusicManager::PlayMusic(std::string filename,int music_type,int loops) {
+	
 	//Mix_Music * music = mAssetManager->GetMusic(filename);
 	Mix_PlayMusic(mAssetManager->GetMusic(filename), loops);
+	if (music_type == 0) {
+		// imperial_march
+		Mix_VolumeMusic(30);
+	}
+	else if (music_type == 1) {
+		// dark
+		Mix_VolumeMusic(128);
+	}
+	else if (music_type == 2) {
+		//bensound_epic / epic boss
+		Mix_VolumeMusic(25);
+	}
 }
 
 void MusicManager::PauseMusic() {
@@ -58,9 +66,31 @@ void MusicManager::QuitMusic() {
 	Mix_HaltMusic();
 }
 
-void MusicManager::PlaySFX(std::string filename, int loops, int channel) {
+void MusicManager::PlaySFX(std::string filename, int sfx_type ,int loops, int channel) {
 	Mix_Chunk* chunk = mAssetManager->GetSFX(filename);
-	Mix_VolumeChunk(chunk, 10);
+	if (sfx_type == 0) {
+		//tower
+		Mix_VolumeChunk(chunk, 10);
+	}
+	else if (sfx_type == 1) {
+		//skeleton_breath
+		std::cout << "BREATHHHHH" << std::endl;
+		Mix_VolumeChunk(chunk, 15);
+	}
+	else if (sfx_type == 2) {
+		//vader breath
+		Mix_VolumeChunk(chunk, 15);
+	}
+	else if (sfx_type == 3) {
+		//death sound / game_over / coin_fall
+		Mix_VolumeChunk(chunk, 20);
+
+	}
+	else if (sfx_type == 4) {
+		//saber on / saber off
+		Mix_VolumeChunk(chunk, 20);
+	}
+	
 	Mix_PlayChannel(channel, chunk, loops);
 }
 
@@ -70,4 +100,8 @@ void MusicManager::setMusicPause(bool pause) {
 
 bool MusicManager::getMusicIsPaused() {
 	return isMusicPaused;
+}
+
+void MusicManager::QuitSFX(int channel) {
+	Mix_HaltChannel(channel);
 }

@@ -18,6 +18,8 @@ GameState::GameState() {
 	paused = false;
 	wasPaused = false;
 	stopWaves = false;
+	isDarth = false;
+	boss = false;
 	showGoldParticles = false;
 
 	actions = 90;
@@ -788,9 +790,9 @@ void GameState::towersFire()
 				// Range of tower as tiles
 				if (abs(tx - px) <= t->getRange() && abs(ty - py) <= t->getRange()) {
 					float r = ((float)rand() / (RAND_MAX));
-					if (r<=0.3f) getMusicManager()->PlaySFX("mortar.wav", 0, 4);
-					else if(r <= 0.6) getMusicManager()->PlaySFX("mortar.wav", 0, 5);
-					else getMusicManager()->PlaySFX("mortar.wav", 0, 6);
+					if (r<=0.3f) getMusicManager()->PlaySFX("mortar.wav", 0, 0, 4);
+					else if(r <= 0.6) getMusicManager()->PlaySFX("mortar.wav", 0, 0, 5);
+					else getMusicManager()->PlaySFX("mortar.wav", 0, 0, 6);
 					shootCannonBall(t, p);
 					break;
 				}
@@ -829,7 +831,7 @@ void GameState::checkPiratesAtChest()
 				gameOver = true;
 			}else {
 				gold -= 10;
-				getMusicManager()->PlaySFX("coin_fall.wav", 0, 1);
+				getMusicManager()->PlaySFX("coin_fall.wav",3 ,0, 1);
 				// Check for gameover
 				if (gold == 0) {
 					// Game Over
@@ -1129,3 +1131,12 @@ void GameState::setBoss(bool boss) {
 bool GameState::getBoss() {
 	return boss;
 }
+
+void GameState::setDarth(bool darth) {
+	isDarth = darth;
+}
+
+bool GameState::getDarth() {
+	return isDarth;
+}
+

@@ -160,6 +160,9 @@ public:
 
 	MusicManager*								getMusicManager();
 
+	void										setDarth(bool darth);
+	bool										getDarth();
+
 private:
 
 	bool										gameOver;
@@ -167,6 +170,7 @@ private:
 	bool										wasPaused;
 	bool										stopWaves;
 	bool										showGoldParticles;
+	bool										isDarth;
 
 	unsigned int								actions;
 
