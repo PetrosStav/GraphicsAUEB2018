@@ -533,7 +533,7 @@ void Renderer::Update(float dt)
 		float dirX = deltaTargetX / distance;
 		float dirY = deltaTargetY / distance;
 		float dirZ = deltaTargetZ / distance;
-		
+
 		float x_new = x + dirX * cb->getSpeed() * 0.2 *dt*render_speed;
 		float y_new = y + dirY * cb->getSpeed() * 0.1 *dt*render_speed;
 		float z_new = z + dirZ * cb->getSpeed() * 0.2 *dt*render_speed;
