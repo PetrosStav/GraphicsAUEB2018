@@ -165,6 +165,9 @@ public:
 	void										setDarth(bool darth);
 	bool										getDarth();
 
+	void										setWasDarth(bool state);
+	bool										getWasDarth();
+
 private:
 
 	bool										gameOver;
@@ -173,6 +176,7 @@ private:
 	bool										stopWaves;
 	bool										showGoldParticles;
 	bool										isDarth;
+	bool										wasDarth;
 
 	unsigned int								actions;
 

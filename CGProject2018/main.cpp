@@ -150,6 +150,8 @@ int main(int argc, char *argv[])
 	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused, timeRender=0, prevTimeRender=0;
 
 	unsigned int img_toggle = 0;
+	unsigned int animL = 0;
+	unsigned int animLR = 0;
 
 	//unsigned int piratesInWave = 0;
 
@@ -481,6 +483,9 @@ int main(int argc, char *argv[])
 					// first halt the background music
 					game->getMusicManager()->QuitMusic();
 
+					// Reset animation int to 0
+					animL = 0;
+
 					if (r <= 0.01f) {
 						game->setBoss(true);
 						
@@ -613,13 +618,32 @@ int main(int argc, char *argv[])
 
 		// Test image rendering
 		if (game->getBoss() || game->getDarth()) {
+			if (game->getDarth()) {
+				// Lightsaber animation
+				animL++;
+				unsigned int animIdx = 0;
+				if (animL <= 3) animIdx = 1;
+				else if (animL <= 6) animIdx = 2;
+				else if(animL <= 9) animIdx = 3;
+				else if(animL <= 12) animIdx = 4;
+				else if(animL <= 15) animIdx = 5;
+				else if(animL <= 18) animIdx = 6;
+				else if(animL <= 21) animIdx = 7;
+				else if(animL <= 24) animIdx = 8;
+				else if(animL <= 27) animIdx = 9;
+				else {
+					animIdx = 10;
+					animL = 30;
+				}
+				renderer->RenderImage("../Data/Images/LightsaberAnim/sith_lightsaber"+std::to_string(animIdx)+".png", -50 + SCREEN_WIDTH / 4 + 145, 20, 1.5, 1.5, false);
+			}
 			if (img_toggle <= 30) {
-				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
-				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
+				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);
 			}
 			else if(img_toggle <= 60) {
-				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
-				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + 3 * SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
+				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);
 			}
 			else {
 				img_toggle = -1;
@@ -627,8 +651,28 @@ int main(int argc, char *argv[])
 			img_toggle += 1;
 		}
 		else {
-			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 50, 1.5, 1.5, false);
-			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 50, 1.5, 1.5, true);
+			if (game->getWasDarth()) {
+				// Lightsaber animation
+				animLR++;
+				unsigned int animIdx = 0;
+				if (animLR <= 3) animIdx = 10;
+				else if (animLR <= 6) animIdx = 9;
+				else if (animLR <= 9) animIdx = 8;
+				else if (animLR <= 12) animIdx = 7;
+				else if (animLR <= 15) animIdx = 6;
+				else if (animLR <= 18) animIdx = 5;
+				else if (animLR <= 21) animIdx = 4;
+				else if (animLR <= 24) animIdx = 3;
+				else if (animLR <= 27) animIdx = 2;
+				else {
+					animIdx = 1;
+					animLR = 0;
+					game->setWasDarth(false);
+				}
+				renderer->RenderImage("../Data/Images/LightsaberAnim/sith_lightsaber" + std::to_string(animIdx) + ".png", -50 + SCREEN_WIDTH / 4 + 145, 20, 1.5, 1.5, false);
+			}
+			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
+			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);
 		}
 
 		// test image no alpha

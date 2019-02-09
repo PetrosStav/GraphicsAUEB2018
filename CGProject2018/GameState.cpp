@@ -19,6 +19,7 @@ GameState::GameState() {
 	wasPaused = false;
 	stopWaves = false;
 	isDarth = false;
+	wasDarth = false;
 	boss = false;
 	showGoldParticles = false;
 
@@ -1156,5 +1157,15 @@ void GameState::setDarth(bool darth) {
 
 bool GameState::getDarth() {
 	return isDarth;
+}
+
+void GameState::setWasDarth(bool state)
+{
+	wasDarth = state;
+}
+
+bool GameState::getWasDarth()
+{
+	return wasDarth;
 }
 

@@ -589,6 +589,7 @@ void Renderer::Update(float dt)
 				if (targetPirate->getHealthPoints() <= 0) {
 					if (targetPirate->getType() == 4) {
 						game->getMusicManager()->PlaySFX("saber_off.wav", 4, 0, 7);
+						game->setWasDarth(true);
 					}
 					game->getMusicManager()->PlaySFX("skeleton_death.wav", 3, 0, 3);
 					targetPirate->setDead(true);
