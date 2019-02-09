@@ -114,6 +114,7 @@ ParticleEmitter::ParticleEmitter()
 {
 	center = glm::vec3(23.2, 1, -2.2);
 	treasureChest = true;
+	fireCannon = false;
 	m_continous_time = 0.0;
 	m_vbo = 0;
 	m_vao = 0;
@@ -184,7 +185,10 @@ void ParticleEmitter::Update(float dt)
 			if (treasureChest) {
 				m_particles_position[i] = 1.5f * glm::vec3(sin(pos), 0, 0) + center;
 			}
-			else {
+			else if (fireCannon) {
+				float pos = i / 5.f * 3.14159f;
+				m_particles_position[i] = 0.2f * glm::vec3(sin(pos), cos(pos), 0) + center;
+			}else{
 				float pos = i / 5.f * 3.14159f;
 				m_particles_position[i] = 0.5f * glm::vec3(sin(pos), 0, cos(pos)) + center;
 			}
@@ -234,4 +238,14 @@ bool ParticleEmitter::isTreasureChest()
 void ParticleEmitter::setTreasureChest(bool state)
 {
 	treasureChest = state;
+}
+
+bool ParticleEmitter::isFireCannon()
+{
+	return fireCannon;
+}
+
+void ParticleEmitter::setFireCannon(bool state)
+{
+	fireCannon = state;
 }

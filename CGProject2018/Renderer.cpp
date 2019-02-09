@@ -25,6 +25,9 @@ Renderer::Renderer()
 		m_geometric_object2[i] = nullptr;
 	}
 
+	m_geometric_object2_transformation_matrix = new glm::mat4[29];
+	m_geometric_object2_transformation_normal_matrix = new glm::mat4[29];
+
 	// Treasure Chest
 	//m_geometric_object3 = nullptr;
 
@@ -87,6 +90,9 @@ Renderer::~Renderer()
 	}
 
 	delete m_geometric_object2;
+
+	delete 	m_geometric_object2_transformation_matrix;
+	delete m_geometric_object2_transformation_normal_matrix;
 
 	//delete m_geometric_object3;
 
@@ -259,8 +265,8 @@ void Renderer::Update(float dt)
 	m_geometric_object1_transformation_matrix = glm::translate(glm::mat4(1.f), glm::vec3(18, 0, 18))*glm::scale(glm::mat4(1.f), glm::vec3(20.0f));
 	m_geometric_object1_transformation_normal_matrix = glm::mat4(glm::transpose(glm::inverse(glm::mat3(m_geometric_object1_transformation_matrix))));
 
-	m_geometric_object2_transformation_matrix = new glm::mat4[29];
-	m_geometric_object2_transformation_normal_matrix = new glm::mat4[29];
+	//m_geometric_object2_transformation_matrix = new glm::mat4[29];
+	//m_geometric_object2_transformation_normal_matrix = new glm::mat4[29];
 
 	for (int i = 0; i < 29; i++) {
 
@@ -759,6 +765,7 @@ bool Renderer::InitRenderingTechniques()
 	m_particle_rendering_program.LoadUniform("uniform_view_matrix");
 	m_particle_rendering_program.LoadUniform("uniform_projection_matrix");
 	m_particle_rendering_program.LoadUniform("uniform_color");
+	m_particle_rendering_program.LoadUniform("uniform_type");
 
 	return initialized;
 }
@@ -1422,6 +1429,7 @@ void Renderer::RenderGeometry()
 		// specify particle color
 		glm::vec3 particle_color = glm::vec3(1, 0.8745, 0);
 		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
+		glUniform1f(m_particle_rendering_program["uniform_type"], 0);
 		m_particle_emitter.Render();
 		m_particle_rendering_program.Unbind();
 
@@ -1440,6 +1448,7 @@ void Renderer::RenderGeometry()
 			particle_color = glm::vec3(0.2, 1.f, 0.2f);
 		}
 		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
+		glUniform1f(m_particle_rendering_program["uniform_type"], 1);
 		p->getParticleEmmiter()->Render();
 		m_particle_rendering_program.Unbind();
 	}
@@ -1454,6 +1463,7 @@ void Renderer::RenderGeometry()
 		// specify particle color
 		glm::vec3 particle_color = glm::vec3(0.2, 1.f, 0.2f);
 		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
+		glUniform1f(m_particle_rendering_program["uniform_type"], 2);
 		cb->getParticleEmmiter()->Render();
 		m_particle_rendering_program.Unbind();
 	}

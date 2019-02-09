@@ -21,6 +21,7 @@ CannonBall::CannonBall() {
 	this->m_particle_emitter = new ParticleEmitter();
 	this->m_particle_emitter->Init();
 	this->m_particle_emitter->setTreasureChest(false);
+	this->m_particle_emitter->setFireCannon(true);
 
 }
 

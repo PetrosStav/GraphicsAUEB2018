@@ -41,6 +41,7 @@ protected:
 	float m_continous_time;
 
 	bool treasureChest;
+	bool fireCannon;
 
 
 public:
@@ -55,6 +56,9 @@ public:
 
 	bool										isTreasureChest();
 	void										setTreasureChest(bool state);
+
+	bool										isFireCannon();
+	void										setFireCannon(bool state);
 
 };
 
