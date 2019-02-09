@@ -73,6 +73,12 @@ public:
 	bool isGoo();
 	void setGoo(bool state);
 
+	bool isDummy();
+	void setDummy(bool state);
+
+	int getDummyRefs();
+	void setDummyRefs(int i);
+
 	void setDeadCycle(int i);
 	int getDeadCycle();
 
@@ -156,6 +162,8 @@ private:
 	int health_points;
 	bool dead;
 	bool goo;
+	bool dummy;
+	int dummy_refs;
 	int dead_cycle;
 
 	float speed;

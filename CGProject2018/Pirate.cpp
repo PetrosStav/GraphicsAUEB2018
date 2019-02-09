@@ -11,6 +11,8 @@ Pirate::Pirate(){
 	this->health_points = 100;
 	this->dead = false;
 	this->goo = false;
+	this->dummy = false;
+	this->dummy_refs = 0;
 	this->dead_cycle = 0;
 	this->size = 1.f;
 	// speed after 2 starts doing funny stuff
@@ -241,6 +243,26 @@ bool Pirate::isGoo()
 void Pirate::setGoo(bool state)
 {
 	goo = state;
+}
+
+bool Pirate::isDummy()
+{
+	return dummy;
+}
+
+void Pirate::setDummy(bool state)
+{
+	dummy = state;
+}
+
+int Pirate::getDummyRefs()
+{
+	return dummy_refs;
+}
+
+void Pirate::setDummyRefs(int i)
+{
+	dummy_refs = i;
 }
 
 void Pirate::setDeadCycle(int i)

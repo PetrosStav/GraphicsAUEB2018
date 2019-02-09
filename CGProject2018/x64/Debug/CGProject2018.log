@@ -1,31 +1,31 @@
 ﻿  Renderer.cpp
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(359): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(360): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(374): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(537): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(361): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(375): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(538): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(539): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1646): warning C4838: conversion from 'int' to 'GLfloat' requires a narrowing conversion
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1642): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1643): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1644): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1645): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1718): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(540): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1683): warning C4838: conversion from 'int' to 'GLfloat' requires a narrowing conversion
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1679): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1680): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1681): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1682): warning C4244: 'initializing': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1755): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1722): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1759): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1727): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1764): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1731): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+c:\users\petro\source\repos\graphicsaueb2018\graphicsaueb2018\cgproject2018\renderer.cpp(1768): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float

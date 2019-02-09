@@ -338,6 +338,7 @@ void Renderer::Update(float dt)
 			p->getParticleEmmiter()->Update(dt);
 			continue;
 		}
+		else if (p->isDummy()) continue;
 		x = p->getX();
 		y = p->getY();
 
@@ -559,32 +560,60 @@ void Renderer::Update(float dt)
 
 
 		if (targetPirate!=nullptr && !targetPirate->isDead() && cb->getBoundingSphere()->isSphereIntersecting(targetPirate->getBoundingSphere())) {
-			//std::cout << "BAM" << std::endl;
-			targetPirate->setHealthPoints(targetPirate->getHealthPoints() - cb->getDamage());
-			//printf("TargetPirate: %d\n", targetPirate->getHealthPoints());
-			if (targetPirate->getHealthPoints() <= 0) {
-				if (targetPirate->getType() == 4) {
-					game->getMusicManager()->PlaySFX("saber_off.wav", 4, 0, 7);
-				}
-				game->getMusicManager()->PlaySFX("skeleton_death.wav", 3, 0, 3);
-				targetPirate->setDead(true);
-				targetPirate->setDeadCycle(1);
-				if (cb->isFireBall()) targetPirate->setGoo(true);
-				std::cout << "Pirate died!" << std::endl;
-				game->resetPirateSpeeds();
-
-				if(targetPirate->getType()==3 || targetPirate->getType() == 4) game->setStopWaves(false);
-				//game->deletePirate(targetPirate);
-
-				// increase score
-				game->setScore(game->getScore() + 1);
-
-				for (CannonBall* cb2 : game->getCannonBalls()) {
-					if (cb2->getTargetPirate() == targetPirate) {
-						cb2->setTargetPirate(nullptr);
+			if (targetPirate->isDummy()) {
+				if (targetPirate->getDummyRefs() <= 2) {
+					// delete pirate
+					game->deletePirate(targetPirate);
+					//printf("Deleted Dummy Pirate!\n");
+					/*int c = 0;
+					for (Pirate* p : game->getPirates()) {
+						if (p->isDummy()) c++;
 					}
+					printf("Dummy pirates: %d", c);*/
 				}
+				else {
+					targetPirate->setDummyRefs(targetPirate->getDummyRefs() - 1);
+				}
+				cb->setTargetPirate(nullptr);
+			}
+			else {
+				//std::cout << "BAM" << std::endl;
+				targetPirate->setHealthPoints(targetPirate->getHealthPoints() - cb->getDamage());
+				//printf("TargetPirate: %d\n", targetPirate->getHealthPoints());
+				if (targetPirate->getHealthPoints() <= 0) {
+					if (targetPirate->getType() == 4) {
+						game->getMusicManager()->PlaySFX("saber_off.wav", 4, 0, 7);
+					}
+					game->getMusicManager()->PlaySFX("skeleton_death.wav", 3, 0, 3);
+					targetPirate->setDead(true);
+					targetPirate->setDeadCycle(1);
+					if (cb->isFireBall()) targetPirate->setGoo(true);
+					std::cout << "Pirate died!" << std::endl;
+					game->resetPirateSpeeds();
 
+					if (targetPirate->getType() == 3 || targetPirate->getType() == 4) game->setStopWaves(false);
+					//game->deletePirate(targetPirate);
+
+					// increase score
+					game->setScore(game->getScore() + 1);
+
+					// Create a dummy Pirate at that location
+
+					Pirate* dummy = new Pirate();
+					dummy->setDummy(true);
+					dummy->setX(targetPirate->getX());
+					dummy->setY(targetPirate->getY());
+					dummy->getBoundingSphere()->setY(-0.3f);
+					game->getPirates().push_back(dummy);
+					for (CannonBall* cb2 : game->getCannonBalls()) {
+						if (cb2->getTargetPirate() == targetPirate) {
+							cb2->setTargetPirate(dummy);
+							dummy->setDummyRefs(dummy->getDummyRefs() + 1);
+						}
+					}
+					//printf("Dummy: %d\n", dummy->getDummyRefs());
+
+				}
 			}
 			game->deleteHitCannonBall(cb);
 			//cb->setHitTarget(true);
@@ -1030,7 +1059,7 @@ bool Renderer::InitGeometricMeshes()
 	else
 		initialized = false;
 
-	mesh = loader.load("../Data/PirateHeavy/vader_body_thicker.obj");
+	mesh = loader.load("../Data/PirateHeavy/vader_body_thicker_verylowpol.obj");
 	if (mesh != nullptr) {
 		game->setDarthVaderBody(mesh);
 	}
@@ -1201,11 +1230,12 @@ void Renderer::RenderShadowMaps()
 		//DrawGeometryNodeToShadowMap(m_geometric_object8, m_geometric_object8_transformation_matrix, m_geometric_object8_transformation_normal_matrix);
 
 		//// draw the 9th object
+		//// draw the 9th object
 		//DrawGeometryNodeToShadowMap(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
 
 		for (Pirate* p : game->getPirates()) {
 
-			if (p->isDead()) continue;
+			if (p->isDead() || p->isDummy()) continue;
 
 			// body
 			DrawGeometryNodeToShadowMap(p->getBody(), p->getBodyTM(), p->getBodyTNM());
@@ -1325,7 +1355,7 @@ void Renderer::RenderGeometry()
 	//DrawGeometryNode(m_geometric_object9, m_geometric_object9_transformation_matrix, m_geometric_object9_transformation_normal_matrix);
 
 	for (Pirate* p : game->getPirates()) {
-		if (p->isDead()) continue;
+		if (p->isDead() || p->isDummy()) continue;
 		// body
 		DrawGeometryNode(p->getBody(), p->getBodyTM(), p->getBodyTNM());
 
