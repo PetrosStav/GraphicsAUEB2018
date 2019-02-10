@@ -11,6 +11,7 @@ GameState::GameState() {
 	createdTowers = std::vector<Tower*>();
 	pirates = std::vector<Pirate*>();
 	cannonballs = std::vector<CannonBall*>();
+	deathNote = std::vector<Pirate*>();
 	treasureChest = new TreasureChest();
 	musicManager = MusicManager::Instance();
 
@@ -20,10 +21,14 @@ GameState::GameState() {
 	stopWaves = false;
 	isDarth = false;
 	wasDarth = false;
+	heilMary = false;
+
+	deathIdx = 0;
+
 	boss = false;
 	showGoldParticles = false;
 
-	actions = 90;
+	actions = 9;
 
 	// Testing
 
@@ -257,26 +262,26 @@ unsigned int GameState::getActions()
 	return actions;
 }
 
-bool GameState::addTower(float x, float y)
-{
-	if (availableTowers.size() != 0) {
-		getRealPos(x, y);
-		// Check that no other towers are in this spot
-		for (Tower* t : createdTowers) {
-			if (t->getX() == x && t->getY() == y) {
-				// TODO
-				// If we found then [MESSAGE] OR [ANOTHER TILE COLOR] + return
-				return false;
-			}
-		}
-		availableTowers.back()->setX(x);
-		availableTowers.back()->setY(y);
-		createdTowers.push_back(availableTowers.back());
-		availableTowers.pop_back();
-		return true;
-	}
-	return false;
-}
+//bool GameState::addTower(float x, float y)
+//{
+//	if (availableTowers.size() != 0) {
+//		getRealPos(x, y);
+//		// Check that no other towers are in this spot
+//		for (Tower* t : createdTowers) {
+//			if (t->getX() == x && t->getY() == y) {
+//				// TODO
+//				// If we found then [MESSAGE] OR [ANOTHER TILE COLOR] + return
+//				return false;
+//			}
+//		}
+//		availableTowers.back()->setX(x);
+//		availableTowers.back()->setY(y);
+//		createdTowers.push_back(availableTowers.back());
+//		availableTowers.pop_back();
+//		return true;
+//	}
+//	return false;
+//}
 
 bool GameState::addTower()
 {
@@ -301,22 +306,22 @@ bool GameState::addTower()
 	return false;
 }
 
-void GameState::removeTower(float x, float y)
-{
-	if (createdTowers.size() != 0) {
-		getRealPos(x, y);
-		unsigned short i = 0;
-		for (Tower* t : createdTowers) {
-			if (t->getX() == x && t->getY() == y) {
-				Tower* erased = createdTowers[i];
-				createdTowers.erase(createdTowers.begin() + i);
-				delete erased;
-				printf("Removed Tower at Pos %f,%f \n", x, y);
-			}
-			i++;
-		}
-	}
-}
+//void GameState::removeTower(float x, float y)
+//{
+//	if (createdTowers.size() != 0) {
+//		getRealPos(x, y);
+//		unsigned short i = 0;
+//		for (Tower* t : createdTowers) {
+//			if (t->getX() == x && t->getY() == y) {
+//				Tower* erased = createdTowers[i];
+//				createdTowers.erase(createdTowers.begin() + i);
+//				delete erased;
+//				printf("Removed Tower at Pos %f,%f \n", x, y);
+//			}
+//			i++;
+//		}
+//	}
+//}
 
 void GameState::removeTower()
 {
@@ -337,24 +342,24 @@ void GameState::removeTower()
 	}
 }
 
-bool GameState::rearrangeTower(float x, float y)
-{
-	if (createdTowers.size() != 0) {
-		getRealPos(x, y);
-		unsigned short i = 0;
-		for (Tower* t : createdTowers) {
-			if (t->getX() == x && t->getY() == y) {
-				Tower* erased = createdTowers[i];
-				createdTowers.erase(createdTowers.begin() + i);
-				availableTowers.push_back(erased);
-				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
-				return true;
-			}
-			i++;
-		}
-	}
-	return false;
-}
+//bool GameState::rearrangeTower(float x, float y)
+//{
+//	if (createdTowers.size() != 0) {
+//		getRealPos(x, y);
+//		unsigned short i = 0;
+//		for (Tower* t : createdTowers) {
+//			if (t->getX() == x && t->getY() == y) {
+//				Tower* erased = createdTowers[i];
+//				createdTowers.erase(createdTowers.begin() + i);
+//				availableTowers.push_back(erased);
+//				printf("Moved Tower from Pos %f,%f to available Towers \n", x, y);
+//				return true;
+//			}
+//			i++;
+//		}
+//	}
+//	return false;
+//}
 
 bool GameState::rearrangeTower()
 {
@@ -377,28 +382,28 @@ bool GameState::rearrangeTower()
 	return false;
 }
 
-bool GameState::upgradeTower(float x, float y)
-{
-	if (createdTowers.size() != 0) {
-		getRealPos(x, y);
-		unsigned short i = 0;
-		for (Tower* t : createdTowers) {
-			if (t->getX() == x && t->getY() == y) {
-				Tower* selected = createdTowers[i];
-				int level = selected->getLevel();
-				if (level < 3) {
-					selected->setLevel(level + 1);
-					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level+1);
-					return true;
-				}
-			}
-			i++;
-		}
-	}
-	return false;
-}
+//bool GameState::upgradeTower(float x, float y)
+//{
+//	if (createdTowers.size() != 0) {
+//		getRealPos(x, y);
+//		unsigned short i = 0;
+//		for (Tower* t : createdTowers) {
+//			if (t->getX() == x && t->getY() == y) {
+//				Tower* selected = createdTowers[i];
+//				int level = selected->getLevel();
+//				if (level < 3) {
+//					selected->setLevel(level + 1);
+//					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level+1);
+//					return true;
+//				}
+//			}
+//			i++;
+//		}
+//	}
+//	return false;
+//}
 
-bool GameState::upgradeTower()
+int GameState::upgradeTower(unsigned int actions)
 {
 	if (createdTowers.size() != 0) {
 		float x = (float)tileX;
@@ -410,30 +415,33 @@ bool GameState::upgradeTower()
 				Tower* selected = createdTowers[i];
 				int level = selected->getLevel();
 				if (level < 3) {
+					if (level == 2 && actions < 6) return 0;
 					level += 1;
 					selected->setLevel(level);
 					if (level == 2) {
 						selected->setFireRate(800);
-						selected->setDamage(10);
+						selected->setDamage(15);
 						selected->setRange(3);
 						selected->setTower(new GeometryNode());
 						selected->getTower()->Init(towerLevelTwoMesh);
+						printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level);
+						return 1;
 					}
 					else {
-						selected->setFireRate(700);
+						selected->setFireRate(650);
 						selected->setDamage(15);
 						selected->setRange(3);
 						selected->setTower(new GeometryNode());
 						selected->getTower()->Init(towerLevelThreeMesh);
-					}
-					printf("Upgraded Tower from Pos %f,%f to level %d \n", x, y, level);
-					return true;
+						return 2;
+					}	
+				
 				}
 			}
 			i++;
 		}
 	}
-	return false;
+	return -1;
 }
 
 void GameState::getRealPos(float & x, float & y)
@@ -520,46 +528,46 @@ void GameState::setPirateRFootMesh(GeometricMesh * mesh)
 	this->pirateRFootMesh = mesh;
 }
 
-void GameState::assignMeshtoPirates()
-{
-	for (Pirate* p : pirates) {
-
-		int type = p->getType();
-
-		p->setBody(new GeometryNode());
-
-		if(type == 1)
-			p->getBody()->Init(pirateBodyMesh);
-		else if(type == 0)
-			p->getBody()->Init(pirateFastBodyMesh);
-		else if(type == 2 || type == 3)
-			p->getBody()->Init(pirateHeavyBodyMesh);
-
-		p->setSword(new GeometryNode());
-		if (type == 1)
-			p->getBody()->Init(pirateSwordMesh);
-		else if (type == 0)
-			p->getBody()->Init(pirateFastSwordMesh);
-		else if (type == 2 || type == 3)
-			p->getBody()->Init(pirateHeavySwordMesh);
-
-		p->setLeftFoot(new GeometryNode());
-		if (type == 1)
-			p->getBody()->Init(pirateLFootMesh);
-		else if (type == 0)
-			p->getBody()->Init(pirateFastLFootMesh);
-		else if (type == 2 || type == 3)
-			p->getBody()->Init(pirateHeavyLFootMesh);
-
-		p->setRightFoot(new GeometryNode());
-		if (type == 1)
-			p->getBody()->Init(pirateRFootMesh);
-		else if (type == 0)
-			p->getBody()->Init(pirateFastRFootMesh);
-		else if (type == 2 || type == 3)
-			p->getBody()->Init(pirateHeavyRFootMesh);
-	}
-}
+//void GameState::assignMeshtoPirates()
+//{
+//	for (Pirate* p : pirates) {
+//
+//		int type = p->getType();
+//
+//		p->setBody(new GeometryNode());
+//
+//		if(type == 1)
+//			p->getBody()->Init(pirateBodyMesh);
+//		else if(type == 0)
+//			p->getBody()->Init(pirateFastBodyMesh);
+//		else if(type == 2 || type == 3)
+//			p->getBody()->Init(pirateHeavyBodyMesh);
+//
+//		p->setSword(new GeometryNode());
+//		if (type == 1)
+//			p->getBody()->Init(pirateSwordMesh);
+//		else if (type == 0)
+//			p->getBody()->Init(pirateFastSwordMesh);
+//		else if (type == 2 || type == 3)
+//			p->getBody()->Init(pirateHeavySwordMesh);
+//
+//		p->setLeftFoot(new GeometryNode());
+//		if (type == 1)
+//			p->getBody()->Init(pirateLFootMesh);
+//		else if (type == 0)
+//			p->getBody()->Init(pirateFastLFootMesh);
+//		else if (type == 2 || type == 3)
+//			p->getBody()->Init(pirateHeavyLFootMesh);
+//
+//		p->setRightFoot(new GeometryNode());
+//		if (type == 1)
+//			p->getBody()->Init(pirateRFootMesh);
+//		else if (type == 0)
+//			p->getBody()->Init(pirateFastRFootMesh);
+//		else if (type == 2 || type == 3)
+//			p->getBody()->Init(pirateHeavyRFootMesh);
+//	}
+//}
 
 void GameState::setPirateFastBodyMesh(GeometricMesh * mesh)
 {
@@ -715,7 +723,7 @@ void GameState::shootCannonBall(Tower * tower, Pirate * pirate)
 	if (tower->getLevel()==3) {
 
 		float r = (float)rand() / RAND_MAX;
-		if (r <= 0.5f) {
+		if (r <= 0.25f) {
 			cannonball->setSpeed(0.5f);
 			cannonball->setDamage(tower->getDamage() * 2);
 			cannonball->setFireBall(true);
@@ -775,16 +783,16 @@ void GameState::deleteHitCannonBall(CannonBall * cannonball)
 	}*/
 }
 
-void GameState::deleteHitCannonBalls()
-{
-	unsigned int i = 0;
-	for (CannonBall* cb : cannonballs) {
-		if (cb->hasHitTarget()) {
-			cannonballs.erase(cannonballs.begin() + i);
-		}
-		i += 1;
-	}
-}
+//void GameState::deleteHitCannonBalls()
+//{
+//	unsigned int i = 0;
+//	for (CannonBall* cb : cannonballs) {
+//		if (cb->hasHitTarget()) {
+//			cannonballs.erase(cannonballs.begin() + i);
+//		}
+//		i += 1;
+//	}
+//}
 
 void GameState::towersFire()
 {
@@ -817,6 +825,47 @@ void GameState::towersFire()
 			t->setState((state + 1) % (t->getFireRate() / 100 + 1));
 		}
 	}
+}
+
+void GameState::sendNukes()
+{
+	heilMary = true;
+	deathNote = std::vector<Pirate*>();
+	for (Pirate* p : pirates) {
+		deathNote.push_back(p);
+	}
+	deathIdx = deathNote.size() - 1;
+}
+
+void GameState::sendNextNuke(int idx)
+{
+	if (idx < 0) {
+		heilMary = false;
+		deathIdx = 0;
+		return;
+	}
+	Pirate* p = deathNote[idx];
+	deathIdx--;
+	if (p->isDead() || p->isDummy()) {
+		return;
+	}
+	float r = ((float)rand() / (RAND_MAX));
+	if (r <= 0.3f) getMusicManager()->PlaySFX("mortar.wav", 0, 0, 4);
+	else if (r <= 0.6) getMusicManager()->PlaySFX("mortar.wav", 0, 0, 5);
+	else getMusicManager()->PlaySFX("mortar.wav", 0, 0, 6);
+	CannonBall* cb = new CannonBall();
+	cb->setX(18);
+	cb->setY(20);
+	cb->setZ(18);
+	cb->setCannonBall(new GeometryNode());
+	cb->getCannonBall()->Init(cannonballMesh);
+	cb->setTargetPirate(p);
+	cb->setSpeed(0.5f);
+	cb->setDamage(500+pirateWave*10);
+	cb->setFireBall(true);
+
+	cannonballs.push_back(cb);
+
 }
 
 void GameState::deletePirate(Pirate* pirate)
@@ -862,7 +911,7 @@ void GameState::checkDeadPirates()
 	for (Pirate* p : pirates) {
 		if (p->isDead()) {
 			int cycle = p->getDeadCycle();
-			if (cycle <= 0) {
+			if (cycle == 0) {
 				deletePirate(p);
 			}
 			else {
@@ -873,18 +922,18 @@ void GameState::checkDeadPirates()
 	if (pirates.empty()) musicManager->QuitSFX(0);
 }
 
-void GameState::deleteToRemoveLists()
-{
-	for (Pirate* p : toRemPirates) {
-		toRemPirates.erase(std::remove(toRemPirates.begin(), toRemPirates.end(), p), toRemPirates.end());
-		delete p;
-	}
-
-	for (CannonBall* c : toRemCannonBalls) {
-		toRemCannonBalls.erase(std::remove(toRemCannonBalls.begin(), toRemCannonBalls.end(), c), toRemCannonBalls.end());
-		delete c;
-	}
-}
+//void GameState::deleteToRemoveLists()
+//{
+//	for (Pirate* p : toRemPirates) {
+//		toRemPirates.erase(std::remove(toRemPirates.begin(), toRemPirates.end(), p), toRemPirates.end());
+//		delete p;
+//	}
+//
+//	for (CannonBall* c : toRemCannonBalls) {
+//		toRemCannonBalls.erase(std::remove(toRemCannonBalls.begin(), toRemCannonBalls.end(), c), toRemCannonBalls.end());
+//		delete c;
+//	}
+//}
 
 void GameState::checkCollidingPirates()
 {
@@ -899,49 +948,49 @@ void GameState::checkCollidingPirates()
 
 				if (p->getSpeed() > p2->getSpeed()) {
 
-					switch (p->getDir()) {
-					case 0:
-						// Up
-						if(p->getY() < p2->getY()) p->setSpeed(p2->getSpeed());
-						break;
-					case 1:
-						// Down
-						if (p->getY() > p2->getY()) p->setSpeed(p2->getSpeed());
-						break;
-					case 2:
-						// Left
-						if (p->getX() < p2->getX()) p->setSpeed(p2->getSpeed());
-						break;
-					case 3:
-						// Right
-						if (p->getX() > p2->getX()) p->setSpeed(p2->getSpeed());
-						break;
+					//switch (p->getDir()) {
+					//case 0:
+					//	// Up
+					//	if(p->getY() < p2->getY()) p->setSpeed(p2->getSpeed());
+					//	break;
+					//case 1:
+					//	// Down
+					//	if (p->getY() > p2->getY()) p->setSpeed(p2->getSpeed());
+					//	break;
+					//case 2:
+					//	// Left
+					//	if (p->getX() < p2->getX()) p->setSpeed(p2->getSpeed());
+					//	break;
+					//case 3:
+					//	// Right
+					//	if (p->getX() > p2->getX()) p->setSpeed(p2->getSpeed());
+					//	break;
 
-					}
-					//p->setSpeed(p2->getSpeed());
+					//}
+					p->setSpeed(p2->getSpeed());
 				}
 				else if (p2->getSpeed() > p->getSpeed()) {
 
-					switch (p2->getDir()) {
-					case 0:
-						// Up
-						if (p2->getY() < p->getY()) p2->setSpeed(p->getSpeed());
-						break;
-					case 1:
-						// Down
-						if (p2->getY() > p->getY()) p2->setSpeed(p->getSpeed());
-						break;
-					case 2:
-						// Left
-						if (p2->getX() < p->getX()) p2->setSpeed(p->getSpeed());
-						break;
-					case 3:
-						// Right
-						if (p2->getX() > p->getX()) p2->setSpeed(p->getSpeed());
-						break;
+					//switch (p2->getDir()) {
+					//case 0:
+					//	// Up
+					//	if (p2->getY() < p->getY()) p2->setSpeed(p->getSpeed());
+					//	break;
+					//case 1:
+					//	// Down
+					//	if (p2->getY() > p->getY()) p2->setSpeed(p->getSpeed());
+					//	break;
+					//case 2:
+					//	// Left
+					//	if (p2->getX() < p->getX()) p2->setSpeed(p->getSpeed());
+					//	break;
+					//case 3:
+					//	// Right
+					//	if (p2->getX() > p->getX()) p2->setSpeed(p->getSpeed());
+					//	break;
 
-					}
-					//p2->setSpeed(p->getSpeed());
+					//}
+					p2->setSpeed(p->getSpeed());
 				}
 
 				//switch (p->getDir()) {
@@ -1088,6 +1137,7 @@ void GameState::setCannonballMesh(GeometricMesh * mesh)
 	cannonballMesh = mesh;
 }
 
+
 void GameState::setTreasureChestMesh(GeometricMesh * mesh)
 {
 	this->treasureChestMesh = mesh;
@@ -1167,5 +1217,25 @@ void GameState::setWasDarth(bool state)
 bool GameState::getWasDarth()
 {
 	return wasDarth;
+}
+
+void GameState::setHeilMary(bool state)
+{
+	heilMary = state;
+}
+
+bool GameState::getHeilMary()
+{
+	return heilMary;
+}
+
+void GameState::setDeathIdx(int idx)
+{
+	deathIdx = idx;
+}
+
+int GameState::getDeathIdx()
+{
+	return deathIdx;
 }
 

@@ -598,7 +598,10 @@ void Renderer::Update(float dt)
 					std::cout << "Pirate died!" << std::endl;
 					game->resetPirateSpeeds();
 
-					if (targetPirate->getType() == 3 || targetPirate->getType() == 4) game->setStopWaves(false);
+					if (targetPirate->getType() == 3 || targetPirate->getType() == 4) {
+						game->setStopWaves(false);
+						game->setGold(game->getGold() + 20 + game->getPirateWave());
+					}
 					//game->deletePirate(targetPirate);
 
 					// increase score
@@ -1444,12 +1447,15 @@ void Renderer::RenderGeometry()
 		glUniformMatrix4fv(m_particle_rendering_program["uniform_projection_matrix"], 1, GL_FALSE, glm::value_ptr(m_projection_matrix));
 		glUniformMatrix4fv(m_particle_rendering_program["uniform_view_matrix"], 1, GL_FALSE, glm::value_ptr(m_view_matrix));
 		// specify particle color
-		glm::vec3 particle_color = glm::vec3(1, 0.2f, 0.2f);
+		glm::vec3 particle_color = glm::vec3(1.f, 0.2f, 0.2f);
 		if (p->isGoo()) {
-			particle_color = glm::vec3(0.2, 1.f, 0.2f);
+			particle_color = glm::vec3(0.2f, 1.f, 0.2f);
+			glUniform1f(m_particle_rendering_program["uniform_type"], 3);
+		}
+		else {
+			glUniform1f(m_particle_rendering_program["uniform_type"], 1);
 		}
 		glUniform3f(m_particle_rendering_program["uniform_color"], particle_color.r, particle_color.g, particle_color.b);
-		glUniform1f(m_particle_rendering_program["uniform_type"], 1);
 		p->getParticleEmmiter()->Render();
 		m_particle_rendering_program.Unbind();
 	}

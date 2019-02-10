@@ -58,17 +58,17 @@ public:
 	unsigned int getActions();
 
 	// Tower functions
-	bool										addTower(float x, float y);
+	//bool										addTower(float x, float y);
 	bool										addTower();
 
-	void										removeTower(float x, float y);
+	//void										removeTower(float x, float y);
 	void										removeTower();
 
-	bool										rearrangeTower(float x, float y);
+	//bool										rearrangeTower(float x, float y);
 	bool										rearrangeTower();
 
-	bool										upgradeTower(float x, float y);
-	bool										upgradeTower();
+	//bool										upgradeTower(float x, float y);
+	int											upgradeTower(unsigned int actions);
 
 	// Grid functions
 	void										getRealPos(float& x, float& y);
@@ -94,7 +94,7 @@ public:
 	void										setPirateSwordMesh(GeometricMesh* mesh);
 	void										setPirateLFootMesh(GeometricMesh* mesh);
 	void										setPirateRFootMesh(GeometricMesh* mesh);
-	void										assignMeshtoPirates();
+	//void										assignMeshtoPirates();
 
 	void										setPirateFastBodyMesh(GeometricMesh* mesh);
 	void										setPirateFastSwordMesh(GeometricMesh* mesh);
@@ -139,9 +139,12 @@ public:
 	// 
 
 	void										deleteHitCannonBall(CannonBall* cannonball);
-	void										deleteHitCannonBalls();
+	//void										deleteHitCannonBalls();
 
 	void										towersFire();
+
+	void										sendNukes();
+	void										sendNextNuke(int idx);
 
 	void										deletePirate(Pirate* pirate);
 
@@ -149,7 +152,7 @@ public:
 
 	void										checkDeadPirates();
 
-	void										deleteToRemoveLists();
+	//void										deleteToRemoveLists();
 
 	void										checkCollidingPirates();
 	void										resetPirateSpeeds();
@@ -168,6 +171,12 @@ public:
 	void										setWasDarth(bool state);
 	bool										getWasDarth();
 
+	void										setHeilMary(bool state);
+	bool										getHeilMary();
+
+	void										setDeathIdx(int idx);
+	int											getDeathIdx();
+
 private:
 
 	bool										gameOver;
@@ -177,6 +186,11 @@ private:
 	bool										showGoldParticles;
 	bool										isDarth;
 	bool										wasDarth;
+	bool										heilMary;
+
+	std::vector<Pirate*>						deathNote;
+
+	int										deathIdx;
 
 	unsigned int								actions;
 

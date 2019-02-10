@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 	//renderer->TileSetPos(tileX, tileY);
 
 	// Timers for timed events
-	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0 ,currentTime, timePaused, timeRender=0, prevTimeRender=0;
+	unsigned int lastTimeT1 = 0, lastTimeT2 = 0, lastTimeT3 = 0, lastTimeT4 = 0, lastTimeT5 = 0, lastTimeT6 = 0, lastTimeT7 = 0 ,currentTime, timePaused, timeRender=0, prevTimeRender=0;
 
 	unsigned int img_toggle = 0;
 	unsigned int animL = 0;
@@ -305,18 +305,33 @@ int main(int argc, char *argv[])
 				{
 					// Upgrade Tower
 					if (game->getActions() >= 3) {
-						bool upgraded = game->upgradeTower();
-						if (upgraded) {
+						int upgraded = game->upgradeTower(game->getActions());
+						if (upgraded == 1) {
 							game->setActions(game->getActions() - 3);
 							printf("Spent 3 action points\nActions: %d\n", game->getActions());
 						}
-						else {
-							printf("Can't perform upgrade!\n");
+						else if (upgraded == 2) {
+							game->setActions(game->getActions() - 6);
+							printf("Spent 6 action points\nActions: %d\n", game->getActions());
+						}
+						else if(upgraded == 0){
+							printf("Can't perform upgrade!\nYou need at least 6 points to upgrade tower to level 3!\n");
 						}
 					}
 					else {
-						printf("You don't have 3 action points!\nYou need %d more action points to perform this action.\n",(3-game->getActions()));
+						printf("You don't have enough action points!\nYou need at least 3 action points to perform this action.\n");
 					}
+				}
+				else if (event.key.keysym.sym == SDLK_n){
+					// Nuke
+					if (game->getActions() >= 30 && !game->getHeilMary()) {
+						game->sendNukes();
+						game->setActions(game->getActions() - 30);
+					}
+					else {
+						printf("You don't have enough action points!\nYou need at least 30 action points to send nukes!\n");
+					}
+					
 				}
 			}
 			else if (event.type == SDL_KEYUP)
@@ -385,6 +400,7 @@ int main(int argc, char *argv[])
 				lastTimeT4 += timePaused;
 				lastTimeT5 += timePaused;
 				lastTimeT6 += timePaused;
+				lastTimeT7 += timePaused;
 				// the game was paused so was the music..so resume it
 				game->getMusicManager()->ResumeMusic();
 				game->getMusicManager()->setMusicPause(false);
@@ -431,13 +447,6 @@ int main(int argc, char *argv[])
 				lastTimeT3 = currentTime;
 			}
 
-			//// every 10ms
-			//currentTime = SDL_GetTicks();
-			//if (currentTime > lastTimeT4 + 10) {
-			//	game->deleteHitCannonBalls();
-			//	lastTimeT4 = currentTime;
-			//}
-
 			// every 500ms
 			currentTime = SDL_GetTicks();
 			if (currentTime > lastTimeT4 + 500) {
@@ -469,7 +478,7 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
-			}else if (game->getPirateWave() % 2 == 0){
+			}else if (game->getPirateWave() % 6 == 0){
 				if (currentTime > lastTimeT6 + 20000) {
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					// Every 6 waves spawn the boss!!
@@ -486,7 +495,7 @@ int main(int argc, char *argv[])
 					// Reset animation int to 0
 					animL = 0;
 
-					if (r <= 0.01f) {
+					if (r <= 0.6f) {
 						game->setBoss(true);
 						
 						//Mix_HookMusicFinished(changeMusic);
@@ -586,6 +595,15 @@ int main(int argc, char *argv[])
 				}
 			}
 
+			//every 250ms
+			currentTime = SDL_GetTicks();
+			if (currentTime > lastTimeT7 + 250) {
+				if (game->getHeilMary()) {
+					game->sendNextNuke(game->getDeathIdx());
+				}
+				lastTimeT7 = currentTime;
+			}
+
 			// Update
 			renderer->Update(dt);
 
@@ -622,54 +640,78 @@ int main(int argc, char *argv[])
 				// Lightsaber animation
 				animL++;
 				unsigned int animIdx = 0;
-				if (animL <= 3) animIdx = 1;
-				else if (animL <= 6) animIdx = 2;
-				else if(animL <= 9) animIdx = 3;
-				else if(animL <= 12) animIdx = 4;
-				else if(animL <= 15) animIdx = 5;
-				else if(animL <= 18) animIdx = 6;
-				else if(animL <= 21) animIdx = 7;
-				else if(animL <= 24) animIdx = 8;
-				else if(animL <= 27) animIdx = 9;
+				if (animL <= 2) animIdx = 1;
+				else if (animL <= 4) animIdx = 2;
+				else if(animL <= 6) animIdx = 3;
+				else if(animL <= 8) animIdx = 4;
+				else if(animL <= 10) animIdx = 5;
+				else if(animL <= 12) animIdx = 6;
+				else if(animL <= 14) animIdx = 7;
+				else if(animL <= 16) animIdx = 8;
+				else if(animL <= 18) animIdx = 9;
+				else if (animL <= 20) animIdx = 10;
+				else if (animL <= 22) animIdx = 11;
+				else if (animL <= 24) animIdx = 12;
+				else if (animL <= 26) animIdx = 13;
+				else if (animL <= 28) animIdx = 14;
+				else if (animL <= 30) animIdx = 15;
+				else if (animL <= 32) animIdx = 16;
+				else if (animL <= 34) animIdx = 17;
+				else if (animL <= 36) animIdx = 18;
+				else if (animL <= 38) animIdx = 19;
 				else {
-					animIdx = 10;
-					animL = 30;
+					animIdx = 20;
+					animL = 40;
 				}
-				renderer->RenderImage("../Data/Images/LightsaberAnim/sith_lightsaber"+std::to_string(animIdx)+".png", -50 + SCREEN_WIDTH / 4 + 145, 20, 1.5, 1.5, false);
-			}
-			if (img_toggle <= 30) {
-				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
+				renderer->RenderImage("../Data/Images/LightsaberAnim/sith_lightsaber"+std::to_string(animIdx)+".png", -50 + SCREEN_WIDTH / 4 + 145, 45, 1.5, 1.5, false);
+				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
 				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);
 			}
-			else if(img_toggle <= 60) {
-				renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
-				renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);
-			}
 			else {
-				img_toggle = -1;
+				if (img_toggle <= 30) {
+					renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
+					renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);
+				}
+				else if (img_toggle <= 60) {
+					renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
+					renderer->RenderImage("../Data/Images/pirate_small_red.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);
+				}
+				else {
+					img_toggle = -1;
+				}
+				img_toggle += 1;
 			}
-			img_toggle += 1;
 		}
 		else {
 			if (game->getWasDarth()) {
 				// Lightsaber animation
 				animLR++;
 				unsigned int animIdx = 0;
-				if (animLR <= 3) animIdx = 10;
-				else if (animLR <= 6) animIdx = 9;
-				else if (animLR <= 9) animIdx = 8;
-				else if (animLR <= 12) animIdx = 7;
-				else if (animLR <= 15) animIdx = 6;
-				else if (animLR <= 18) animIdx = 5;
-				else if (animLR <= 21) animIdx = 4;
-				else if (animLR <= 24) animIdx = 3;
-				else if (animLR <= 27) animIdx = 2;
+				if (animLR <= 2) animIdx = 20;
+				else if (animLR <= 4) animIdx = 19;
+				else if (animLR <= 6) animIdx = 18;
+				else if (animLR <= 8) animIdx = 17;
+				else if (animLR <= 10) animIdx = 16;
+				else if (animLR <= 12) animIdx = 15;
+				else if (animLR <= 14) animIdx = 14;
+				else if (animLR <= 16) animIdx = 13;
+				else if (animLR <= 18) animIdx = 12;
+				else if (animLR <= 20) animIdx = 11;
+				else if (animLR <= 22) animIdx = 10;
+				else if (animLR <= 24) animIdx = 9;
+				else if (animLR <= 26) animIdx = 8;
+				else if (animLR <= 28) animIdx = 7;
+				else if (animLR <= 30) animIdx = 6;
+				else if (animLR <= 32) animIdx = 5;
+				else if (animLR <= 34) animIdx = 4;
+				else if (animLR <= 36) animIdx = 3;
+				else if (animLR <= 38) animIdx = 2;
 				else {
 					animIdx = 1;
 					animLR = 0;
 					game->setWasDarth(false);
 				}
-				renderer->RenderImage("../Data/Images/LightsaberAnim/sith_lightsaber" + std::to_string(animIdx) + ".png", -50 + SCREEN_WIDTH / 4 + 145, 20, 1.5, 1.5, false);
+				renderer->RenderImage("../Data/Images/LightsaberAnim/sith_lightsaber" + std::to_string(animIdx) + ".png", -50 + SCREEN_WIDTH / 4 + 145, 45, 1.5, 1.5, false);
 			}
 			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + SCREEN_WIDTH / 4, 10, 1.5, 1.5, false);
 			renderer->RenderImage("../Data/Images/pirate_small.png", -50 + 3 * SCREEN_WIDTH / 4, 10, 1.5, 1.5, true);

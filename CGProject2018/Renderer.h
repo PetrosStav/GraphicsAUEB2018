@@ -125,7 +125,7 @@ protected:
 	ShaderProgram								m_image_shader_program;
 
 	ParticleEmitter								m_particle_emitter;
-	ParticleSwirl								m_particle_swirld;
+	//ParticleSwirl								m_particle_swirld;
 	ShaderProgram								m_particle_rendering_program;
 
 public:
