@@ -152,6 +152,8 @@ int main(int argc, char *argv[])
 	unsigned int img_toggle = 0;
 	unsigned int animL = 0;
 	unsigned int animLR = 0;
+	unsigned int fpsShowLim = 0;
+	int prevFps = 0;
 
 	//unsigned int piratesInWave = 0;
 
@@ -620,12 +622,20 @@ int main(int argc, char *argv[])
 
 		// Draw
 		renderer->Render();
-		SDL_Color color = { 255,0,0 };
-		renderer->RenderText("Score: " + std::to_string(game->getScore()), color, 0, 0, 74);
-		renderer->RenderText("Actions: " + std::to_string(game->getActions()), color, 0, 50, 74);
-		renderer->RenderText("Gold: " + std::to_string(game->getGold()), color, 0, 100, 74);
-		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()-1), color, 0, 150, 74);
-		renderer->RenderText("FPS: " + std::to_string(int(1.0f/dt)>=60?60: int(1.0f / dt)), color, SCREEN_WIDTH-200, 0, 74);
+		SDL_Color color = { 170,40,20 };
+		renderer->RenderText("Score: " + std::to_string(game->getScore()), color, 10, 10, 74);
+		renderer->RenderText("Actions: " + std::to_string(game->getActions()), color, 10, 60, 74);
+		renderer->RenderText("Gold: " + std::to_string(game->getGold()), color, 10, 110, 74);
+		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()-1), color, 10, 160, 74);
+		fpsShowLim++;
+		if (fpsShowLim <= 5) {
+			renderer->RenderText("FPS: " + std::to_string(prevFps), color, SCREEN_WIDTH - 200, 10, 74);
+		}
+		else {
+			renderer->RenderText("FPS: " + std::to_string(int(1.0f / dt) >= 60 ? 60 : int(1.0f / dt)), color, SCREEN_WIDTH - 200, 10, 74);
+			fpsShowLim = 0;
+			prevFps = int(1.0f / dt) >= 60 ? 60 : int(1.0f / dt);
+		}
 		renderer->setFontSize(74);
 
 		if (game->getGameOver()) {

@@ -67,7 +67,8 @@ Renderer::Renderer()
 
 	// Load starting font
 	font_size = 74;
-	font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", font_size);
+	//font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", font_size);
+	font = TTF_OpenFont("../Data/Fonts/DoubleFeature20.ttf", font_size);
 	
 }
 
@@ -1563,7 +1564,9 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 		// Close the previous font
 		TTF_CloseFont(font);
 		// Open with new size
-		font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", size);
+		//font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", size);
+		font = TTF_OpenFont("../Data/Fonts/DoubleFeature20.ttf", font_size);
+
 	}
 	SDL_Surface * sFont = TTF_RenderText_Blended(font, message.c_str(), color);
 
