@@ -208,6 +208,11 @@ float compute_spotlight(vec3 vertex_to_light_direction)
 	return spoteffect;
 }
 
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+
 void main(void) 
 {	
 	vec3 normal = normalize(f_normal);
@@ -241,6 +246,7 @@ void main(void)
 	vec3 specularReflection = (NdotL > 0.0)? irradiance * specularNormalization * uniform_specular * pow( NdotH, uniform_shininess + 0.001) : vec3(0);
 	
 	out_color = vec4( diffuseReflection + specularReflection, diffuseColor.a);
+	
 	//out_color = diffuseColor;
 }
 

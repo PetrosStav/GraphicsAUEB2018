@@ -35,7 +35,7 @@ void main(void)
 	
 #define BLOOM
 #ifdef BLOOM
-	
+		
 	vec2 texSize = textureSize(uniform_texture, 0);
 	
 	// check each corner

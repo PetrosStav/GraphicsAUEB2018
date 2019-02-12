@@ -724,6 +724,9 @@ bool Renderer::InitRenderingTechniques()
 	m_geometry_rendering_program.LoadUniform("uniform_cast_shadows");
 	m_geometry_rendering_program.LoadUniform("shadowmap_texture");
 
+	//Lightsaber Uniform
+	m_geometry_rendering_program.LoadUniform("uniform_islightsaber");
+
 	// Post Processing Program
 	vertex_shader_path = "../Data/Shaders/postproc.vert";
 	fragment_shader_path = "../Data/Shaders/postproc.frag";
@@ -1497,6 +1500,7 @@ void Renderer::DrawGeometryNode(GeometryNode* node, glm::mat4 model_matrix, glm:
 		glUniform3f(m_geometry_rendering_program["uniform_specular"], specularColor.r, specularColor.g, specularColor.b);
 		glUniform1f(m_geometry_rendering_program["uniform_shininess"], shininess);
 		glUniform1f(m_geometry_rendering_program["uniform_has_texture"], (node->parts[j].textureID > 0) ? 1.0f : 0.0f);
+
 		glBindTexture(GL_TEXTURE_2D, node->parts[j].textureID);
 
 		glDrawArrays(GL_TRIANGLES, node->parts[j].start_offset, node->parts[j].count);
@@ -1565,7 +1569,7 @@ void Renderer::RenderText(std::string message, SDL_Color color, int x, int y, in
 		TTF_CloseFont(font);
 		// Open with new size
 		//font = TTF_OpenFont("../Data/Fonts/OpenSans-Regular.ttf", size);
-		font = TTF_OpenFont("../Data/Fonts/DoubleFeature20.ttf", font_size);
+		font = TTF_OpenFont("../Data/Fonts/DoubleFeature20.ttf", size);
 
 	}
 	SDL_Surface * sFont = TTF_RenderText_Blended(font, message.c_str(), color);

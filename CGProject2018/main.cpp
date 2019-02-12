@@ -293,6 +293,7 @@ int main(int argc, char *argv[])
 						piratesInWave.types.push_back(1);
 						piratesInWave.levels.push_back(1);
 					}*/
+					game->setActions(200);
 
 				}
 				else if (event.key.keysym.sym == SDLK_0)
@@ -480,7 +481,7 @@ int main(int argc, char *argv[])
 					lastTimeT6 = currentTime;
 					game->setPirateWave(game->getPirateWave() + 1);
 				}
-			}else if (game->getPirateWave() % 6 == 0){
+			}else if (game->getPirateWave() % 2 == 0){
 				if (currentTime > lastTimeT6 + 20000) {
 					printf("THE WAVE IS: %d\n", game->getPirateWave());
 					// Every 6 waves spawn the boss!!
@@ -497,7 +498,7 @@ int main(int argc, char *argv[])
 					// Reset animation int to 0
 					animL = 0;
 
-					if (r <= 0.6f) {
+					if (r <= 0.01f) {
 						game->setBoss(true);
 						
 						//Mix_HookMusicFinished(changeMusic);
@@ -574,24 +575,26 @@ int main(int argc, char *argv[])
 			if (currentTime > lastTimeT5 + game->getPirateRate()) {
 				if (piratesInWave.num_of_pirates > 0) {
 					piratesInWave.num_of_pirates -= 1;
-					int type = piratesInWave.types[piratesInWave.num_of_pirates];
-					int level = piratesInWave.levels[piratesInWave.num_of_pirates];
-					game->createPirate(type, level);
-					// Change rate that pirates are placed according to their type
-					// in order to avoid collisions
-					switch (type) {
-					case 0:
-						game->setPirateRate(1000);
-						break;
-					case 1:
-						game->setPirateRate(2000);
-						break;
-					case 2:
-						game->setPirateRate(3000);
-						break;
-					case 3:case 4:
-						game->setPirateRate(2000);
-						break;
+					if (piratesInWave.num_of_pirates <= piratesInWave.types.size()) {
+						int type = piratesInWave.types[piratesInWave.num_of_pirates];
+						int level = piratesInWave.levels[piratesInWave.num_of_pirates];
+						game->createPirate(type, level);
+						// Change rate that pirates are placed according to their type
+						// in order to avoid collisions
+						switch (type) {
+						case 0:
+							game->setPirateRate(1000);
+							break;
+						case 1:
+							game->setPirateRate(2000);
+							break;
+						case 2:
+							game->setPirateRate(3000);
+							break;
+						case 3:case 4:
+							game->setPirateRate(2000);
+							break;
+						}
 					}
 					lastTimeT5 = currentTime;
 				}
@@ -626,7 +629,7 @@ int main(int argc, char *argv[])
 		renderer->RenderText("Score: " + std::to_string(game->getScore()), color, 10, 10, 74);
 		renderer->RenderText("Actions: " + std::to_string(game->getActions()), color, 10, 60, 74);
 		renderer->RenderText("Gold: " + std::to_string(game->getGold()), color, 10, 110, 74);
-		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()-1), color, 10, 160, 74);
+		renderer->RenderText("Wave: " + std::to_string(game->getPirateWave()==0?0:game->getPirateWave()-1), color, 10, 160, 74);
 		fpsShowLim++;
 		if (fpsShowLim <= 5) {
 			renderer->RenderText("FPS: " + std::to_string(prevFps), color, SCREEN_WIDTH - 200, 10, 74);
